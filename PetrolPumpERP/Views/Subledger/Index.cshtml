@@ -1,0 +1,108 @@
+﻿@model PetrolPumpERP.Models.DataModels.SubledgerResponse
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@Scripts.Render("~/bundles/Subledger")
+<div data-ng-controller="SubledgerController" data-ng-app="PetroliumApp" >
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.SubledgerList)" id="subledgerlist"/>
+    <h2>Subledger</h2>
+    <div class="table-responsive" data-ng-show="Details==true" >
+        <div class="col-md-12">
+            <div class="col-md-8 divsearch">
+                <input type="text" placeholder="Search" class="form-control" data-ng-model="Prefix" data-ng-change="FilterList()" />
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" data-ng-click="FilterList()">Search</button>
+                <button class="btn btn-primary" data-ng-click="AddNewUI()">New</button>
+                <button class="btn btn-primary" data-ng-click="Reset()">Reset</button>
+            </div>
+            <hr />
+        </div>
+        
+        <table class="table">
+            <tr>
+                <th>
+                    Subledger Id
+                </th>
+                <th>
+                    Subledger Name
+                </th>
+                <th>
+                    Mainledger Name
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+                <tr data-ng-repeat="subledger in SearchSubledgerList">
+                    <td>
+                        {{subledger.SubLedgerId}}
+                    </td>
+                    <td>
+                        {{subledger.SubLedgerName}}
+                    </td>
+                    <td>
+                        {{subledger.MainLedgerName}}
+                    </td>
+                    <td>
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </td>
+                    <td>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </td>
+                </tr>
+        </table>
+
+        <ul class="pagination">
+            <li data-ng-click="First()"><a href="#"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li data-ng-click="Prev()"><a href="#"><span class="glyphicon glyphicon-backward"></span></a></li>
+            <li data-ng-click="Next()"><a href="#"><span class="glyphicon glyphicon-forward"></span></a></li>
+            <li data-ng-click="Last()"><a href="#"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+        </ul>
+    </div>
+
+    <div data-ng-show="Add==true || Edit==true">
+        <ng-form role="form"  name="frmReg" novalidate>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <input type="hidden" id="MLedgerid" />
+                        <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MainledgerList)" id="MainLedgerlist" />
+                        <select id="MainLedgerId" class = "form-control">
+                            <option value="0">---Select---</option>
+                            <option data-ng-repeat="mainledger in MainLedgers" value="{{mainledger.MainLedgerId}}">{{mainledger.MainLedgerName}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6" data-ng-show="ErrorModel.IsSelectMainledger==true">
+                        <span>{{ErrorMessage}}</span>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <input type="text" id="SubledgerName" placeholder="Subledger Name*" maxlength="50" minlength="2" 
+                               class="form-control setMargin"  />
+                    </div>
+                    <div class="col-md-6" data-ng-show="ErrorModel.IsSelectsubledgerName==true">
+                        <span>{{ErrorMessage}}</span>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <hr />
+            <div class="col-md-3">
+                <button class="btn btn-primary" data-ng-click="Save(true)" data-ng-show="Add==true">Save</button>
+                <button class="btn btn-primary" data-ng-click="Save(false)" data-ng-show="Edit==true">Update</button>
+                <button class="btn btn-primary" data-ng-click="CancelClick()">Cancel</button>
+            </div>
+        </ng-form>
+    </div>
+</div>
+
+

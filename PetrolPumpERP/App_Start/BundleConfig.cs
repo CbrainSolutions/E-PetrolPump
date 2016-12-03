@@ -1,0 +1,50 @@
+﻿using System.Web;
+using System.Web.Optimization;
+
+namespace PetrolPumpERP
+{
+    public class BundleConfig
+    {
+        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+        public static void RegisterBundles(BundleCollection bundles)
+        {
+            //bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+            //            "~/Scripts/jquery-{version}.js"));
+
+            //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+            //            "~/Scripts/jquery.validate*"));
+
+            //// Use the development version of Modernizr to develop with and learn from. Then, when you're
+            //// ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
+            //bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
+            //            "~/Scripts/modernizr-*"));
+
+            //bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+            //          "~/Scripts/bootstrap.js",
+            //          "~/Scripts/respond.js"));
+
+            bundles.Add(new StyleBundle("~/Content/cssadmin").Include(
+                      "~/Content/Admin/bootstrap.min.css"));
+
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/Main/bootstrap.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Main").Include(
+                "~/Scripts/Main/jquery.min.js",
+                "~/Scripts/Main/bootstrap.min.js",
+                "~/Scripts/Main/angular.min.js",
+                "~/Scripts/Main/App.js",
+                "~/Scripts/Main/common.js",
+                "~/Scripts/Main/spin.js",
+                "~/Scripts/Main/ShowCustomAlert.js"
+                ));
+            bundles.Add(new ScriptBundle("~/bundles/Login").Include("~/Scripts/Main/LoginController.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Subledger").Include("~/Scripts/Main/SubledgerController.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/AccountType").Include("~/Scripts/Main/AccountTypeController.js"));
+
+
+        }
+    }
+}

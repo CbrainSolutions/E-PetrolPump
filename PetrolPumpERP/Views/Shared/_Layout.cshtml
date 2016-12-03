@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Petrol Pump</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/Main")
+    @Scripts.Render("~/bundles/Login")
+</head>
+<body id="mainbody">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index","Home")">Petrol</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active" id="lihome"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li id="lireg">
+                        <a href="@Url.Action("Register","Account")">Register</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li data-toggle="modal" data-target="#myModal"><a href="#"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="myCarousel" class="carousel slide">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="" contenteditable="false"></li>
+            <li data-target="#myCarousel" data-slide-to="1" class="active" contenteditable="false"></li>
+            <li data-target="#myCarousel" data-slide-to="2" class="" contenteditable="false"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item" style="">
+                <img src="@Url.Content("~/Content/images/pic2.jpg")" alt="" class="">
+            </div>
+            <div class="item" style="">
+                <img src="@Url.Content("~/Content/images/ganesh3.jpg")" alt="" class="">
+            </div>
+            <div class="item active">
+                <img src="@Url.Content("~/Content/images/pic4.jpg")" alt="" class="">
+                
+            </div>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+    <div class="container text-center" id="contentdiv">
+        @RenderBody()
+    </div>
+    <footer class="container-fluid text-center">
+        <div class="col-md-4">
+            <div class="f-mov-list">
+                <h4 class="h3color">महत्वाच्या नोंदी</h4>
+                <ul class="footerli">
+                    <li><a class="h3color h3back" href="@Url.Action("Index","Home")">Home</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </footer>
+    <div id="myModal" class="modal fade" role="dialog" data-ng-app="PetroliumApp" data-ng-controller="LoginController">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title h3color h3back1">User Login</h4>
+                </div>
+                <div class="modal-body">
+                    <ng-form name="frmLogin" novalidate>
+                        <div id="divLogin">
+                            <div>
+                                <input type="text" class="form-control" name="UserName" required data-ng-model="LoginModel.UserName" placeholder="लॉग-इन नाव"
+                                       data-ng-class="{'borderred':frmLogin.UserName.$dirty && frmLogin.UserName.$error.required}" />
+                            </div>
+                            <br />
+                            <div>
+                                <input type="password" class="form-control" name="Password" required data-ng-model="LoginModel.Password"
+                                       placeholder="पासवर्ड" data-ng-class="{'borderred':frmLogin.Password.$dirty && frmLogin.Password.$error.required}" />
+                            </div>
+                            <hr />
+                            <button type="button" class="btn btn-primary btn-sm" data-ng-disabled="frmLogin.$invalid==true" id="btnLogin" data-ng-click="ValidateAndLogin()">Login</button>
+                            <br />
+                            <a class="h3color h3back1" data-ng-click="lnkForgotPasswordClick()">Forgot Password</a>
+
+                        </div>
+                        <div id="forGotPassword" style="display:none">
+                            <div>
+                                <input type="text" class="form-control" id="UserLoginId" placeholder="लॉग-इन नाव" />
+                            </div>
+                            <br />
+                            <button type="button" class="btn btn-primary btn-sm" id="btnForgot" data-ng-click="ForgotPassword()">Forgot Password</button>
+                            <br />
+                            <a class="h3color h3back1" data-ng-click="lnkLoginClick()">Login</a>
+                        </div>
+                        <br />
+                        <a class="h3color h3back1" href="@Url.Action("Register","Account")">New User?</a>
+                    </ng-form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('#myCarousel').carousel();
+        var winWidth = $(window).innerWidth();
+        $(window).resize(function () {
+
+            if ($(window).innerWidth() < winWidth) {
+                $('.carousel-inner>.item>img').css({
+                    'min-width': winWidth, 'width': winWidth
+                });
+            }
+            else {
+                winWidth = $(window).innerWidth();
+                $('.carousel-inner>.item>img').css({
+                    'min-width': '', 'width': ''
+                });
+            }
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+
+
+    
+
