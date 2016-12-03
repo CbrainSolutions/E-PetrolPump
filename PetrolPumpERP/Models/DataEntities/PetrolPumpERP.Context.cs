@@ -13,11 +13,12 @@ namespace PetrolPumpERP.Models.DataEntities
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class PetrolPumpERPEntities1 : DbContext
+    public partial class PetrolPumpERPEntities : DbContext
     {
-        public PetrolPumpERPEntities1()
-            : base("name=PetrolPumpERPEntities1")
+        public PetrolPumpERPEntities()
+            : base("name=PetrolPumpERPEntities")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
