@@ -87,6 +87,15 @@
     <Property Name="IsDelete" Type="bit" />
     <Property Name="SubledgerId" Type="bigint" />
   </EntityType>
+  <EntityType Name="tblAccountTypeDetail">
+    <Key>
+      <PropertyRef Name="SRNo" />
+    </Key>
+    <Property Name="SRNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountTypeId" Type="bigint" />
+    <Property Name="IsDelete" Type="bit" />
+    <Property Name="SubledgerId" Type="bigint" />
+  </EntityType>
   <EntityType Name="tblAllowanceDeduction">
     <Key>
       <PropertyRef Name="AllowDedId" />
@@ -434,6 +443,7 @@
     <EntitySet Name="tbl_InvoiceDetail" EntityType="Self.tbl_InvoiceDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tbl_ReceiptDetails" EntityType="Self.tbl_ReceiptDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblAccountType" EntityType="Self.tblAccountType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAccountTypeDetail" EntityType="Self.tblAccountTypeDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblAllowanceDeduction" EntityType="Self.tblAllowanceDeduction" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblCustomeType" EntityType="Self.tblCustomeType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDebitNote" EntityType="Self.tblDebitNote" Schema="dbo" store:Type="Tables" />

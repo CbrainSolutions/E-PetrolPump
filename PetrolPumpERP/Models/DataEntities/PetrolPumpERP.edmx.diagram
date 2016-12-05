@@ -34,6 +34,7 @@
         <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_CustomerInfo" Width="1.5" PointX="15.75" PointY="6.75" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblCustomeType" Width="1.5" PointX="0.875" PointY="0.75" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblAccountType" Width="1.5" PointX="15.375" PointY="13.75" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAccountTypeDetail" Width="1.5" PointX="9.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

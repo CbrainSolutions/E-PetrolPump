@@ -410,6 +410,7 @@
     <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
     <EntitySet Name="tblCustomeTypes" EntityType="PetrolPumpERPModel.tblCustomeType" />
     <EntitySet Name="tblAccountTypes" EntityType="PetrolPumpERPModel.tblAccountType" />
+    <EntitySet Name="tblAccountTypeDetails" EntityType="PetrolPumpERPModel.tblAccountTypeDetail" />
   </EntityContainer>
   <EntityType Name="tbl_CustomerInfo">
     <Key>
@@ -456,6 +457,15 @@
     </Key>
     <Property Name="AccountTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="AccountType" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="SubledgerId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblAccountTypeDetail">
+    <Key>
+      <PropertyRef Name="SRNo" />
+    </Key>
+    <Property Name="SRNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountTypeId" Type="Int64" />
     <Property Name="IsDelete" Type="Boolean" />
     <Property Name="SubledgerId" Type="Int64" />
   </EntityType>

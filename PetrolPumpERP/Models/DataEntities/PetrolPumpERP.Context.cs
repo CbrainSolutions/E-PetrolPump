@@ -55,5 +55,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tbl_CustomerInfo> tbl_CustomerInfo { get; set; }
         public virtual DbSet<tblCustomeType> tblCustomeTypes { get; set; }
         public virtual DbSet<tblAccountType> tblAccountTypes { get; set; }
+        public virtual DbSet<tblAccountTypeDetail> tblAccountTypeDetails { get; set; }
     }
 }

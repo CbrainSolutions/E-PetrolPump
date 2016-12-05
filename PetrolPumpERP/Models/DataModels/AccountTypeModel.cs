@@ -15,13 +15,21 @@ namespace PetrolPumpERP.Models.DataModels
         public Nullable<bool> IsDelete { get; set; }
         public Nullable<long> SubledgerId { get; set; }
 
-        //public string SubLedgerName { get; set; }
+        public int SRNo { get; set; }
+
+        public string SubLedgerName { get; set; }
     }
 
-    public class AccountTypeDetails
-    {
 
-    }
+    //public class AccountTypeDetails
+    //{
+    //    public int SRNo { get; set; }
+    //    public Nullable<long> AccountTypeId { get; set; }
+    //    public Nullable<bool> IsDelete { get; set; }
+    //    public Nullable<long> SubledgerId { get; set; }
+
+    //    public string SubLedgerName { get; set; }
+    //}
 
     public class AccountTypeResponse : Error
     {
@@ -31,7 +39,7 @@ namespace PetrolPumpERP.Models.DataModels
     public class AccountTypeBL
     {
         public static AccountTypeBL _userBl = null;
-        PetrolPumpERP.Models.DataEntities.PetrolPumpERPEntities _db = new PetrolPumpERPEntities1();
+        PetrolPumpERP.Models.DataEntities.PetrolPumpERPEntities _db = new PetrolPumpERPEntities();
         private AccountTypeBL()
         {
 
@@ -53,18 +61,15 @@ namespace PetrolPumpERP.Models.DataModels
         public AccountTypeResponse GetAccountTypes()
         {
             AccountTypeResponse response = new AccountTypeResponse() { Status = false };
-            
-            response.AccountTypeList = _db.tblAccountTypes.Join(_db.tblSubLedgers,
-                                     accounttype => accounttype.SubledgerId,
-                                     subledgre =>subledgre.SubLedgerId,
-                                     (accountype, subledgre) => new { entityaccounttype= accountype,entitysubledger=subledgre}).Select(p => 
-                                     new AccountTypeModel {
-                                         AccountType=p.entityaccounttype.AccountType,
-                                         AccountTypeId=p.entityaccounttype.AccountTypeId,
-                                         IsDelete=p.entityaccounttype.IsDelete,
-                                         SubledgerId=p.entityaccounttype.SubledgerId,
-                                         SubLedgerName=p.entitysubledger.SubLedgerName,
-                                     });
+
+            response.AccountTypeList = from tbl in _db.tblAccountTypes
+                                       where tbl.IsDelete == false
+                                       select new AccountTypeModel
+                                       {
+                                           AccountType=tbl.AccountType,
+                                           AccountTypeId=tbl.AccountTypeId,
+                                           IsDelete=tbl.IsDelete,
+                                       };
 
 
             if (response.AccountTypeList.Count() > 0)
@@ -74,18 +79,48 @@ namespace PetrolPumpERP.Models.DataModels
             return response;
         }
 
-        public AccountTypeResponse SaveAccountType(AccountTypeModel model)
+        public IQueryable<AccountTypeModel> GetAccountTypesDetails(int? AcId)
+        {
+            return (from tbl in _db.tblAccountTypeDetails
+                    join tblsubledger in _db.tblSubLedgers
+                    on tbl.SubledgerId equals tblsubledger.SubLedgerId
+                    where tbl.IsDelete == false
+                    && tbl.AccountTypeId==AcId
+                    select new AccountTypeModel
+                    {
+                        AccountTypeId = Convert.ToInt32(tbl.AccountTypeId),
+                        IsDelete = tbl.IsDelete,
+                        SRNo = tbl.SRNo,
+                        SubledgerId = tblsubledger.SubLedgerId,
+                        SubLedgerName = tblsubledger.SubLedgerName,
+                    });
+        }
+
+        public AccountTypeResponse SaveAccountType(List<AccountTypeModel> model)
         {
             AccountTypeResponse response = new AccountTypeResponse() { Status = false };
             tblAccountType tbl = new tblAccountType()
             {
                 IsDelete = false,
-                AccountType = model.AccountType,
-                SubledgerId = model.SubledgerId
+                AccountType = model[0].AccountType,
+                //SubledgerId = model[0].SubledgerId
             };
             _db.tblAccountTypes.Add(tbl);
             if (_db.SaveChanges() > 0)
             {
+                
+                foreach (var item in model)
+                {
+                    tblAccountTypeDetail tbldetails = new tblAccountTypeDetail()
+                    {
+                        IsDelete = false,
+                        AccountTypeId = response.Id,
+                        SubledgerId = item.SubledgerId
+                    };
+                    _db.tblAccountTypeDetails.Add(tbldetails);
+                }
+
+                _db.SaveChanges();
                 response.Status = true;
                 response.Id = tbl.AccountTypeId;
             }
@@ -96,28 +131,28 @@ namespace PetrolPumpERP.Models.DataModels
             return response;
         }
 
-        public AccountTypeResponse UpdateAccountType(AccountTypeModel model)
-        {
-            AccountTypeResponse response = new AccountTypeResponse() { Status = false };
-            tblAccountType tbl = _db.tblAccountTypes.Where(p => p.AccountTypeId == model.AccountTypeId).FirstOrDefault();
-            if (tbl!=null)
-            {
-                tbl.AccountType = model.AccountType;
-                tbl.SubledgerId = model.SubledgerId;
-                if (_db.SaveChanges() > 0)
-                {
-                    response.Status = true;
-                }
-                else
-                {
-                    response.Message = "Record not updated.";
-                }
-            }
-            else
-            {
-                response.Message = "Record not found.";
-            }
-            return response;
-        }
+        //public AccountTypeResponse UpdateAccountType(AccountTypeModel model)
+        //{
+        //    AccountTypeResponse response = new AccountTypeResponse() { Status = false };
+        //    tblAccountType tbl = _db.tblAccountTypes.Where(p => p.AccountTypeId == model.AccountTypeId).FirstOrDefault();
+        //    if (tbl!=null)
+        //    {
+        //        tbl.AccountType = model.AccountType;
+        //        tbl.SubledgerId = model.SubledgerId;
+        //        if (_db.SaveChanges() > 0)
+        //        {
+        //            response.Status = true;
+        //        }
+        //        else
+        //        {
+        //            response.Message = "Record not updated.";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        response.Message = "Record not found.";
+        //    }
+        //    return response;
+        //}
     }
 }

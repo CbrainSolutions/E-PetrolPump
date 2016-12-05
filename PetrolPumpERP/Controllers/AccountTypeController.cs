@@ -23,17 +23,23 @@ namespace PetrolPumpERP.Controllers
 
         [MyAuthorizeAttribute]
         [HttpPost]
-        public ActionResult Save(AccountTypeModel model)
+        public ActionResult Save(List<AccountTypeModel> model)
         {
             return Json(objAccounttype.SaveAccountType(model));
         }
 
         [MyAuthorizeAttribute]
-        [HttpPost]
-        public ActionResult Update(AccountTypeModel model)
+        public ActionResult GetAccountTypeDetails(int? AcId)
         {
-            return Json(objAccounttype.UpdateAccountType(model));
+            return Json(objAccounttype.GetAccountTypesDetails(AcId));
         }
+
+        //[MyAuthorizeAttribute]
+        //[HttpPost]
+        //public ActionResult Update(AccountTypeModel model)
+        //{
+        //    return Json(objAccounttype.UpdateAccountType(model));
+        //}
 
     }
 }

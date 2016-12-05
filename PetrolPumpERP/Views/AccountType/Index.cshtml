@@ -7,7 +7,7 @@
 @Scripts.Render("~/bundles/AccountType")
 <div data-ng-controller="AccountTypeController" data-ng-app="PetroliumApp">
     <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.AccountTypeList)" id="accounttypelist" />
-    <h2>Subledger</h2>
+    <h2>Account Type</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">
             <div class="col-md-8 divsearch">
@@ -30,9 +30,6 @@
                     Account Type
                 </th>
                 <th>
-                    Subledger Name
-                </th>
-                <th>
                     Edit
                 </th>
                 <th>
@@ -45,9 +42,6 @@
                 </td>
                 <td>
                     {{accounttype.AccountType}}
-                </td>
-                <td>
-                    {{accounttype.SubLedgerName}}
                 </td>
                 <td>
                     <span class="glyphicon glyphicon-trash" data-ng-click="EditClick(accounttype)"></span>
@@ -71,26 +65,71 @@
             <div class="form-group">
                 <div class="col-md-12">
                     <div class="col-md-6">
-                        
-                        <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
-                        <select id="SubLedgerId" class="form-control">
-                            <option value="0">---Select---</option>
-                            <option data-ng-repeat="subledger in SubLedgers" value="{{subledger.SubLedgerId}}">{{subledger.SubLedgerName}}</option>
-                        </select>
+                        <input type="text" id="AccountType" placeholder="Account Type*" maxlength="50" minlength="2"
+                               class="form-control setMargin" />
                     </div>
-                    <div class="col-md-6" data-ng-show="ErrorModel.IsSelectSubledger==true">
+                    <div class="col-md-6" data-ng-show="ErrorModel.IsSelectAccountType==true">
                         <span>{{ErrorMessage}}</span>
                     </div>
                 </div>
                 <br />
             </div>
-            <div class="form-group">
+            <div class="form-group" >
                 <div class="col-md-12">
-                    <div class="col-md-6">
-                        <input type="text" id="AccountType" placeholder="Account Type*" maxlength="50" minlength="2"
-                               class="form-control setMargin" />
+                    <div class="col-md-6" style="height:200px;overflow:auto">
+                        <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
+                        <input type="text" data-ng-model="SearchSubledger" class="form-control"/>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Select
+                                    </th>
+                                    <th>
+                                        Subledger Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="subledger in SubLedgers | filter:SearchSubledger">
+                                    <td>
+                                        <div class="material-switch pull-left"  >
+                                            <input id="{{subledger.SubLedgerId}}" name="someSwitchOption001" type="checkbox" data-ng-click="AddToList(subledger)"/>
+                                            <label for="{{subledger.SubLedgerId}}" class="label-default"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{subledger.SubLedgerName}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-md-6" data-ng-show="ErrorModel.IsSelectAccountType==true">
+                    <div class="col-md-6" style="height:200px;overflow:auto">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Remove
+                                    </th>
+                                    <th>
+                                        Subledger Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="subledger in AddedSubledgers">
+                                    <td>
+                                        <span class="glyphicon glyphicon-trash" data-ng-click="RemoveModel(subledger)"></span>
+                                    </td>
+                                    <td>
+                                        {{subledger.SubLedgerName}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12" data-ng-show="ErrorModel.IsSelectSubledger==true">
                         <span>{{ErrorMessage}}</span>
                     </div>
                 </div>
@@ -105,3 +144,49 @@
         </ng-form>
     </div>
 </div>
+<style type="text/css">
+    .material-switch > input[type="checkbox"] {
+    display: none;   
+}
+
+.material-switch > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative; 
+    width: 40px;  
+}
+
+.material-switch > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position:absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.material-switch > label::after {
+    background: rgb(255, 255, 255);
+    border-radius: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.material-switch > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+.material-switch > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    left: 20px;
+}
+</style>

@@ -92,14 +92,15 @@
           <Property Name="IsDelete" Type="bit" />
           <Property Name="SubledgerId" Type="bigint" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PetrolPumpERP.dbo.tblAccountTypeDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblAccountTypeDetails">
-          <Property Name="AccountTypeDetailsId" Type="int" />
-          <Property Name="SubledgerId" Type="bigint" />
+        <EntityType Name="tblAccountTypeDetail">
+          <Key>
+            <PropertyRef Name="SRNo" />
+          </Key>
+          <Property Name="SRNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountTypeId" Type="bigint" />
           <Property Name="IsDelete" Type="bit" />
-          <Property Name="IsModify" Type="bit" />
-        </EntityType>-->
+          <Property Name="SubledgerId" Type="bigint" />
+        </EntityType>
         <EntityType Name="tblAllowanceDeduction">
           <Key>
             <PropertyRef Name="AllowDedId" />
@@ -447,6 +448,7 @@ warning 6013: The table/view 'PetrolPumpERP.dbo.tblAccountTypeDetails' does not 
           <EntitySet Name="tbl_InvoiceDetail" EntityType="Self.tbl_InvoiceDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_ReceiptDetails" EntityType="Self.tbl_ReceiptDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblAccountType" EntityType="Self.tblAccountType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblAccountTypeDetail" EntityType="Self.tblAccountTypeDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblAllowanceDeduction" EntityType="Self.tblAllowanceDeduction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCustomeType" EntityType="Self.tblCustomeType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDebitNote" EntityType="Self.tblDebitNote" Schema="dbo" store:Type="Tables" />
@@ -886,6 +888,7 @@ warning 6013: The table/view 'PetrolPumpERP.dbo.tblAccountTypeDetails' does not 
           <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
           <EntitySet Name="tblCustomeTypes" EntityType="PetrolPumpERPModel.tblCustomeType" />
           <EntitySet Name="tblAccountTypes" EntityType="PetrolPumpERPModel.tblAccountType" />
+          <EntitySet Name="tblAccountTypeDetails" EntityType="PetrolPumpERPModel.tblAccountTypeDetail" />
         </EntityContainer>
         <EntityType Name="tbl_CustomerInfo">
           <Key>
@@ -932,6 +935,15 @@ warning 6013: The table/view 'PetrolPumpERP.dbo.tblAccountTypeDetails' does not 
           </Key>
           <Property Name="AccountTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AccountType" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="SubledgerId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblAccountTypeDetail">
+          <Key>
+            <PropertyRef Name="SRNo" />
+          </Key>
+          <Property Name="SRNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountTypeId" Type="Int64" />
           <Property Name="IsDelete" Type="Boolean" />
           <Property Name="SubledgerId" Type="Int64" />
         </EntityType>
@@ -1395,6 +1407,16 @@ warning 6013: The table/view 'PetrolPumpERP.dbo.tblAccountTypeDetails' does not 
                 <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
                 <ScalarProperty Name="AccountType" ColumnName="AccountType" />
                 <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAccountTypeDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountTypeDetail">
+              <MappingFragment StoreEntitySet="tblAccountTypeDetail">
+                <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+                <ScalarProperty Name="SRNo" ColumnName="SRNo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

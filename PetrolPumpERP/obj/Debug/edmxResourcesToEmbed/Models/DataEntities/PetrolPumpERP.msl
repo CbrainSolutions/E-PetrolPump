@@ -458,5 +458,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblAccountTypeDetails">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountTypeDetail">
+        <MappingFragment StoreEntitySet="tblAccountTypeDetail">
+          <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+          <ScalarProperty Name="SRNo" ColumnName="SRNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

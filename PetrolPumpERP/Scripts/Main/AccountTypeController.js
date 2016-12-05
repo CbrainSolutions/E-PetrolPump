@@ -3,6 +3,7 @@
     $scope.AccountTypeList = [];
     $scope.SearchAccountTypeList = [];
     $scope.SubLedgers = [];
+    $scope.AddedSubledgers = [];
     $scope.Details = true;
     $scope.ErrorModel = { IsSelectSubledger: false, IsSelectAccountType: false };
     $scope.ErrorMessage = ""
@@ -19,6 +20,17 @@
         $scope.Details = false;
         $scope.Add = true;
         $scope.Edit = false;
+    }
+
+    $scope.AddToList = function (model)
+    {
+        $scope.AddedSubledgers.push(model)
+    }
+
+    $scope.RemoveModel = function (item) {
+        var index = $scope.AddedSubledgers.indexOf(item);
+        $scope.AddedSubledgers.splice(index, 1);
+        $("#" + item.SubLedgerId).attr("checked",false);
     }
 
     $scope.FilterList = function () {
@@ -40,12 +52,34 @@
     }
 
     $scope.EditClick = function (SubledgerModel) {
-        $("#SubLedgerId").val(SubledgerModel.MainLedgerId);
-        $("#AccountType").val(SubledgerModel.AccountType);
-        $scope.AccountTypeId = SubledgerModel.AccountTypeId;
-        $scope.Details = false;
-        $scope.Add = false;
-        $scope.Edit = true;
+        //$("#SubLedgerId").val(SubledgerModel.MainLedgerId);
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + '/AccountType/GetAccountTypeDetails?AcId=' + SubledgerModel.AccountTypeId;
+        $http({
+            method: 'GET',
+            url: url,
+        }).then(function successCallback(response) {
+            $("#AccountType").val(SubledgerModel.AccountType);
+            $scope.AccountTypeId = SubledgerModel.AccountTypeId;
+            $scope.Details = false;
+            $scope.Add = false;
+            $scope.Edit = true;
+            $scope.AddedSubledgers = [];
+            angular.forEach($scope.AddedSubledgers, function (value, key) {
+                $scope.AddedSubledgers.push({ SubLedgerId: value.SubLedgerId, SubLedgerName: value.SubLedgerName, SRNo: value.SRNo });
+            });
+            document.getElementById("mainbody").removeChild(spinner.el);
+        }, function errorCallback(response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.responseText,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
     }
 
     $scope.Save = function (isEdit) {
@@ -57,20 +91,26 @@
         else {
             $scope.ErrorModel.IsSelectMainledger = false;
         }
-        if ($("#AccountType").val() == "") {
+        if ($scope.AddedSubledgers.length==0) {
             $scope.ErrorModel.IsSelectsubledgerName = true;
-            $scope.ErrorMessage = "Subledger name should be filled.";
+            $scope.ErrorMessage = "Please select subledgers.";
             return false;
         }
         else {
             $scope.ErrorModel.IsSelectsubledgerName = false;
         }
+
         var spinner = new Spinner().spin();
         document.getElementById("mainbody").appendChild(spinner.el);
-        var model = { SubLedgerId: $("#SubLedgerId").val(), AccountType: $("#AccountType").val() };
-        if (isEdit == false) {
-            model = { SubLedgerId: $("#SubLedgerId").val(), AccountType: $("#AccountType").val(), AccountTypeId: $scope.AccountTypeId };
-        }
+
+        var model =[];
+        angular.forEach($scope.AddedSubledgers, function(value, key) {
+            model.push({ SubLedgerId: value.SubLedgerId, AccountType: $("#AccountType").val() });
+        });
+        
+        //if (isEdit == false) {
+        //    model = { SubLedgerId: $("#SubLedgerId").val(), AccountType: $("#AccountType").val(), AccountTypeId: $scope.AccountTypeId };
+        //}
 
         var url = GetVirtualDirectory() + '/AccountType/Save';
         if (isEdit == false) {
@@ -87,7 +127,7 @@
 
         $http(req).then(function (response) {
             if (response.data.Status == true) {
-                model = { SubLedgerId: $("#SubLedgerId").val(), AccountType: $("#AccountType").val(), AccountTypeId: response.data.Id, SubLedgerName: $("#SubLedgerId option:selected").text() };
+                model = { AccountType: $("#AccountType").val(), AccountTypeId: response.data.Id };
                 $scope.AccountTypeList.push(model);
                 setTimeout(function () {
                     $scope.$apply(function () {

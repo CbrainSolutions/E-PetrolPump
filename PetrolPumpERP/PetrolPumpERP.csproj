@@ -225,6 +225,9 @@
     <Compile Include="Models\DataEntities\tblAccountType.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataEntities\tblAccountTypeDetail.cs">
+      <DependentUpon>PetrolPumpERP.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataEntities\tblAllowanceDeduction.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
