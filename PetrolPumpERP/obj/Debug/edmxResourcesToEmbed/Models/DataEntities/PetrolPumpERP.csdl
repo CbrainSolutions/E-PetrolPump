@@ -133,30 +133,6 @@
     <Property Name="FirmName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="tblLedger">
-    <Key>
-      <PropertyRef Name="LedgerId" />
-    </Key>
-    <Property Name="LedgerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="LedgerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="AccountNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="PanNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="AccOpenDate" Type="DateTime" Precision="3" />
-    <Property Name="SubLedgerId" Type="Int64" />
-    <Property Name="EmailID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="FinancialYearId" Type="Int64" />
-    <Property Name="MiscCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="IFSCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="BankBranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Uploaded" Type="Boolean" />
-    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="PinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="AcType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-  </EntityType>
   <EntityType Name="tblMainLedger">
     <Key>
       <PropertyRef Name="MainLedgerId" />
@@ -390,7 +366,6 @@
     <EntitySet Name="tblDesignationMasters" EntityType="Self.tblDesignationMaster" />
     <EntitySet Name="tblEmployees" EntityType="Self.tblEmployee" />
     <EntitySet Name="tblFinancialMasters" EntityType="Self.tblFinancialMaster" />
-    <EntitySet Name="tblLedgers" EntityType="Self.tblLedger" />
     <EntitySet Name="tblMainLedgers" EntityType="Self.tblMainLedger" />
     <EntitySet Name="tblProductMasters" EntityType="Self.tblProductMaster" />
     <EntitySet Name="tblPurchaseInvoices" EntityType="Self.tblPurchaseInvoice" />
@@ -407,11 +382,64 @@
     <EntitySet Name="tblUnitMasters" EntityType="Self.tblUnitMaster" />
     <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
     <EntitySet Name="tblUserTypes" EntityType="Self.tblUserType" />
-    <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
     <EntitySet Name="tblCustomeTypes" EntityType="PetrolPumpERPModel.tblCustomeType" />
     <EntitySet Name="tblAccountTypes" EntityType="PetrolPumpERPModel.tblAccountType" />
     <EntitySet Name="tblAccountTypeDetails" EntityType="PetrolPumpERPModel.tblAccountTypeDetail" />
+    <EntitySet Name="tblLedgers" EntityType="PetrolPumpERPModel.tblLedger" />
+    <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
   </EntityContainer>
+  <EntityType Name="tblCustomeType">
+    <Key>
+      <PropertyRef Name="CustomerTypeId" />
+    </Key>
+    <Property Name="CustomerTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tblAccountType">
+    <Key>
+      <PropertyRef Name="AccountTypeId" />
+    </Key>
+    <Property Name="AccountTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountType" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="SubledgerId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblAccountTypeDetail">
+    <Key>
+      <PropertyRef Name="SRNo" />
+    </Key>
+    <Property Name="SRNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountTypeId" Type="Int64" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="SubledgerId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblLedger">
+    <Key>
+      <PropertyRef Name="LedgerId" />
+    </Key>
+    <Property Name="LedgerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LedgerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="AccountNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PanNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AccOpenDate" Type="DateTime" Precision="3" />
+    <Property Name="SubLedgerId" Type="Int64" />
+    <Property Name="EmailID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FinancialYearId" Type="Int64" />
+    <Property Name="MiscCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IFSCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BankBranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Uploaded" Type="Boolean" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AcType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AcTypeId" Type="Int32" />
+  </EntityType>
   <EntityType Name="tbl_CustomerInfo">
     <Key>
       <PropertyRef Name="CustomerId" />
@@ -440,33 +468,6 @@
     <Property Name="IsSeperateBill" Type="Boolean" />
     <Property Name="IsRoundOff" Type="Boolean" />
     <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="LedgerId" Type="Int32" />
-  </EntityType>
-  <EntityType Name="tblCustomeType">
-    <Key>
-      <PropertyRef Name="CustomerTypeId" />
-    </Key>
-    <Property Name="CustomerTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
-  </EntityType>
-  <EntityType Name="tblAccountType">
-    <Key>
-      <PropertyRef Name="AccountTypeId" />
-    </Key>
-    <Property Name="AccountTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="AccountType" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="SubledgerId" Type="Int64" />
-  </EntityType>
-  <EntityType Name="tblAccountTypeDetail">
-    <Key>
-      <PropertyRef Name="SRNo" />
-    </Key>
-    <Property Name="SRNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="AccountTypeId" Type="Int64" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="SubledgerId" Type="Int64" />
+    <Property Name="LedgerId" Type="Int64" />
   </EntityType>
 </Schema>

@@ -143,31 +143,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblLedgers">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblLedger">
-        <MappingFragment StoreEntitySet="tblLedger">
-          <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
-          <ScalarProperty Name="LedgerName" ColumnName="LedgerName" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
-          <ScalarProperty Name="PanNo" ColumnName="PanNo" />
-          <ScalarProperty Name="AccOpenDate" ColumnName="AccOpenDate" />
-          <ScalarProperty Name="SubLedgerId" ColumnName="SubLedgerId" />
-          <ScalarProperty Name="EmailID" ColumnName="EmailID" />
-          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
-          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
-          <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
-          <ScalarProperty Name="MiscCode" ColumnName="MiscCode" />
-          <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
-          <ScalarProperty Name="BankBranchName" ColumnName="BankBranchName" />
-          <ScalarProperty Name="Uploaded" ColumnName="Uploaded" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Area" ColumnName="Area" />
-          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-          <ScalarProperty Name="AcType" ColumnName="AcType" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblMainLedgers">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tblMainLedger">
         <MappingFragment StoreEntitySet="tblMainLedger">
@@ -407,6 +382,62 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblCustomeTypes">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblCustomeType">
+        <MappingFragment StoreEntitySet="tblCustomeType">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+          <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAccountTypes">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountType">
+        <MappingFragment StoreEntitySet="tblAccountType">
+          <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+          <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAccountTypeDetails">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountTypeDetail">
+        <MappingFragment StoreEntitySet="tblAccountTypeDetail">
+          <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+          <ScalarProperty Name="SRNo" ColumnName="SRNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblLedgers">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblLedger">
+        <MappingFragment StoreEntitySet="tblLedger">
+          <ScalarProperty Name="AcTypeId" ColumnName="AcTypeId" />
+          <ScalarProperty Name="AcType" ColumnName="AcType" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="Area" ColumnName="Area" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Uploaded" ColumnName="Uploaded" />
+          <ScalarProperty Name="BankBranchName" ColumnName="BankBranchName" />
+          <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+          <ScalarProperty Name="MiscCode" ColumnName="MiscCode" />
+          <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+          <ScalarProperty Name="SubLedgerId" ColumnName="SubLedgerId" />
+          <ScalarProperty Name="AccOpenDate" ColumnName="AccOpenDate" />
+          <ScalarProperty Name="PanNo" ColumnName="PanNo" />
+          <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="LedgerName" ColumnName="LedgerName" />
+          <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tbl_CustomerInfo">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_CustomerInfo">
         <MappingFragment StoreEntitySet="tbl_CustomerInfo">
@@ -435,36 +466,6 @@
           <ScalarProperty Name="CustomerMName" ColumnName="CustomerMName" />
           <ScalarProperty Name="CustomerFirstName" ColumnName="CustomerFirstName" />
           <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblCustomeTypes">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblCustomeType">
-        <MappingFragment StoreEntitySet="tblCustomeType">
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
-          <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblAccountTypes">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountType">
-        <MappingFragment StoreEntitySet="tblAccountType">
-          <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="AccountType" ColumnName="AccountType" />
-          <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblAccountTypeDetails">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountTypeDetail">
-        <MappingFragment StoreEntitySet="tblAccountTypeDetail">
-          <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
-          <ScalarProperty Name="SRNo" ColumnName="SRNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

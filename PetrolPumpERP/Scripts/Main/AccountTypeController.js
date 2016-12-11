@@ -39,12 +39,16 @@
     }
 
     $scope.Reset = function () {
-        $scope.AccountTypeList = $("#accounttypelist").val();
+        $scope.AccountTypeList = JSON.parse($("#accounttypelist").val());
         $scope.SearchAccountTypeList = $scope.AccountTypeList;
+        $scope.First();
     }
 
     $scope.CancelClick = function () {
-        $("#SubLedgerId").val("0");
+        angular.forEach($scope.AccountTypeList, function (value, key) {
+            $("#" + value.SubledgerId).attr("checked", false);
+        });
+        $scope.AddedSubledgers = [];
         $("#AccountType").val("");
         $scope.Details = true;
         $scope.Add = false;
@@ -66,8 +70,9 @@
             $scope.Add = false;
             $scope.Edit = true;
             $scope.AddedSubledgers = [];
-            angular.forEach($scope.AddedSubledgers, function (value, key) {
-                $scope.AddedSubledgers.push({ SubLedgerId: value.SubLedgerId, SubLedgerName: value.SubLedgerName, SRNo: value.SRNo });
+            angular.forEach(response.data, function (value, key) {
+                $("#" + value.SubledgerId).attr("checked", true);
+                $scope.AddedSubledgers.push({ SubLedgerId: value.SubledgerId, SubLedgerName: value.SubLedgerName, SRNo: value.SRNo });
             });
             document.getElementById("mainbody").removeChild(spinner.el);
         }, function errorCallback(response) {
@@ -83,35 +88,38 @@
     }
 
     $scope.Save = function (isEdit) {
-        if ($("#SubLedgerId").val() == "0") {
-            $scope.ErrorModel.IsSelectMainledger = true;
-            $scope.ErrorMessage = "Main ledger should be selected.";
+        if ($("#AccountType").val() == "") {
+            $scope.ErrorModel.IsSelectSubledger = true;
+            $scope.ErrorMessage = "Account type should be filled.";
             return false;
         }
         else {
-            $scope.ErrorModel.IsSelectMainledger = false;
+            $scope.ErrorModel.IsSelectSubledger = false;
         }
+        
         if ($scope.AddedSubledgers.length==0) {
-            $scope.ErrorModel.IsSelectsubledgerName = true;
+            $scope.ErrorModel.IsSelectAccountType = true;
             $scope.ErrorMessage = "Please select subledgers.";
             return false;
         }
         else {
-            $scope.ErrorModel.IsSelectsubledgerName = false;
+            $scope.ErrorModel.IsSelectAccountType = false;
         }
 
         var spinner = new Spinner().spin();
         document.getElementById("mainbody").appendChild(spinner.el);
 
-        var model =[];
-        angular.forEach($scope.AddedSubledgers, function(value, key) {
-            model.push({ SubLedgerId: value.SubLedgerId, AccountType: $("#AccountType").val() });
-        });
-        
-        //if (isEdit == false) {
-        //    model = { SubLedgerId: $("#SubLedgerId").val(), AccountType: $("#AccountType").val(), AccountTypeId: $scope.AccountTypeId };
-        //}
-
+        var model = [];
+        if (isEdit==false) {
+            angular.forEach($scope.AddedSubledgers, function (value, key) {
+                model.push({ SubLedgerId: value.SubLedgerId, AccountType: $("#AccountType").val(),AccountTypeId:$scope.AccountTypeId });
+            });
+        }
+        else {
+            angular.forEach($scope.AddedSubledgers, function (value, key) {
+                model.push({ SubLedgerId: value.SubLedgerId, AccountType: $("#AccountType").val() });
+            });
+        }
         var url = GetVirtualDirectory() + '/AccountType/Save';
         if (isEdit == false) {
             url = GetVirtualDirectory() + '/AccountType/Update';
@@ -127,8 +135,11 @@
 
         $http(req).then(function (response) {
             if (response.data.Status == true) {
-                model = { AccountType: $("#AccountType").val(), AccountTypeId: response.data.Id };
-                $scope.AccountTypeList.push(model);
+                if (isEdit==true) {
+                    model = { AccountType: $("#AccountType").val(), AccountTypeId: response.data.Id };
+                    $scope.AccountTypeList.push(model);
+                }
+                
                 setTimeout(function () {
                     $scope.$apply(function () {
                         $("#accounttypelist").val(JSON.stringify($scope.AccountTypeList));

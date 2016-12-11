@@ -38,6 +38,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public Nullable<bool> IsSeperateBill { get; set; }
         public Nullable<bool> IsRoundOff { get; set; }
         public Nullable<bool> IsDelete { get; set; }
-        public Nullable<int> LedgerId { get; set; }
+        public Nullable<long> LedgerId { get; set; }
     }
 }

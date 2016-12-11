@@ -12,12 +12,29 @@
     <div class="container-fluid">
         <div class="row content">
             <div class="col-sm-3 sidenav">
-                <h4>John's Blog</h4>
+                <h4>HP Petrolium</h4>
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#section1">Home</a></li>
-                    <li><a href="#section2">Friends</a></li>
-                    <li><a href="#section3">Family</a></li>
-                    <li><a href="#section3">Photos</a></li>
+                    <li id="lnksubledger" class="active">
+                        <a data-toggle="collapse" data-target="#toggleDemo" data-parent="#sidenav01" class="collapsed" href="#">
+                            Masters
+                            <div class="collapse" id="toggleDemo" style="height: 0px;">
+                                <ul class="nav nav-list">
+                                    <li>
+                                        <a href="@Url.Action("Index","Subledger")">Subledger</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index","AccountType")">Account Types</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index","Customer")">Customer</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </li>
+                    <li id="lnkactype"><a href="@Url.Action("Index","AccountType")">Account Types</a></li>
+                    <li id="lnkcustomer"><a href="#section3">Family</a></li>
+                    <li id="lnkproduct"><a href="#section3">Photos</a></li>
                 </ul>
             </div>
 

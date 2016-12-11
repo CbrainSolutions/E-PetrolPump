@@ -19,7 +19,7 @@
         IsSecurityDeposit: false,
         IsNoofCreditDays: false,
         IsAccountType: false,
-        IsSubledger:false,
+        IsSubledger: false,
     };
     $scope.ErrorMessage = ""
     $scope.Add = false;
@@ -32,8 +32,7 @@
 
     $scope.Prefix = "";
 
-    $scope.AcTypeChanged=function()
-    {
+    $scope.AcTypeChanged = function () {
         var id = $("#AccountType").val();
         $scope.SelectedSubledgerList = $filter('filter')($scope.SubledgerList, function (d) { return d.AccountTypeId === parseInt(id); });
         var html = "<option value='0'>---Select Subledger---</option>";
@@ -43,10 +42,9 @@
         $("#ddlsubledger").html(html);
     }
 
-    $scope.ValidateForm = function ()
-    {
+    $scope.ValidateForm = function () {
         var valid = false;
-        if ($("#AccountType").val()=="0") {
+        if ($("#AccountType").val() == "0") {
             $scope.ErrorMessage = "Account type should be selected.";
             $scope.ErrorModel.IsAccountType = true;
             return valid;
@@ -56,7 +54,7 @@
             $scope.ErrorModel.IsSubledger = true;
             return valid;
         }
-        if ($("#CustomerFirstName").val()=="") {
+        if ($("#CustomerFirstName").val() == "") {
             $scope.ErrorMessage = "First name should be filled.";
             $scope.ErrorModel.IsFirstNameFilled = true;
             return valid;
@@ -110,7 +108,7 @@
     }
 
     $scope.Reset = function () {
-        $scope.CustomerList =JSON.parse($("#customerlist").val());
+        $scope.CustomerList = JSON.parse($("#customerlist").val());
         $scope.SearchCustomerList = $scope.CustomerList;
         $scope.First();
     }
@@ -172,24 +170,24 @@
         $("#NoofCreditDays").val(CustomerModel.NoofCreditDays);
         $("#IsSeperateBill").val(String(CustomerModel.VehicleWiseBill));
         $("#IsRoundOff").val(String(CustomerModel.IsRoundOff));
-        
+
         $scope.Details = false;
         $scope.Add = false;
         $scope.Edit = true;
     }
 
-    
+
 
     $scope.Save = function (isEdit) {
         if ($scope.ValidateForm()) {
             var spinner = new Spinner().spin();
             document.getElementById("mainbody").appendChild(spinner.el);
-            var model = 
-                { 
-                    CustomerId:isEdit==false?$scope.CustomerId:0,
+            var model =
+                {
+                    CustomerId: isEdit == false ? $scope.CustomerId : 0,
                     CustomerFirstName: $("#CustomerFirstName").val(),
-                    SubledgerId:$("#ddlsubledger").val(),
-                    CustomerMName : $("#CustomerMName").val(),
+                    SubledgerId: $("#ddlsubledger").val(),
+                    CustomerMName: $("#CustomerMName").val(),
                     CustomeLName: $("#CustomerLName").val(),
                     Address: $("#Address").val(),
                     City: $("#City").val(),
@@ -210,9 +208,9 @@
                     NoofCreditDays: $("#NoofCreditDays").val(),
                     IsSeperateBill: $("#IsSeperateBill").val(),
                     IsRoundOff: $("#IsRoundOff").val(),
-                    AccountTypeId:$("#AccountType").val(),
+                    AccountTypeId: $("#AccountType").val(),
                 };
-            
+
             var url = GetVirtualDirectory() + '/Customer/Save';
             if (isEdit == false) {
                 url = GetVirtualDirectory() + '/Customer/Update';
@@ -226,7 +224,7 @@
                 data: model,
             }
             $http(req).then(function (response) {
-                if (isEdit==false) {
+                if (isEdit == false) {
                     angular.forEach($scope.CustomerList, function (value, key) {
                         if (value.CustomerId == response.data.Id) {
                             $scope.CustomerList[key].CustomerFirstName = model.CustomerFirstName;

@@ -29,8 +29,9 @@
 
     $scope.Reset = function ()
     {
-        $scope.SubledgerList = $("#subledgerlist").val();
+        $scope.SubledgerList = JSON.parse($("#subledgerlist").val());
         $scope.SearchSubledgerList = $scope.SubledgerList;
+        $scope.First();
     }
 
     $scope.CancelClick = function () {
@@ -89,8 +90,18 @@
 
         $http(req).then(function (response) {
             if (response.data.Status == true) {
-                model = { MainLedgerId: $("#MainLedgerId").val(), SubLedgerName: model.SubLedgerName, SubLedgerId: response.data.Id, MainLedgerName: $("#MainLedgerId option:selected").text() };
-                $scope.SubledgerList.push(model);
+                if (isEdit==false) {
+                    angular.forEach($scope.SubledgerList, function (value, key) {
+                        if (value.SubLedgerId == model.SubLedgerId) {
+                            $scope.SubledgerList[key].MainLedgerId = $("#MainLedgerId").val();
+                            $scope.SubledgerList[key].SubLedgerName = model.SubLedgerName;
+                        }
+                    });
+                }
+                else {
+                    model = { MainLedgerId: $("#MainLedgerId").val(), SubLedgerName: model.SubLedgerName, SubLedgerId: response.data.Id, MainLedgerName: $("#MainLedgerId option:selected").text() };
+                    $scope.SubledgerList.push(model);
+                }
                 setTimeout(function () {
                     $scope.$apply(function () {
                         $("#subledgerlist").val(JSON.stringify($scope.SubledgerList));

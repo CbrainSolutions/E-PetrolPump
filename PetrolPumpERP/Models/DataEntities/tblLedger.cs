@@ -33,5 +33,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public string Area { get; set; }
         public string PinCode { get; set; }
         public string AcType { get; set; }
+        public Nullable<int> AcTypeId { get; set; }
     }
 }

@@ -7214,6 +7214,68 @@ button.close {
     padding-left:0px;
 }
 
+.submitPopup {
+	display: none;
+	z-index: 70000;
+	position: absolute;
+}
+.overlay {
+	background: #fff;
+	bottom: 0;
+	opacity: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1001;
+}
+
+#alertBox .overlay {
+	background: #000;
+	opacity: 0.8;
+}
+.submitPopupPanel {
+	background: #e9edf0;
+	color: #000;
+	font-size: 1.1em;
+	/*margin-top:-95px;*/
+	margin-left: -150px;
+	position: fixed;
+	text-align: center;
+	top: 20%;
+	left: 50%;
+	width: 300px;
+	z-index: 70000;
+	padding: 15px;
+	border-radius: 8px;
+	box-shadow: 0px 5px 15px rgba(0,0,0,0.15);
+	border: 3px solid #dfe4e8;
+}
+.submitPopupPanel .legendBtn {
+	margin: 20px 0 0 0;
+	width: 100%;
+}
+.submitPopupPanel .legendBtn li:last-child {
+	margin: 0;
+}
+.submitPopupPanel .legendBtn li {
+	list-style-type: none;
+	display: inline-block;
+	margin: 0 10px 0 0;
+}
+.requestButton {
+    float:right;
+}
+
+.profileDiv {
+    color: #2e6da4;
+    border: none;
+    border-color: #fff;
+    height:120px;
+    padding: 0;
+    text-align: left;
+    margin-top: 10px;
+}
+
 .popupInfo {
 	line-height: 24px;
 	font-size: 1.1em;
@@ -7239,4 +7301,29 @@ button.close {
 .pure-form input.ng-dirty.ng-invalid {
   border-color: #e9322d;
 }
+
+.field-message {
+  display: inline-block;
+  color:#e9322d;
+  font-size: 90%;
+  margin-left: 0.5em;
+}
+
+
+.pure-form input.ng-dirty.ng-invalid {
+  border-color: #e9322d;
+}
+
+.field-message {
+  display: inline-block;
+  color:#e9322d;
+  font-size: 90%;
+  margin-left: 0.5em;
+}
+
+
+.pure-form input.ng-dirty.ng-invalid {
+  border-color: #e9322d;
+}
+
 /*# sourceMappingURL=bootstrap.min.css.map */

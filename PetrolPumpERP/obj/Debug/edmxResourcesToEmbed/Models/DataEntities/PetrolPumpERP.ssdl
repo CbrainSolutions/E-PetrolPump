@@ -28,7 +28,7 @@
     <Property Name="IsSeperateBill" Type="bit" />
     <Property Name="IsRoundOff" Type="bit" />
     <Property Name="IsDelete" Type="bit" />
-    <Property Name="LedgerId" Type="int" />
+    <Property Name="LedgerId" Type="bigint" />
   </EntityType>
   <EntityType Name="tbl_Invoice">
     <Key>
@@ -213,6 +213,7 @@
     <Property Name="Area" Type="varchar" MaxLength="50" />
     <Property Name="PinCode" Type="varchar" MaxLength="50" />
     <Property Name="AcType" Type="varchar" MaxLength="50" />
+    <Property Name="AcTypeId" Type="int" />
   </EntityType>
   <EntityType Name="tblMainLedger">
     <Key>

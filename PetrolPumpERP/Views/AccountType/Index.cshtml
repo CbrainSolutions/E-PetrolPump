@@ -44,10 +44,10 @@
                     {{accounttype.AccountType}}
                 </td>
                 <td>
-                    <span class="glyphicon glyphicon-trash" data-ng-click="EditClick(accounttype)"></span>
+                    <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(accounttype)"></span>
                 </td>
                 <td>
-                    <span class="glyphicon glyphicon-pencil"></span>
+                    <span class="glyphicon glyphicon-trash"></span>
                 </td>
             </tr>
         </table>
@@ -68,7 +68,7 @@
                         <input type="text" id="AccountType" placeholder="Account Type*" maxlength="50" minlength="2"
                                class="form-control setMargin" />
                     </div>
-                    <div class="col-md-6" data-ng-show="ErrorModel.IsSelectAccountType==true">
+                    <div class="col-md-6" data-ng-show="ErrorModel.IsSelectSubledger==true">
                         <span>{{ErrorMessage}}</span>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-12" data-ng-show="ErrorModel.IsSelectSubledger==true">
+                    <div class="col-md-12" data-ng-show="ErrorModel.IsSelectAccountType==true">
                         <span>{{ErrorMessage}}</span>
                     </div>
                 </div>
@@ -144,49 +144,3 @@
         </ng-form>
     </div>
 </div>
-<style type="text/css">
-    .material-switch > input[type="checkbox"] {
-    display: none;   
-}
-
-.material-switch > label {
-    cursor: pointer;
-    height: 0px;
-    position: relative; 
-    width: 40px;  
-}
-
-.material-switch > label::before {
-    background: rgb(0, 0, 0);
-    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-    content: '';
-    height: 16px;
-    margin-top: -8px;
-    position:absolute;
-    opacity: 0.3;
-    transition: all 0.4s ease-in-out;
-    width: 40px;
-}
-.material-switch > label::after {
-    background: rgb(255, 255, 255);
-    border-radius: 16px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-    content: '';
-    height: 24px;
-    left: -4px;
-    margin-top: -8px;
-    position: absolute;
-    top: -4px;
-    transition: all 0.3s ease-in-out;
-    width: 24px;
-}
-.material-switch > input[type="checkbox"]:checked + label::before {
-    background: inherit;
-    opacity: 0.5;
-}
-.material-switch > input[type="checkbox"]:checked + label::after {
-    background: inherit;
-    left: 20px;
-}
-</style>

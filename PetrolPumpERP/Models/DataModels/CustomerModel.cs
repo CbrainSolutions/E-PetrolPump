@@ -34,9 +34,11 @@ namespace PetrolPumpERP.Models.DataModels
         public Nullable<bool> IsSeperateBill { get; set; }
         public Nullable<bool> IsRoundOff { get; set; }
         public Nullable<bool> IsDelete { get; set; }
-        public Nullable<int> LedgerId { get; set; }
-
+        public Nullable<long> LedgerId { get; set; }
+        public long? SubledgerId { get; set; }
         public string CustomerType { get; set; }
+
+        public int? AccountTypeId { get; set; }
     }
 
     public class CustomerTypeResponse : Error
@@ -80,41 +82,46 @@ namespace PetrolPumpERP.Models.DataModels
         public CustomerResponse GetAllCustomers()
         {
             CustomerResponse response = new CustomerResponse() { Status = false };
-            response.CustomerList = _db.tbl_CustomerInfo.Join(_db.tblCustomeTypes,
-                                 customertype => customertype.CustomerTypeId,
-                                 customer => customer.CustomerTypeId,
-                                 (customertype, customer) => new { entitycustomer = customertype, entitycustomertype = customer })
-                                 .Where(p=>p.entitycustomer.IsDelete==false).Select(p =>
+            response.CustomerList = from tbl in _db.tbl_CustomerInfo
+                                    join tblctype in _db.tblCustomeTypes
+                                    on tbl.CustomerTypeId equals tblctype.CustomerTypeId
+                                    join tblledger in _db.tblLedgers
+                                    on tbl.LedgerId equals tblledger.LedgerId
+                                    where tbl.IsDelete==false
+                                    select
                                 new CustomerModel()
                                 {
-                                   CustomerId=p.entitycustomer.CustomerId,
-                                    CustomerFirstName = p.entitycustomer.CustomerFirstName,
-                                     CustomerMName = p.entitycustomer.CustomerMName,
-                                     CustomeLName = p.entitycustomer.CustomeLName,
-                                     Address = p.entitycustomer.Address,
-                                     City = p.entitycustomer.City,
-                                     Pin = p.entitycustomer.Pin,
-                                     State = p.entitycustomer.State,
-                                     Country = p.entitycustomer.Country,
-                                     MobileNo = p.entitycustomer.MobileNo,
-                                     EMailId = p.entitycustomer.EMailId,
-                                    CustomerTypeId = p.entitycustomer.CustomerTypeId,
-                                     DuplicateBill = p.entitycustomer.DuplicateBill,
-                                     SummaryofBills = p.entitycustomer.SummaryofBills,
-                                     ContactPerson = p.entitycustomer.ContactPerson,
-                                     VehicleWiseBill = p.entitycustomer.VehicleWiseBill,
-                                     BillingCycle = p.entitycustomer.BillingCycle,
-                                    CreditLimit = p.entitycustomer.CreditLimit,
-                                    ChargesPercent = p.entitycustomer.ChargesPercent,
-                                    SecurityDeposit = p.entitycustomer.SecurityDeposit,
-                                    NoofCreditDays = p.entitycustomer.NoofCreditDays,
-                                     IsSeperateBill = p.entitycustomer.IsSeperateBill,
-                                     IsRoundOff = p.entitycustomer.IsRoundOff,
-                                     IsDelete = p.entitycustomer.IsDelete,
-                                    LedgerId = p.entitycustomer.LedgerId,
-
-                                     CustomerType = p.entitycustomertype.CustomerType
-                                });
+                                    CustomerId = tbl.CustomerId,
+                                    CustomerFirstName = tbl.CustomerFirstName,
+                                    CustomerMName = tbl.CustomerMName,
+                                    CustomeLName = tbl.CustomeLName,
+                                    Address = tbl.Address,
+                                    City = tbl.City,
+                                    Pin = tbl.Pin,
+                                    State = tbl.State,
+                                    Country = tbl.Country,
+                                    MobileNo = tbl.MobileNo,
+                                    EMailId = tbl.EMailId,
+                                    CustomerTypeId = tbl.CustomerTypeId,
+                                    DuplicateBill = tbl.DuplicateBill,
+                                    SummaryofBills = tbl.SummaryofBills,
+                                    ContactPerson = tbl.ContactPerson,
+                                    VehicleWiseBill = tbl.VehicleWiseBill,
+                                    BillingCycle = tbl.BillingCycle,
+                                    CreditLimit = tbl.CreditLimit,
+                                    ChargesPercent = tbl.ChargesPercent,
+                                    SecurityDeposit = tbl.SecurityDeposit,
+                                    NoofCreditDays = tbl.NoofCreditDays,
+                                    IsSeperateBill = tbl.IsSeperateBill,
+                                    IsRoundOff = tbl.IsRoundOff,
+                                    IsDelete = tbl.IsDelete,
+                                    LedgerId = tbl.LedgerId,
+                                    
+                                    CustomerType = tblctype.CustomerType,
+                                    AccountTypeId=tblledger.AcTypeId,
+                                    SubledgerId=tblledger.SubLedgerId
+                                    
+                                };
             if (response.CustomerList.Count() > 0)
             {
                 response.Status = true;
@@ -126,40 +133,55 @@ namespace PetrolPumpERP.Models.DataModels
         {
             CustomerResponse response = new CustomerResponse() { Status = false };
             //tblSubLedger tbl = _db.tbl_CustomerInfo.Where(p => p..Trim().ToUpper() == model.SubLedgerName.Trim().ToUpper()).FirstOrDefault();
-            tbl_CustomerInfo tbl = new tbl_CustomerInfo()
-            {
-                CustomerId = model.CustomerId,
-                CustomerFirstName = model.CustomerFirstName,
-                CustomerMName = model.CustomerMName,
-                CustomeLName = model.CustomeLName,
-                Address = model.Address,
-                City = model.City,
-                Pin = model.Pin,
-                State = model.State,
-                Country = model.Country,
-                MobileNo = model.MobileNo,
-                EMailId = model.EMailId,
-                CustomerTypeId = model.CustomerTypeId,
-                DuplicateBill = model.DuplicateBill,
-                SummaryofBills = model.SummaryofBills,
-                ContactPerson = model.ContactPerson,
-                VehicleWiseBill = model.VehicleWiseBill,
-                BillingCycle = model.BillingCycle,
-                CreditLimit = model.CreditLimit,
-                ChargesPercent = model.ChargesPercent,
-                SecurityDeposit = model.SecurityDeposit,
-                NoofCreditDays = model.NoofCreditDays,
-                IsSeperateBill = model.IsSeperateBill,
-                IsRoundOff = model.IsRoundOff,
-                IsDelete = model.IsDelete,
-                LedgerId = model.LedgerId,
 
+            tblLedger ledger = new tblLedger()
+            {
+                AccOpenDate = DateTime.Now.Date,
+                AcTypeId = model.AccountTypeId,
+                SubLedgerId=model.SubledgerId,
             };
-            _db.tbl_CustomerInfo.Add(tbl);
+            _db.tblLedgers.Add(ledger);
             if (_db.SaveChanges() > 0)
             {
-                response.Status = true;
-                response.Id = tbl.CustomerId;
+                tbl_CustomerInfo tbl = new tbl_CustomerInfo()
+                {
+                    CustomerId = model.CustomerId,
+                    CustomerFirstName = model.CustomerFirstName,
+                    CustomerMName = model.CustomerMName,
+                    CustomeLName = model.CustomeLName,
+                    Address = model.Address,
+                    City = model.City,
+                    Pin = model.Pin,
+                    State = model.State,
+                    Country = model.Country,
+                    MobileNo = model.MobileNo,
+                    EMailId = model.EMailId,
+                    CustomerTypeId = model.CustomerTypeId,
+                    DuplicateBill = model.DuplicateBill,
+                    SummaryofBills = model.SummaryofBills,
+                    ContactPerson = model.ContactPerson,
+                    VehicleWiseBill = model.VehicleWiseBill,
+                    BillingCycle = model.BillingCycle,
+                    CreditLimit = model.CreditLimit,
+                    ChargesPercent = model.ChargesPercent,
+                    SecurityDeposit = model.SecurityDeposit,
+                    NoofCreditDays = model.NoofCreditDays,
+                    IsSeperateBill = model.IsSeperateBill,
+                    IsRoundOff = model.IsRoundOff,
+                    IsDelete = false,
+                    LedgerId = ledger.LedgerId,
+
+                };
+                _db.tbl_CustomerInfo.Add(tbl);
+                if (_db.SaveChanges() > 0)
+                {
+                    response.Status = true;
+                    response.Id = tbl.CustomerId;
+                }
+                else
+                {
+                    response.Message = "Record not saved.";
+                }
             }
             else
             {
@@ -168,7 +190,7 @@ namespace PetrolPumpERP.Models.DataModels
             return response;
         }
 
-        public CustomerResponse UpdateSubledger(CustomerModel model)
+        public CustomerResponse UpdateCustomer(CustomerModel model)
         {
             CustomerResponse response = new CustomerResponse() { Status = false };
             tbl_CustomerInfo tbl = _db.tbl_CustomerInfo.Where(p => p.CustomerId == model.CustomerId).FirstOrDefault();
