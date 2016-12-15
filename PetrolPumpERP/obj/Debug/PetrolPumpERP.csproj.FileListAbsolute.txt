@@ -159,6 +159,5 @@ F:\MyApplication\PetrolPumpERP\PetrolPumpERP\bin\Microsoft.Owin.Security.OAuth.x
 F:\MyApplication\PetrolPumpERP\PetrolPumpERP\bin\Microsoft.Owin.Security.Google.xml
 F:\MyApplication\PetrolPumpERP\PetrolPumpERP\bin\Microsoft.Owin.Security.Twitter.xml
 F:\MyApplication\PetrolPumpERP\PetrolPumpERP\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-F:\MyApplication\PetrolPumpERP\PetrolPumpERP\obj\Debug\PetrolPumpERP.csprojResolveAssemblyReference.cache
 F:\MyApplication\PetrolPumpERP\PetrolPumpERP\obj\Debug\PetrolPumpERP.dll
 F:\MyApplication\PetrolPumpERP\PetrolPumpERP\obj\Debug\PetrolPumpERP.pdb
