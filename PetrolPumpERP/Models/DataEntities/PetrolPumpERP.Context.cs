@@ -18,7 +18,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public PetrolPumpERPEntities()
             : base("name=PetrolPumpERPEntities")
         {
-            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -56,5 +55,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblLedger> tblLedgers { get; set; }
         public virtual DbSet<tbl_CustomerInfo> tbl_CustomerInfo { get; set; }
         public virtual DbSet<tblSupplierMaster> tblSupplierMasters { get; set; }
+        public virtual DbSet<tblProductType> tblProductTypes { get; set; }
     }
 }

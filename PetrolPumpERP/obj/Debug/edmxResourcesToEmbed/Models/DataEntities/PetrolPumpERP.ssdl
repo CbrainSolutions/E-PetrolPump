@@ -236,6 +236,14 @@
     <Property Name="IsReusable" Type="bit" Nullable="false" />
     <Property Name="IsDelete" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="tblProductType">
+    <Key>
+      <PropertyRef Name="ProductTypeId" />
+    </Key>
+    <Property Name="ProductTypeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductType" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsDelete" Type="bit" />
+  </EntityType>
   <EntityType Name="tblPurchaseInvoice">
     <Key>
       <PropertyRef Name="PINo" />
@@ -368,6 +376,11 @@
     <Property Name="ChangeBy" Type="nchar" MaxLength="10" Nullable="false" />
     <Property Name="ChangeDate" Type="datetime" />
     <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="LedgerId" Type="bigint" />
+    <Property Name="City" Type="varchar" MaxLength="50" />
+    <Property Name="State" Type="varchar" MaxLength="50" />
+    <Property Name="Country" Type="varchar" MaxLength="50" />
+    <Property Name="Pin" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblTransaction">
     <Key>
@@ -455,6 +468,7 @@
     <EntitySet Name="tblLedger" EntityType="Self.tblLedger" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblMainLedger" EntityType="Self.tblMainLedger" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblProductMaster" EntityType="Self.tblProductMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblProductType" EntityType="Self.tblProductType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPurchaseInvoice" EntityType="Self.tblPurchaseInvoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPurchaseInvoiceDetails" EntityType="Self.tblPurchaseInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPurchaseOrder" EntityType="Self.tblPurchaseOrder" Schema="dbo" store:Type="Tables" />

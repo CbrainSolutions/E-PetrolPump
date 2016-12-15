@@ -241,6 +241,14 @@
           <Property Name="IsReusable" Type="bit" Nullable="false" />
           <Property Name="IsDelete" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblProductType">
+          <Key>
+            <PropertyRef Name="ProductTypeId" />
+          </Key>
+          <Property Name="ProductTypeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductType" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
         <EntityType Name="tblPurchaseInvoice">
           <Key>
             <PropertyRef Name="PINo" />
@@ -374,6 +382,10 @@
           <Property Name="ChangeDate" Type="datetime" />
           <Property Name="IsDelete" Type="bit" Nullable="false" />
           <Property Name="LedgerId" Type="bigint" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Pin" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblTransaction">
           <Key>
@@ -461,6 +473,7 @@
           <EntitySet Name="tblLedger" EntityType="Self.tblLedger" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMainLedger" EntityType="Self.tblMainLedger" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblProductMaster" EntityType="Self.tblProductMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProductType" EntityType="Self.tblProductType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseInvoice" EntityType="Self.tblPurchaseInvoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseInvoiceDetails" EntityType="Self.tblPurchaseInvoiceDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseOrder" EntityType="Self.tblPurchaseOrder" Schema="dbo" store:Type="Tables" />
@@ -846,6 +859,7 @@
           <EntitySet Name="tblLedgers" EntityType="PetrolPumpERPModel.tblLedger" />
           <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
           <EntitySet Name="tblSupplierMasters" EntityType="PetrolPumpERPModel.tblSupplierMaster" />
+          <EntitySet Name="tblProductTypes" EntityType="PetrolPumpERPModel.tblProductType" />
         </EntityContainer>
         <EntityType Name="tblCustomeType">
           <Key>
@@ -950,6 +964,18 @@
           <Property Name="ChangeDate" Type="DateTime" Precision="3" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
           <Property Name="LedgerId" Type="Int64" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Pin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblProductType">
+          <Key>
+            <PropertyRef Name="ProductTypeId" />
+          </Key>
+          <Property Name="ProductTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1406,6 +1432,10 @@
           <EntitySetMapping Name="tblSupplierMasters">
             <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSupplierMaster">
               <MappingFragment StoreEntitySet="tblSupplierMaster">
+                <ScalarProperty Name="Pin" ColumnName="Pin" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
                 <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
                 <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
@@ -1423,6 +1453,15 @@
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
                 <ScalarProperty Name="SupplierCode" ColumnName="SupplierCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProductTypes">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblProductType">
+              <MappingFragment StoreEntitySet="tblProductType">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

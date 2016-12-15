@@ -31,5 +31,9 @@ namespace PetrolPumpERP.Models.DataEntities
         public Nullable<System.DateTime> ChangeDate { get; set; }
         public bool IsDelete { get; set; }
         public Nullable<long> LedgerId { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public string Pin { get; set; }
     }
 }

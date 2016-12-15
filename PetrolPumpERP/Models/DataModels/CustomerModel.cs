@@ -139,6 +139,7 @@ namespace PetrolPumpERP.Models.DataModels
                 AccOpenDate = DateTime.Now.Date,
                 AcTypeId = model.AccountTypeId,
                 SubLedgerId=model.SubledgerId,
+                FinancialYearId = 1
             };
             _db.tblLedgers.Add(ledger);
             if (_db.SaveChanges() > 0)

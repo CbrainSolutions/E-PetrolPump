@@ -29,6 +29,7 @@
     $scope.CurruntIndex = 0;
     $scope.SubledgerModel = { SubLedgerId: 0, SubLedgerName: "", MainLedgerId: 0 };
     $scope.ddlvalue = 0;
+    $scope.CustomerId = 0;
 
     $scope.Prefix = "";
 

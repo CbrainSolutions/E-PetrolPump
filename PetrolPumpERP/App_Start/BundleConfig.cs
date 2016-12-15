@@ -48,6 +48,9 @@ namespace PetrolPumpERP
 
             bundles.Add(new ScriptBundle("~/bundles/Vendor").Include("~/Scripts/Main/VendorController.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/UOM").Include("~/Scripts/Main/UOMController.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ProductType").Include("~/Scripts/Main/ProductTypeController.js"));
 
         }
     }

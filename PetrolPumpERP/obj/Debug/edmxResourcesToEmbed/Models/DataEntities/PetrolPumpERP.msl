@@ -286,28 +286,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblSupplierMasters">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSupplierMaster">
-        <MappingFragment StoreEntitySet="tblSupplierMaster">
-          <ScalarProperty Name="SupplierCode" ColumnName="SupplierCode" />
-          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
-          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
-          <ScalarProperty Name="VATCSTNo" ColumnName="VATCSTNo" />
-          <ScalarProperty Name="ExciseNo" ColumnName="ExciseNo" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="ServiceTaxNo" ColumnName="ServiceTaxNo" />
-          <ScalarProperty Name="TotalInwardAmnt" ColumnName="TotalInwardAmnt" />
-          <ScalarProperty Name="TotCumInwardAmnt" ColumnName="TotCumInwardAmnt" />
-          <ScalarProperty Name="EntryBy" ColumnName="EntryBy" />
-          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
-          <ScalarProperty Name="ChangeBy" ColumnName="ChangeBy" />
-          <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblTransactions">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransaction">
         <MappingFragment StoreEntitySet="tblTransaction">
@@ -466,6 +444,42 @@
           <ScalarProperty Name="CustomerMName" ColumnName="CustomerMName" />
           <ScalarProperty Name="CustomerFirstName" ColumnName="CustomerFirstName" />
           <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblSupplierMasters">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSupplierMaster">
+        <MappingFragment StoreEntitySet="tblSupplierMaster">
+          <ScalarProperty Name="Pin" ColumnName="Pin" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
+          <ScalarProperty Name="ChangeBy" ColumnName="ChangeBy" />
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="EntryBy" ColumnName="EntryBy" />
+          <ScalarProperty Name="TotCumInwardAmnt" ColumnName="TotCumInwardAmnt" />
+          <ScalarProperty Name="TotalInwardAmnt" ColumnName="TotalInwardAmnt" />
+          <ScalarProperty Name="ServiceTaxNo" ColumnName="ServiceTaxNo" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="ExciseNo" ColumnName="ExciseNo" />
+          <ScalarProperty Name="VATCSTNo" ColumnName="VATCSTNo" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="SupplierCode" ColumnName="SupplierCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblProductTypes">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblProductType">
+        <MappingFragment StoreEntitySet="tblProductType">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

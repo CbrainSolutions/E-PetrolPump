@@ -202,7 +202,9 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\SubledgerController.cs" />
+    <Compile Include="Controllers\UOMController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -257,6 +259,9 @@
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntities\tblProductMaster.cs">
+      <DependentUpon>PetrolPumpERP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataEntities\tblProductType.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntities\tblPurchaseInvoice.cs">
@@ -315,8 +320,11 @@
     </Compile>
     <Compile Include="Models\DataModels\AccountTypeModel.cs" />
     <Compile Include="Models\DataModels\CustomerModel.cs" />
+    <Compile Include="Models\DataModels\ProductType.cs" />
     <Compile Include="Models\DataModels\SubledgerModel.cs" />
+    <Compile Include="Models\DataModels\UOMModel.cs" />
     <Compile Include="Models\DataModels\UserBL.cs" />
+    <Compile Include="Models\DataModels\VendorModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MyAuthorizeAttribute.cs" />
@@ -399,9 +407,11 @@
     <Content Include="Scripts\Main\CustomerController.js" />
     <Content Include="Scripts\Main\jquery.min.js" />
     <Content Include="Scripts\Main\LoginController.js" />
+    <Content Include="Scripts\Main\ProductTypeController.js" />
     <Content Include="Scripts\Main\ShowCustomAlert.js" />
     <Content Include="Scripts\Main\spin.js" />
     <Content Include="Scripts\Main\SubledgerController.js" />
+    <Content Include="Scripts\Main\UOMController.js" />
     <Content Include="Scripts\Main\VendorController.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
@@ -447,10 +457,12 @@
     <Content Include="Views\Subledger\Index.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\AccountType\Index.cshtml" />
+    <Content Include="Views\Vendor\Index.cshtml" />
+    <Content Include="Views\UOM\Index.cshtml" />
+    <Content Include="Views\ProductType\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Vendor\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

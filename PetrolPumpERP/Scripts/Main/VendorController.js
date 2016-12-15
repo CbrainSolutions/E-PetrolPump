@@ -1,25 +1,19 @@
-﻿PetroliumApp.controller("CustomerController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
+﻿PetroliumApp.controller("VendorController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
-    $scope.CustomerList = [];
-    $scope.SearchCustomerList = [];
-    $scope.MainLedgers = [];
+    $scope.VendorList = [];
+    $scope.SearchVendorList = [];
     $scope.AccountTypes = [];
     $scope.SubledgerList = [];
 
     $scope.SelectedSubledgerList = [];
     $scope.Details = true;
     $scope.ErrorModel = {
-        IsFirstNameFilled: false,
-        IsLastNameFilled: false,
+        IsSupplierName: false,
+        IsPhoneNo: false,
         IsAddressFilled: false,
-        IsSelectMainledger: false,
-        IsBillingCycle: false,
-        IsCreditLimit: false,
-        IsChargesPercent: false,
-        IsSecurityDeposit: false,
-        IsNoofCreditDays: false,
         IsAccountType: false,
         IsSubledger: false,
+        IsVATCSTNo:false,
     };
     $scope.ErrorMessage = ""
     $scope.Add = false;
@@ -29,6 +23,7 @@
     $scope.CurruntIndex = 0;
     $scope.SubledgerModel = { SubLedgerId: 0, SubLedgerName: "", MainLedgerId: 0 };
     $scope.ddlvalue = 0;
+    $scope.VendorId = 0;
 
     $scope.Prefix = "";
 
@@ -54,41 +49,27 @@
             $scope.ErrorModel.IsSubledger = true;
             return valid;
         }
-        if ($("#CustomerFirstName").val() == "") {
-            $scope.ErrorMessage = "First name should be filled.";
-            $scope.ErrorModel.IsFirstNameFilled = true;
+        if ($("#SupplierName").val() == "") {
+            $scope.ErrorMessage = "Supplier Name should be filled.";
+            $scope.ErrorModel.IsSupplierName = true;
             return valid;
         }
-        if ($("#CustomerLName").val() == "") {
-            $scope.ErrorMessage = "Last name should be filled.";
-            $scope.ErrorModel.IsLastNameFilled = true;
+        if ($("#Address").val() == "") {
+            $scope.ErrorMessage = "Address should be filled.";
+            $scope.ErrorModel.IsAddressFilled = true;
             return valid;
         }
-        if ($("#MainLedgerId").val() == "0") {
-            $scope.ErrorMessage = "Customer type should be selected.";
-            $scope.ErrorModel.IsSelectMainledger = true;
+        if ($("#MobileNo").val() == "") {
+            $scope.ErrorMessage = "Mobile no should be filled.";
+            $scope.ErrorModel.IsPhoneNo = true;
             return valid;
         }
-        if ($("#BillingCycle").val() == "") {
-            $scope.ErrorMessage = "Billing Cycle should be filled.";
-            $scope.ErrorModel.IsBillingCycle = true;
+        if ($("#VATCSTNo").val() == "") {
+            $scope.ErrorMessage = "VAT CST No should be filled.";
+            $scope.ErrorModel.IsVATCSTNo = true;
             return valid;
         }
-        if ($("#ChargesPercent").val() == "") {
-            $scope.ErrorMessage = "Charges Percent should be filled.";
-            $scope.ErrorModel.IsChargesPercent = true;
-            return valid;
-        }
-        if ($("#SecurityDeposit").val() == "") {
-            $scope.ErrorMessage = "Security Deposit should be filled.";
-            $scope.ErrorModel.IsSecurityDeposit = true;
-            return valid;
-        }
-        if ($("#NoofCreditDays").val() == "") {
-            $scope.ErrorMessage = "No of Credit Days should be filled.";
-            $scope.ErrorModel.IsNoofCreditDays = true;
-            return valid;
-        }
+        
         valid = true;
         return valid;
     }
@@ -101,75 +82,53 @@
 
     $scope.FilterList = function () {
         var reg = new RegExp($scope.Prefix);
-        $scope.CustomerList = JSON.parse($("#customerlist").val()).filter(function (customer) {
+        $scope.VendorList = JSON.parse($("#vendorlist").val()).filter(function (customer) {
             return (reg.test(customer.CustomerFirstName) || reg.test(customer.Address) || reg.test(customer.City));
         });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.CustomerList = JSON.parse($("#customerlist").val());
-        $scope.SearchCustomerList = $scope.CustomerList;
+        $scope.VendorList = JSON.parse($("#vendorlist").val());
+        $scope.SearchVendorList = $scope.VendorList;
         $scope.First();
     }
 
     $scope.CancelClick = function () {
-        $("#CustomerFirstName").val("");
+        $("#SupplierName").val("");
         $("#ddlsubledger").val("0");
-        $("#CustomerMName").val("");
-        $("#CustomerLName").val("");
         $("#Address").val("");
+        $("#PhoneNo").val("");
+        $("#MobileNo").val("");
+        $("#VATCSTNo").val("");
+        $("#ExciseNo").val("");
+        $("#Email").val("");
         $("#City").val("");
-        $("#Pin").val("");
         $("#State").val("");
         $("#Country").val("");
-        $("#MobileNo").val("");
-        $("#EMailId").val("");
-        $("#MainLedgerId").val("0");
-        $("#DuplicateBill").val("0");
-        $("#SummaryofBills").val("0");
-        $("#ContactPerson").val("");
-        $("#VehicleWiseBill").val("0");
-        $("#BillingCycle").val("");
-        $("#CreditLimit").val("");
-        $("#ChargesPercent").val("");
-        $("#SecurityDeposit").val("");
-        $("#NoofCreditDays").val("");
-        $("#VehicleWiseBill").val("0");
-        $("#IsRoundOff").val("0");
+        $("#Pin").val("");
         $("#AccountType").val("0");
         $scope.Details = true;
         $scope.Add = false;
         $scope.Edit = false;
     }
 
-    $scope.EditClick = function (CustomerModel) {
-        $scope.CustomerId = CustomerModel.CustomerId;
-        $("#AccountType").val(CustomerModel.AccountTypeId);
+    $scope.EditClick = function (VendorModel) {
+        $scope.CustomerId = VendorModel.CustomerId;
+        $("#AccountType").val(VendorModel.AccountTypeId);
         $scope.AcTypeChanged();
-        $("#CustomerFirstName").val(CustomerModel.CustomerFirstName);
-        $("#ddlsubledger").val(CustomerModel.SubledgerId);
-        $("#CustomerMName").val(CustomerModel.CustomerMName);
-        $("#CustomerLName").val(CustomerModel.CustomerLName);
-        $("#Address").val(CustomerModel.Address);
-        $("#City").val(CustomerModel.City);
-        $("#Pin").val(CustomerModel.Pin);
-        $("#State").val(CustomerModel.State);
-        $("#Country").val(CustomerModel.Country);
-        $("#MobileNo").val(CustomerModel.MobileNo);
-        $("#EMailId").val(CustomerModel.EMailId);
-        $("#MainLedgerId").val(CustomerModel.CustomerTypeId);
-        $("#DuplicateBill").val(String(CustomerModel.DuplicateBill));
-        $("#SummaryofBills").val(String(CustomerModel.SummaryofBills));
-        $("#ContactPerson").val(CustomerModel.ContactPerson);
-        $("#VehicleWiseBill").val(String(CustomerModel.VehicleWiseBill));
-        $("#BillingCycle").val(CustomerModel.BillingCycle);
-        $("#CreditLimit").val(CustomerModel.CreditLimit);
-        $("#ChargesPercent").val(CustomerModel.ChargesPercent);
-        $("#SecurityDeposit").val(CustomerModel.SecurityDeposit);
-        $("#NoofCreditDays").val(CustomerModel.NoofCreditDays);
-        $("#IsSeperateBill").val(String(CustomerModel.VehicleWiseBill));
-        $("#IsRoundOff").val(String(CustomerModel.IsRoundOff));
+        $("#SupplierName").val(VendorModel.SupplierName);
+        $("#ddlsubledger").val(VendorModel.SubledgerId);
+        $("#VATCSTNo").val(VendorModel.VATCSTNo);
+        $("#ExciseNo").val(VendorModel.ExciseNo);
+        $("#Address").val(VendorModel.Address);
+        $("#City").val(VendorModel.City);
+        $("#Pin").val(VendorModel.Pin);
+        $("#State").val(VendorModel.State);
+        $("#Country").val(VendorModel.Country);
+        $("#MobileNo").val(VendorModel.MobileNo);
+        $("#Email").val(VendorModel.Email);
+        $("#PhoneNo").val(VendorModel.PhoneNo);
 
         $scope.Details = false;
         $scope.Add = false;
@@ -184,36 +143,25 @@
             document.getElementById("mainbody").appendChild(spinner.el);
             var model =
                 {
-                    CustomerId: isEdit == false ? $scope.CustomerId : 0,
-                    CustomerFirstName: $("#CustomerFirstName").val(),
+                    SupplierCode: isEdit == false ? $scope.VendorId : 0,
+                    SupplierName: $("#SupplierName").val(),
                     SubledgerId: $("#ddlsubledger").val(),
-                    CustomerMName: $("#CustomerMName").val(),
-                    CustomeLName: $("#CustomerLName").val(),
+                    VATCSTNo: $("#VATCSTNo").val(),
+                    ExciseNo: $("#ExciseNo").val(),
                     Address: $("#Address").val(),
                     City: $("#City").val(),
                     Pin: $("#Pin").val(),
                     State: $("#State").val(),
                     Country: $("#Country").val(),
                     MobileNo: $("#MobileNo").val(),
-                    EMailId: $("#EMailId").val(),
-                    CustomerTypeId: $("#MainLedgerId").val(),
-                    DuplicateBill: $("#DuplicateBill").val(),
-                    SummaryofBills: $("#SummaryofBills").val(),
-                    ContactPerson: $("#ContactPerson").val(),
-                    VehicleWiseBill: $("#VehicleWiseBill").val(),
-                    BillingCycle: $("#BillingCycle").val(),
-                    CreditLimit: $("#CreditLimit").val(),
-                    ChargesPercent: $("#ChargesPercent").val(),
-                    SecurityDeposit: $("#SecurityDeposit").val(),
-                    NoofCreditDays: $("#NoofCreditDays").val(),
-                    IsSeperateBill: $("#IsSeperateBill").val(),
-                    IsRoundOff: $("#IsRoundOff").val(),
+                    Email: $("#Email").val(),
                     AccountTypeId: $("#AccountType").val(),
+                    PhoneNo: $("#PhoneNo").val(),
                 };
 
-            var url = GetVirtualDirectory() + '/Customer/Save';
+            var url = GetVirtualDirectory() + '/Vendor/Save';
             if (isEdit == false) {
-                url = GetVirtualDirectory() + '/Customer/Update';
+                url = GetVirtualDirectory() + '/Vendor/Update';
             }
             var req = {
                 method: 'POST',
@@ -225,42 +173,30 @@
             }
             $http(req).then(function (response) {
                 if (isEdit == false) {
-                    angular.forEach($scope.CustomerList, function (value, key) {
-                        if (value.CustomerId == response.data.Id) {
-                            $scope.CustomerList[key].CustomerFirstName = model.CustomerFirstName;
-                            $scope.CustomerList[key].CustomerFirstName = model.CustomerFirstName;
-                            $scope.CustomerList[key].CustomerMName = model.CustomerMName;
-                            $scope.CustomerList[key].CustomeLName = model.CustomeLName;
-                            $scope.CustomerList[key].Address = model.Address;
-                            $scope.CustomerList[key].City = model.City;
-                            $scope.CustomerList[key].Pin = model.Pin;
-                            $scope.CustomerList[key].State = model.State;
-                            $scope.CustomerList[key].Country = model.Country;
-                            $scope.CustomerList[key].MobileNo = model.MobileNo;
-                            $scope.CustomerList[key].EMailId = model.EMailId;
-                            $scope.CustomerList[key].CustomerTypeId = model.CustomerTypeId;
-                            $scope.CustomerList[key].DuplicateBill = model.DuplicateBill;
-                            $scope.CustomerList[key].SummaryofBills = model.SummaryofBills;
-                            $scope.CustomerList[key].ContactPerson = model.ContactPerson;
-                            $scope.CustomerList[key].VehicleWiseBill = model.VehicleWiseBill;
-                            $scope.CustomerList[key].BillingCycle = model.BillingCycle;
-                            $scope.CustomerList[key].CreditLimit = model.CreditLimit;
-                            $scope.CustomerList[key].ChargesPercent = model.ChargesPercent;
-                            $scope.CustomerList[key].SecurityDeposit = model.SecurityDeposit;
-                            $scope.CustomerList[key].NoofCreditDays = model.NoofCreditDays;
-                            $scope.CustomerList[key].IsSeperateBill = model.IsSeperateBill;
-                            $scope.CustomerList[key].IsRoundOff = model.IsRoundOff;
+                    angular.forEach($scope.VendorList, function (value, key) {
+                        if (value.SupplierCode == response.data.Id) {
+                            $scope.VendorList[key].SupplierName = model.SupplierName;
+                            $scope.VendorList[key].VATCSTNo = model.VATCSTNo;
+                            $scope.VendorList[key].ExciseNo = model.ExciseNo;
+                            $scope.VendorList[key].Address = model.Address;
+                            $scope.VendorList[key].City = model.City;
+                            $scope.VendorList[key].Pin = model.Pin;
+                            $scope.VendorList[key].State = model.State;
+                            $scope.VendorList[key].Country = model.Country;
+                            $scope.VendorList[key].MobileNo = model.MobileNo;
+                            $scope.VendorList[key].Email = model.Email;
+                            $scope.VendorList[key].PhoneNo = model.PhoneNo;
                         }
                     });
                 }
                 else {
-                    model.CustomerId = response.data.Id;
-                    $scope.CustomerList.push(model);
+                    model.SupplierCode = response.data.Id;
+                    $scope.VendorList.push(model);
                 }
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#customerlist").val(JSON.stringify($scope.CustomerList));
-                        $scope.SearchCustomerList = $scope.CustomerList;
+                        $("#vendorlist").val(JSON.stringify($scope.VendorList));
+                        $scope.SearchVendorList = $scope.VendorList;
                         $scope.First();
                         $scope.CancelClick();
                     });
@@ -282,13 +218,13 @@
 
     $scope.First = function () {
         $scope.CurruntIndex = 0;
-        $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, 0);
+        $scope.SearchVendorList = $filter('limitTo')($scope.VendorList, $scope.Paging, 0);
     }
 
     $scope.Prev = function () {
         $scope.CurruntIndex = $scope.CurruntIndex - $scope.Paging;
         if ($scope.CurruntIndex >= 0) {
-            $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, $scope.CurruntIndex);
+            $scope.SearchVendorList = $filter('limitTo')($scope.VendorList, $scope.Paging, $scope.CurruntIndex);
         }
         else {
             $scope.CurruntIndex = 0;
@@ -297,8 +233,8 @@
 
     $scope.Next = function () {
         $scope.CurruntIndex = $scope.CurruntIndex + $scope.Paging;
-        if ($scope.CurruntIndex <= $scope.CustomerList.length) {
-            $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, $scope.CurruntIndex);
+        if ($scope.CurruntIndex <= $scope.VendorList.length) {
+            $scope.SearchVendorList = $filter('limitTo')($scope.VendorList, $scope.Paging, $scope.CurruntIndex);
         }
         else {
             $scope.Last();
@@ -306,20 +242,19 @@
     }
 
     $scope.Last = function () {
-        var total = $scope.CustomerList.length;
-        var rem = parseInt($scope.CustomerList.length) % parseInt($scope.Paging);
-        var position = $scope.CustomerList.length - $scope.Paging;
+        var total = $scope.VendorList.length;
+        var rem = parseInt($scope.VendorList.length) % parseInt($scope.Paging);
+        var position = $scope.VendorList.length - $scope.Paging;
         if (rem > 0) {
-            position = $scope.CustomerList.length - rem;
+            position = $scope.VendorList.length - rem;
         }
         $scope.CurruntIndex = position;
-        $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, position);
+        $scope.SearchVendorList = $filter('limitTo')($scope.VendorList, $scope.Paging, position);
     }
 
     $scope.init = function () {
-        $scope.CustomerList = JSON.parse($("#customerlist").val());
-        $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, $scope.CurruntIndex);
-        $scope.CustomerTypes = JSON.parse($("#CustomerTypeList").val());
+        $scope.VendorList = JSON.parse($("#vendorlist").val());
+        $scope.SearchVendorList = $filter('limitTo')($scope.VendorList, $scope.Paging, $scope.CurruntIndex);
         $scope.AccountTypes = JSON.parse($("#AccontTypeList").val()).AccountTypeList;
         //console.log($scope.AccountTypes);
         $scope.SubledgerList = JSON.parse($("#SubledgerList").val());

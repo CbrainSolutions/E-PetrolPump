@@ -1,0 +1,231 @@
+﻿@model PetrolPumpERP.Models.DataModels.VendorResponse
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@Scripts.Render("~/bundles/Vendor")
+<div data-ng-controller="VendorController" data-ng-app="PetroliumApp">
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.VendorList)" id="vendorlist" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AccontTypeList)" id="AccontTypeList" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
+    <h2>Vendor</h2>
+    <div class="table-responsive" data-ng-show="Details==true">
+        <div class="col-md-12">
+            <div class="col-md-8 divsearch">
+                <input type="text" placeholder="Search" class="form-control" data-ng-model="Prefix" data-ng-change="FilterList()" />
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" data-ng-click="FilterList()">Search</button>
+                <button class="btn btn-primary" data-ng-click="AddNewUI()">New</button>
+                <button class="btn btn-primary" data-ng-click="Reset()">Reset</button>
+            </div>
+            <hr />
+        </div>
+
+        <table class="table">
+            <tr>
+                <th>
+                    Supplier Id
+                </th>
+                <th>
+                    Supplier Name
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Mobile No
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+            <tr data-ng-repeat="vendor in SearchVendorList">
+                <td>
+                    {{vendor.SupplierCode}}
+                </td>
+                <td>
+                    {{vendor.SupplierName}}
+                </td>
+                <td>
+                    {{vendor.Address}}
+                </td>
+                <td>
+                    {{vendor.Email}}
+                </td>
+                <td>
+                    {{customer.MobileNo}}
+                </td>
+                <td>
+                    <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(vendor)"></span>
+                </td>
+                <td>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </td>
+            </tr>
+        </table>
+
+        <ul class="pagination">
+            <li data-ng-click="First()"><a href="#"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li data-ng-click="Prev()"><a href="#"><span class="glyphicon glyphicon-backward"></span></a></li>
+            <li data-ng-click="Next()"><a href="#"><span class="glyphicon glyphicon-forward"></span></a></li>
+            <li data-ng-click="Last()"><a href="#"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+        </ul>
+    </div>
+
+    <div data-ng-show="Add==true || Edit==true">
+        <ng-form role="form" name="frmReg" novalidate>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <select id="AccountType" class="form-control" data-ng-click="AcTypeChanged()">
+                                <option value="0">--Account Type--</option>
+                                <option data-ng-repeat="accountType in AccountTypes" value="{{accountType.AccountTypeId}}">{{accountType.AccountType}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsAccountType==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <select id="ddlsubledger" class="form-control">
+                                <option value="0">---Select Subledger---</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsSubledger==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="SupplierName" placeholder="Supplier Name*" maxlength="20" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsSupplierName==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="Address" placeholder="Address" maxlength="20" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsAddressFilled==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="PhoneNo" placeholder="Phone No" maxlength="20" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="MobileNo" placeholder="Mobile No" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsPhoneNo==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="VATCSTNo" placeholder="VAT CST No" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsVATCSTNo==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="ExciseNo" placeholder="Excise No" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="Email" placeholder="Email" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="City" placeholder="City" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="State" placeholder="State" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="Country" placeholder="Country" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="Pin" placeholder="Pin" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <hr />
+
+            <div class="col-md-3">
+                <button class="btn btn-primary" data-ng-click="Save(true)" data-ng-show="Add==true">Save</button>
+                <button class="btn btn-primary" data-ng-click="Save(false)" data-ng-show="Edit==true">Update</button>
+                <button class="btn btn-primary" data-ng-click="CancelClick()">Cancel</button>
+            </div>
+        </ng-form>
+    </div>
+</div>

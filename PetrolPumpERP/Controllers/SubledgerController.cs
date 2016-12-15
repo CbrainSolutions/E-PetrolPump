@@ -21,6 +21,7 @@ namespace PetrolPumpERP.Controllers
         }
 
         [MyAuthorizeAttribute]
+        [HttpPost]
         public ActionResult Save(SubledgerModel model)
         {
             model.SubLedgerCreationDate = DateTime.Now.Date;
@@ -29,6 +30,7 @@ namespace PetrolPumpERP.Controllers
         }
 
         [MyAuthorizeAttribute]
+        [HttpPost]
         public ActionResult Update(SubledgerModel model)
         {
             return Json(objSubledger.UpdateSubledger(model));
