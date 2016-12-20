@@ -91,6 +91,9 @@ namespace PetrolPumpERP.Models.DataModels
                                       State=tbl.State,
                                       Country=tbl.Country,
                                       Pin=tbl.Pin,
+                                      SupplierCode=tbl.SupplierCode,
+                                      AccountTypeId=tblledger.AcTypeId,
+                                      SubledgerId=tblledger.SubLedgerId,
                                   };
             return response;
         }
@@ -102,7 +105,7 @@ namespace PetrolPumpERP.Models.DataModels
             VendorResponse response = new VendorResponse() { Status = false };
             //tblSubLedger tbl = _db.tbl_CustomerInfo.Where(p => p..Trim().ToUpper() == model.SubLedgerName.Trim().ToUpper()).FirstOrDefault();
             tblSupplierMaster tbl=_db.tblSupplierMasters.Where(p=>p.SupplierName.Trim().ToLower()==model.SupplierName.Trim().ToLower()).FirstOrDefault();
-            if (tbl!=null)
+            if (tbl==null)
             {
                 tblLedger ledger = new tblLedger()
                 {
@@ -113,34 +116,46 @@ namespace PetrolPumpERP.Models.DataModels
                     LedgerName = "",
                 };
                 _db.tblLedgers.Add(ledger);
-                if (_db.SaveChanges() > 0)
+                try
                 {
-                    tbl = new tblSupplierMaster()
+                    if (_db.SaveChanges() > 0)
                     {
-                        Address = model.Address,
-                        ChangeDate = DateTime.Now.Date,
-                        Email = model.Email,
-                        EntryDate = DateTime.Now.Date,
-                        ExciseNo = model.ExciseNo,
-                        MobileNo = model.MobileNo,
-                        ServiceTaxNo = "",
-                        SupplierName = model.SupplierName,
-                        TotalInwardAmnt = 0,
-                        VATCSTNo = model.VATCSTNo,
-                        PhoneNo = model.PhoneNo,
-                        IsDelete = false,
-                        TotCumInwardAmnt = 0,
-                        LedgerId = ledger.LedgerId,
-                        City = model.City,
-                        State = model.State,
-                        Country = model.Country,
-                        Pin = model.Pin,
-                        ChangeBy = "",
-                        EntryBy = "",
-                    };
-                    _db.tblSupplierMasters.Add(tbl);
-                    try
-                    {
+                        tbl = new tblSupplierMaster()
+                        {
+                            Address = model.Address,
+                            ChangeDate = DateTime.Now.Date,
+                            Email = model.Email,
+                            EntryDate = DateTime.Now.Date,
+                            ExciseNo = string.IsNullOrEmpty(model.ExciseNo)?"":model.ExciseNo,
+                            MobileNo = model.MobileNo,
+                            ServiceTaxNo = "",
+                            SupplierName = model.SupplierName,
+                            TotalInwardAmnt = 0,
+                            VATCSTNo = model.VATCSTNo,
+                            PhoneNo = model.PhoneNo,
+                            IsDelete = false,
+                            TotCumInwardAmnt = 0,
+                            LedgerId = ledger.LedgerId,
+                            City = model.City,
+                            State = model.State,
+                            Country = model.Country,
+                            Pin = model.Pin,
+                            ChangeBy = "",
+                            EntryBy = "",
+                        };
+                        _db.tblSupplierMasters.Add(tbl);
+
+                        tblOpeningBalance opening = new tblOpeningBalance()
+                        {
+                            CreatedDate=DateTime.Now.Date,
+                            CreditBal=0,
+                            DebitBal=0,
+                            FinancialYearId=1,
+                            IsDelete=false,
+                            LedgerId=ledger.LedgerId,
+                            OpeningBalnceEffectFrom=DateTime.Now.Date,
+                        };
+                        _db.tblOpeningBalances.Add(opening);
                         var state = _db.SaveChanges();
                         if (state > 0)
                         {
@@ -151,21 +166,22 @@ namespace PetrolPumpERP.Models.DataModels
                         {
                             response.Message = "Record not saved.";
                         }
+
                     }
-                    catch (DbEntityValidationException ex)
+                    else
                     {
-                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                        {
-                            foreach (var validationError in entityValidationErrors.ValidationErrors)
-                            {
-                                //Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
-                            }
-                        }
+                        response.Message = "Record not saved.";
                     }
                 }
-                else
+                catch (DbEntityValidationException ex)
                 {
-                    response.Message = "Record not saved.";
+                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in entityValidationErrors.ValidationErrors)
+                        {
+                            //Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                        }
+                    }
                 }
             }
             else
@@ -197,13 +213,27 @@ namespace PetrolPumpERP.Models.DataModels
                 tbl.State = model.State;
                 tbl.Country = model.Country;
                 tbl.Pin = model.Pin;
-                if (_db.SaveChanges() > 0)
+                tbl.ServiceTaxNo = "";
+                try
                 {
-                    response.Status = true;
+                    if (_db.SaveChanges() > 0)
+                    {
+                        response.Status = true;
+                    }
+                    else
+                    {
+                        response.Message = "Record not updated.";
+                    }
                 }
-                else
+                catch (DbEntityValidationException ex)
                 {
-                    response.Message = "Record not updated.";
+                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in entityValidationErrors.ValidationErrors)
+                        {
+                            //Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                        }
+                    }
                 }
             }
             else
@@ -232,6 +262,7 @@ namespace PetrolPumpERP.Models.DataModels
                         tbl.State = model.State;
                         tbl.Country = model.Country;
                         tbl.Pin = model.Pin;
+                        tbl.ServiceTaxNo = "";
                         if (_db.SaveChanges() > 0)
                         {
                             response.Status = true;

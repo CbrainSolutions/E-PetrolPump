@@ -202,6 +202,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\SubledgerController.cs" />
     <Compile Include="Controllers\UOMController.cs" />
@@ -256,6 +257,9 @@
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntities\tblMainLedger.cs">
+      <DependentUpon>PetrolPumpERP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataEntities\tblOpeningBalance.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntities\tblProductMaster.cs">
@@ -320,6 +324,7 @@
     </Compile>
     <Compile Include="Models\DataModels\AccountTypeModel.cs" />
     <Compile Include="Models\DataModels\CustomerModel.cs" />
+    <Compile Include="Models\DataModels\ProductModel.cs" />
     <Compile Include="Models\DataModels\ProductType.cs" />
     <Compile Include="Models\DataModels\SubledgerModel.cs" />
     <Compile Include="Models\DataModels\UOMModel.cs" />
@@ -407,6 +412,7 @@
     <Content Include="Scripts\Main\CustomerController.js" />
     <Content Include="Scripts\Main\jquery.min.js" />
     <Content Include="Scripts\Main\LoginController.js" />
+    <Content Include="Scripts\Main\ProductController.js" />
     <Content Include="Scripts\Main\ProductTypeController.js" />
     <Content Include="Scripts\Main\ShowCustomAlert.js" />
     <Content Include="Scripts\Main\spin.js" />
@@ -460,6 +466,7 @@
     <Content Include="Views\Vendor\Index.cshtml" />
     <Content Include="Views\UOM\Index.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

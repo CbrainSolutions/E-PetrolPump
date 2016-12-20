@@ -174,6 +174,17 @@ namespace PetrolPumpERP.Models.DataModels
 
                 };
                 _db.tbl_CustomerInfo.Add(tbl);
+                tblOpeningBalance opening = new tblOpeningBalance()
+                {
+                    CreatedDate = DateTime.Now.Date,
+                    CreditBal = 0,
+                    DebitBal = 0,
+                    FinancialYearId = 1,
+                    IsDelete = false,
+                    LedgerId = ledger.LedgerId,
+                    OpeningBalnceEffectFrom = DateTime.Now.Date,
+                };
+                _db.tblOpeningBalances.Add(opening);
                 if (_db.SaveChanges() > 0)
                 {
                     response.Status = true;

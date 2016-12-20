@@ -224,17 +224,32 @@
     <Property Name="IsDelete" Type="bit" />
     <Property Name="IsModify" Type="bit" />
   </EntityType>
+  <EntityType Name="tblOpeningBalance">
+    <Key>
+      <PropertyRef Name="OpeningBalanceId" />
+    </Key>
+    <Property Name="OpeningBalanceId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LedgerId" Type="bigint" />
+    <Property Name="OpeningBalnceEffectFrom" Type="datetime" />
+    <Property Name="CreditBal" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="DebitBal" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FinancialYearId" Type="bigint" />
+    <Property Name="IsDelete" Type="bit" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
   <EntityType Name="tblProductMaster">
     <Key>
       <PropertyRef Name="ProductId" />
     </Key>
-    <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ProductName" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="UOM" Type="varchar" MaxLength="20" Nullable="false" />
-    <Property Name="SubUOM" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-    <Property Name="IsReusable" Type="bit" Nullable="false" />
-    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="ProductId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductName" Type="varchar" MaxLength="100" />
+    <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="ProductTypeId" Type="bigint" />
+    <Property Name="UOMId" Type="int" />
+    <Property Name="SubUOMId" Type="int" />
+    <Property Name="IsDelete" Type="bit" />
+    <Property Name="ProductDescription" Type="varchar" MaxLength="500" />
+    <Property Name="CreatedDate" Type="date" />
   </EntityType>
   <EntityType Name="tblProductType">
     <Key>
@@ -330,7 +345,7 @@
       <PropertyRef Name="StockId" />
     </Key>
     <Property Name="StockId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="ProductId" Type="bigint" Nullable="false" />
     <Property Name="OpeningQty" Type="int" />
     <Property Name="OpeningQtyDate" Type="datetime" />
     <Property Name="InwardQty" Type="int" />
@@ -367,7 +382,7 @@
     <Property Name="MobileNo" Type="nvarchar" MaxLength="10" Nullable="false" />
     <Property Name="VATCSTNo" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="ExciseNo" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="ServiceTaxNo" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="TotalInwardAmnt" Type="decimal" Precision="10" Scale="2" Nullable="false" />
     <Property Name="TotCumInwardAmnt" Type="decimal" Precision="10" Scale="2" Nullable="false" />
@@ -467,6 +482,7 @@
     <EntitySet Name="tblFinancialMaster" EntityType="Self.tblFinancialMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblLedger" EntityType="Self.tblLedger" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblMainLedger" EntityType="Self.tblMainLedger" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblOpeningBalance" EntityType="Self.tblOpeningBalance" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblProductMaster" EntityType="Self.tblProductMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblProductType" EntityType="Self.tblProductType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblPurchaseInvoice" EntityType="Self.tblPurchaseInvoice" Schema="dbo" store:Type="Tables" />

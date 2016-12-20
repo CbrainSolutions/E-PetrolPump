@@ -23,7 +23,7 @@
     }
 
     $scope.FilterList = function () {
-        $scope.ProductTypeList = $filter('filter')(JSON.parse($("#producttypelist").val()), { UnitDesc: $scope.Prefix })
+        $scope.ProductTypeList = $filter('filter')(JSON.parse($("#producttypelist").val()), { ProductType: $scope.Prefix })
         $scope.First();
     }
 

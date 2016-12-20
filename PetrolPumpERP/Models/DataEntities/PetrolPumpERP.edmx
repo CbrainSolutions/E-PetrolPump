@@ -229,17 +229,32 @@
           <Property Name="IsDelete" Type="bit" />
           <Property Name="IsModify" Type="bit" />
         </EntityType>
+        <EntityType Name="tblOpeningBalance">
+          <Key>
+            <PropertyRef Name="OpeningBalanceId" />
+          </Key>
+          <Property Name="OpeningBalanceId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LedgerId" Type="bigint" />
+          <Property Name="OpeningBalnceEffectFrom" Type="datetime" />
+          <Property Name="CreditBal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DebitBal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FinancialYearId" Type="bigint" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="tblProductMaster">
           <Key>
             <PropertyRef Name="ProductId" />
           </Key>
-          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProductName" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="UOM" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="SubUOM" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="IsReusable" Type="bit" Nullable="false" />
-          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="varchar" MaxLength="100" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ProductTypeId" Type="bigint" />
+          <Property Name="UOMId" Type="int" />
+          <Property Name="SubUOMId" Type="int" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="ProductDescription" Type="varchar" MaxLength="500" />
+          <Property Name="CreatedDate" Type="date" />
         </EntityType>
         <EntityType Name="tblProductType">
           <Key>
@@ -335,7 +350,7 @@
             <PropertyRef Name="StockId" />
           </Key>
           <Property Name="StockId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
           <Property Name="OpeningQty" Type="int" />
           <Property Name="OpeningQtyDate" Type="datetime" />
           <Property Name="InwardQty" Type="int" />
@@ -372,7 +387,7 @@
           <Property Name="MobileNo" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="VATCSTNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ExciseNo" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="ServiceTaxNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="TotalInwardAmnt" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="TotCumInwardAmnt" Type="decimal" Precision="10" Scale="2" Nullable="false" />
@@ -472,6 +487,7 @@
           <EntitySet Name="tblFinancialMaster" EntityType="Self.tblFinancialMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblLedger" EntityType="Self.tblLedger" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMainLedger" EntityType="Self.tblMainLedger" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblOpeningBalance" EntityType="Self.tblOpeningBalance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblProductMaster" EntityType="Self.tblProductMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblProductType" EntityType="Self.tblProductType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseInvoice" EntityType="Self.tblPurchaseInvoice" Schema="dbo" store:Type="Tables" />
@@ -493,22 +509,86 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PetrolPumpERPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PetrolPumpERPEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
+          <EntitySet Name="tbl_Invoice" EntityType="PetrolPumpERPModel.tbl_Invoice" />
+          <EntitySet Name="tbl_InvoiceDetail" EntityType="PetrolPumpERPModel.tbl_InvoiceDetail" />
+          <EntitySet Name="tbl_ReceiptDetails" EntityType="PetrolPumpERPModel.tbl_ReceiptDetails" />
+          <EntitySet Name="tblAccountTypes" EntityType="PetrolPumpERPModel.tblAccountType" />
+          <EntitySet Name="tblAccountTypeDetails" EntityType="PetrolPumpERPModel.tblAccountTypeDetail" />
+          <EntitySet Name="tblAllowanceDeductions" EntityType="PetrolPumpERPModel.tblAllowanceDeduction" />
+          <EntitySet Name="tblCustomeTypes" EntityType="PetrolPumpERPModel.tblCustomeType" />
+          <EntitySet Name="tblDebitNotes" EntityType="PetrolPumpERPModel.tblDebitNote" />
+          <EntitySet Name="tblDebitNoteDetails" EntityType="PetrolPumpERPModel.tblDebitNoteDetail" />
+          <EntitySet Name="tblDesignationMasters" EntityType="PetrolPumpERPModel.tblDesignationMaster" />
+          <EntitySet Name="tblEmployees" EntityType="PetrolPumpERPModel.tblEmployee" />
+          <EntitySet Name="tblFinancialMasters" EntityType="PetrolPumpERPModel.tblFinancialMaster" />
+          <EntitySet Name="tblLedgers" EntityType="PetrolPumpERPModel.tblLedger" />
+          <EntitySet Name="tblMainLedgers" EntityType="PetrolPumpERPModel.tblMainLedger" />
+          <EntitySet Name="tblProductTypes" EntityType="PetrolPumpERPModel.tblProductType" />
+          <EntitySet Name="tblPurchaseInvoices" EntityType="PetrolPumpERPModel.tblPurchaseInvoice" />
+          <EntitySet Name="tblPurchaseInvoiceDetails" EntityType="PetrolPumpERPModel.tblPurchaseInvoiceDetail" />
+          <EntitySet Name="tblPurchaseOrders" EntityType="PetrolPumpERPModel.tblPurchaseOrder" />
+          <EntitySet Name="tblPurchaseOrderDetails" EntityType="PetrolPumpERPModel.tblPurchaseOrderDetail" />
+          <EntitySet Name="tblSalaries" EntityType="PetrolPumpERPModel.tblSalary" />
+          <EntitySet Name="tblSalaryDetails" EntityType="PetrolPumpERPModel.tblSalaryDetail" />
+          <EntitySet Name="tblSubLedgers" EntityType="PetrolPumpERPModel.tblSubLedger" />
+          <EntitySet Name="tblSupplierMasters" EntityType="PetrolPumpERPModel.tblSupplierMaster" />
+          <EntitySet Name="tblTransactions" EntityType="PetrolPumpERPModel.tblTransaction" />
+          <EntitySet Name="tblTransactionTypes" EntityType="PetrolPumpERPModel.tblTransactionType" />
+          <EntitySet Name="tblUnitMasters" EntityType="PetrolPumpERPModel.tblUnitMaster" />
+          <EntitySet Name="tblUsers" EntityType="PetrolPumpERPModel.tblUser" />
+          <EntitySet Name="tblUserTypes" EntityType="PetrolPumpERPModel.tblUserType" />
+          <EntitySet Name="tblProductMasters" EntityType="PetrolPumpERPModel.tblProductMaster" />
+          <EntitySet Name="tblStockDetails" EntityType="PetrolPumpERPModel.tblStockDetail" />
+          <EntitySet Name="tblOpeningBalances" EntityType="PetrolPumpERPModel.tblOpeningBalance" />
+        </EntityContainer>
+        <EntityType Name="tbl_CustomerInfo">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerMName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomeLName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Pin" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EMailId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerTypeId" Type="Int32" />
+          <Property Name="DuplicateBill" Type="Boolean" />
+          <Property Name="SummaryofBills" Type="Boolean" />
+          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleWiseBill" Type="Boolean" />
+          <Property Name="BillingCycle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreditLimit" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ChargesPercent" Type="Int32" />
+          <Property Name="SecurityDeposit" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NoofCreditDays" Type="Int32" />
+          <Property Name="IsSeperateBill" Type="Boolean" />
+          <Property Name="IsRoundOff" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="LedgerId" Type="Int64" />
+        </EntityType>
         <EntityType Name="tbl_Invoice">
           <Key>
             <PropertyRef Name="InvoiceNo" />
           </Key>
           <Property Name="InvoiceNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-          <Property Name="CustomerCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CustomerCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ISCASH" Type="Boolean" />
-          <Property Name="CustName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CustAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CustContactNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NetVAT" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="NetInvoiceAmount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="BalanceAmount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CustName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustContactNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NetVAT" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="NetInvoiceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="BalanceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
           <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="NetAmount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NetAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="tbl_InvoiceDetail">
           <Key>
@@ -520,8 +600,8 @@
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="BatchNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
-          <Property Name="Rate" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="ProductAmount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="ProductAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
           <Property Name="VAT" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="VATAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
@@ -531,24 +611,42 @@
             <PropertyRef Name="ReceiptNo" />
           </Key>
           <Property Name="ReceiptNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CustomerCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="VoucherDate" Type="DateTime" Precision="3" />
-          <Property Name="TotalAmount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="ReceiptMode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TotalAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="ReceiptMode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ChequeNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ChequeDate" Type="DateTime" Precision="3" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblAccountType">
+          <Key>
+            <PropertyRef Name="AccountTypeId" />
+          </Key>
+          <Property Name="AccountTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountType" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="SubledgerId" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblAccountTypeDetail">
+          <Key>
+            <PropertyRef Name="SRNo" />
+          </Key>
+          <Property Name="SRNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountTypeId" Type="Int64" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="SubledgerId" Type="Int64" />
         </EntityType>
         <EntityType Name="tblAllowanceDeduction">
           <Key>
             <PropertyRef Name="AllowDedId" />
           </Key>
           <Property Name="AllowDedId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Percentage" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="IsPercentage" Type="Boolean" Nullable="false" />
           <Property Name="IsFixed" Type="Boolean" Nullable="false" />
           <Property Name="IsFlexible" Type="Boolean" Nullable="false" />
@@ -556,6 +654,15 @@
           <Property Name="IsDeduction" Type="Boolean" Nullable="false" />
           <Property Name="IsBasic" Type="Boolean" Nullable="false" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblCustomeType">
+          <Key>
+            <PropertyRef Name="CustomerTypeId" />
+          </Key>
+          <Property Name="CustomerTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="tblDebitNote">
           <Key>
@@ -590,7 +697,7 @@
             <PropertyRef Name="DesignationCode" />
           </Key>
           <Property Name="DesignationCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DesignationDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DesignationDesc" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="tblEmployee">
@@ -598,15 +705,15 @@
             <PropertyRef Name="EmpCode" />
           </Key>
           <Property Name="EmpCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EmpFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="EmpMiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="EmpLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="EmpAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmpFirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmpMiddleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmpLastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmpAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DeptId" Type="Int32" Nullable="false" />
           <Property Name="EmpDOB" Type="DateTime" Precision="3" />
           <Property Name="EmpDOJ" Type="DateTime" Precision="3" />
-          <Property Name="UserType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DesignationId" Type="Int32" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
           <Property Name="BankName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -626,6 +733,31 @@
           <Property Name="FirmName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="tblLedger">
+          <Key>
+            <PropertyRef Name="LedgerId" />
+          </Key>
+          <Property Name="LedgerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LedgerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AccountNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PanNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccOpenDate" Type="DateTime" Precision="3" />
+          <Property Name="SubLedgerId" Type="Int64" />
+          <Property Name="EmailID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FinancialYearId" Type="Int64" />
+          <Property Name="MiscCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IFSCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BankBranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Uploaded" Type="Boolean" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AcType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AcTypeId" Type="Int32" />
+        </EntityType>
         <EntityType Name="tblMainLedger">
           <Key>
             <PropertyRef Name="MainLedgerId" />
@@ -635,17 +767,13 @@
           <Property Name="IsDelete" Type="Boolean" />
           <Property Name="IsModify" Type="Boolean" />
         </EntityType>
-        <EntityType Name="tblProductMaster">
+        <EntityType Name="tblProductType">
           <Key>
-            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="ProductTypeId" />
           </Key>
-          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="UOM" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SubUOM" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="IsReusable" Type="Boolean" Nullable="false" />
-          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="ProductTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
         </EntityType>
         <EntityType Name="tblPurchaseInvoice">
           <Key>
@@ -709,8 +837,8 @@
           <Property Name="No_of_Days" Type="Int32" Nullable="false" />
           <Property Name="LeavesTaken" Type="Int32" Nullable="false" />
           <Property Name="Attend_Days" Type="Int32" Nullable="false" />
-          <Property Name="Sal_Month" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NetPayment" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Sal_Month" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="NetPayment" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="OTHours" Type="Int32" />
           <Property Name="IsPaymentDone" Type="Boolean" Nullable="false" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
@@ -724,29 +852,9 @@
           <Property Name="SalId" Type="Int32" Nullable="false" />
           <Property Name="SalDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="AllowanceDeduction_Id" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="IsPaymentDone" Type="Boolean" Nullable="false" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tblStockDetail">
-          <Key>
-            <PropertyRef Name="StockId" />
-          </Key>
-          <Property Name="StockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="OpeningQty" Type="Int32" />
-          <Property Name="OpeningQtyDate" Type="DateTime" Precision="3" />
-          <Property Name="InwardQty" Type="Int32" />
-          <Property Name="InwardPrice" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="OutwardQty" Type="Int32" />
-          <Property Name="OutwardPrice" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="DocumentNo" Type="Int32" />
-          <Property Name="TransactionType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
-          <Property Name="BatchNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
-          <Property Name="InwardAmount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="OutwardAmount" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="tblSubLedger">
           <Key>
@@ -758,6 +866,32 @@
           <Property Name="MainLedgerId" Type="Int64" />
           <Property Name="IsDelete" Type="Boolean" />
           <Property Name="IsModify" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="tblSupplierMaster">
+          <Key>
+            <PropertyRef Name="SupplierCode" />
+          </Key>
+          <Property Name="SupplierCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="VATCSTNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExciseNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ServiceTaxNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalInwardAmnt" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="TotCumInwardAmnt" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="EntryBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EntryDate" Type="DateTime" Precision="3" />
+          <Property Name="ChangeBy" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ChangeDate" Type="DateTime" Precision="3" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="LedgerId" Type="Int64" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Pin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblTransaction">
           <Key>
@@ -828,576 +962,59 @@
           <Property Name="IsDelete" Type="Boolean" />
           <Property Name="IsModify" Type="Boolean" />
         </EntityType>
-        <EntityContainer Name="PetrolPumpERPEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="tbl_Invoice" EntityType="Self.tbl_Invoice" />
-          <EntitySet Name="tbl_InvoiceDetail" EntityType="Self.tbl_InvoiceDetail" />
-          <EntitySet Name="tbl_ReceiptDetails" EntityType="Self.tbl_ReceiptDetails" />
-          <EntitySet Name="tblAllowanceDeductions" EntityType="Self.tblAllowanceDeduction" />
-          <EntitySet Name="tblDebitNotes" EntityType="Self.tblDebitNote" />
-          <EntitySet Name="tblDebitNoteDetails" EntityType="Self.tblDebitNoteDetail" />
-          <EntitySet Name="tblDesignationMasters" EntityType="Self.tblDesignationMaster" />
-          <EntitySet Name="tblEmployees" EntityType="Self.tblEmployee" />
-          <EntitySet Name="tblFinancialMasters" EntityType="Self.tblFinancialMaster" />
-          <EntitySet Name="tblMainLedgers" EntityType="Self.tblMainLedger" />
-          <EntitySet Name="tblProductMasters" EntityType="Self.tblProductMaster" />
-          <EntitySet Name="tblPurchaseInvoices" EntityType="Self.tblPurchaseInvoice" />
-          <EntitySet Name="tblPurchaseInvoiceDetails" EntityType="Self.tblPurchaseInvoiceDetail" />
-          <EntitySet Name="tblPurchaseOrders" EntityType="Self.tblPurchaseOrder" />
-          <EntitySet Name="tblPurchaseOrderDetails" EntityType="Self.tblPurchaseOrderDetail" />
-          <EntitySet Name="tblSalaries" EntityType="Self.tblSalary" />
-          <EntitySet Name="tblSalaryDetails" EntityType="Self.tblSalaryDetail" />
-          <EntitySet Name="tblStockDetails" EntityType="Self.tblStockDetail" />
-          <EntitySet Name="tblSubLedgers" EntityType="Self.tblSubLedger" />
-          <EntitySet Name="tblTransactions" EntityType="Self.tblTransaction" />
-          <EntitySet Name="tblTransactionTypes" EntityType="Self.tblTransactionType" />
-          <EntitySet Name="tblUnitMasters" EntityType="Self.tblUnitMaster" />
-          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
-          <EntitySet Name="tblUserTypes" EntityType="Self.tblUserType" />
-          <EntitySet Name="tblCustomeTypes" EntityType="PetrolPumpERPModel.tblCustomeType" />
-          <EntitySet Name="tblAccountTypes" EntityType="PetrolPumpERPModel.tblAccountType" />
-          <EntitySet Name="tblAccountTypeDetails" EntityType="PetrolPumpERPModel.tblAccountTypeDetail" />
-          <EntitySet Name="tblLedgers" EntityType="PetrolPumpERPModel.tblLedger" />
-          <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
-          <EntitySet Name="tblSupplierMasters" EntityType="PetrolPumpERPModel.tblSupplierMaster" />
-          <EntitySet Name="tblProductTypes" EntityType="PetrolPumpERPModel.tblProductType" />
-        </EntityContainer>
-        <EntityType Name="tblCustomeType">
+        <EntityType Name="tblProductMaster">
           <Key>
-            <PropertyRef Name="CustomerTypeId" />
+            <PropertyRef Name="ProductId" />
           </Key>
-          <Property Name="CustomerTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ProductTypeId" Type="Int64" />
+          <Property Name="UOMId" Type="Int32" />
+          <Property Name="SubUOMId" Type="Int32" />
           <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="ProductDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
         </EntityType>
-        <EntityType Name="tblAccountType">
+        <EntityType Name="tblStockDetail">
           <Key>
-            <PropertyRef Name="AccountTypeId" />
+            <PropertyRef Name="StockId" />
           </Key>
-          <Property Name="AccountTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AccountType" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="IsDelete" Type="Boolean" />
-          <Property Name="SubledgerId" Type="Int64" />
-        </EntityType>
-        <EntityType Name="tblAccountTypeDetail">
-          <Key>
-            <PropertyRef Name="SRNo" />
-          </Key>
-          <Property Name="SRNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AccountTypeId" Type="Int64" />
-          <Property Name="IsDelete" Type="Boolean" />
-          <Property Name="SubledgerId" Type="Int64" />
-        </EntityType>
-        <EntityType Name="tblLedger">
-          <Key>
-            <PropertyRef Name="LedgerId" />
-          </Key>
-          <Property Name="LedgerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LedgerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="AccountNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PanNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AccOpenDate" Type="DateTime" Precision="3" />
-          <Property Name="SubLedgerId" Type="Int64" />
-          <Property Name="EmailID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FinancialYearId" Type="Int64" />
-          <Property Name="MiscCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IFSCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BankBranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Uploaded" Type="Boolean" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AcType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AcTypeId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="tbl_CustomerInfo">
-          <Key>
-            <PropertyRef Name="CustomerId" />
-          </Key>
-          <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustomerMName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustomeLName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Pin" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EMailId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustomerTypeId" Type="Int32" />
-          <Property Name="DuplicateBill" Type="Boolean" />
-          <Property Name="SummaryofBills" Type="Boolean" />
-          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VehicleWiseBill" Type="Boolean" />
-          <Property Name="BillingCycle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreditLimit" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="ChargesPercent" Type="Int32" />
-          <Property Name="SecurityDeposit" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="NoofCreditDays" Type="Int32" />
-          <Property Name="IsSeperateBill" Type="Boolean" />
-          <Property Name="IsRoundOff" Type="Boolean" />
-          <Property Name="IsDelete" Type="Boolean" />
-          <Property Name="LedgerId" Type="Int64" />
-        </EntityType>
-        <EntityType Name="tblSupplierMaster">
-          <Key>
-            <PropertyRef Name="SupplierCode" />
-          </Key>
-          <Property Name="SupplierCode" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNo" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="VATCSTNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ExciseNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ServiceTaxNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TotalInwardAmnt" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="TotCumInwardAmnt" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="EntryBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EntryDate" Type="DateTime" Precision="3" />
-          <Property Name="ChangeBy" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="ChangeDate" Type="DateTime" Precision="3" />
+          <Property Name="StockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="OpeningQty" Type="Int32" />
+          <Property Name="OpeningQtyDate" Type="DateTime" Precision="3" />
+          <Property Name="InwardQty" Type="Int32" />
+          <Property Name="InwardPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OutwardQty" Type="Int32" />
+          <Property Name="OutwardPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DocumentNo" Type="Int32" />
+          <Property Name="TransactionType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
-          <Property Name="LedgerId" Type="Int64" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Pin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BatchNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="InwardAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OutwardAmount" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
-        <EntityType Name="tblProductType">
+        <EntityType Name="tblOpeningBalance">
           <Key>
-            <PropertyRef Name="ProductTypeId" />
+            <PropertyRef Name="OpeningBalanceId" />
           </Key>
-          <Property Name="ProductTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OpeningBalanceId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LedgerId" Type="Int64" />
+          <Property Name="OpeningBalnceEffectFrom" Type="DateTime" Precision="3" />
+          <Property Name="CreditBal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DebitBal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FinancialYearId" Type="Int64" />
           <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
         </EntityType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="PetrolPumpERPModelStoreContainer" CdmEntityContainer="PetrolPumpERPEntities1">
-          <EntitySetMapping Name="tbl_Invoice">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_Invoice">
-              <MappingFragment StoreEntitySet="tbl_Invoice">
-                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
-                <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="CustAddress" ColumnName="CustAddress" />
-                <ScalarProperty Name="CustContactNo" ColumnName="CustContactNo" />
-                <ScalarProperty Name="NetVAT" ColumnName="NetVAT" />
-                <ScalarProperty Name="NetInvoiceAmount" ColumnName="NetInvoiceAmount" />
-                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_InvoiceDetail">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_InvoiceDetail">
-              <MappingFragment StoreEntitySet="tbl_InvoiceDetail">
-                <ScalarProperty Name="SRNO" ColumnName="SRNO" />
-                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="ProductAmount" ColumnName="ProductAmount" />
-                <ScalarProperty Name="VAT" ColumnName="VAT" />
-                <ScalarProperty Name="VATAmount" ColumnName="VATAmount" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_ReceiptDetails">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_ReceiptDetails">
-              <MappingFragment StoreEntitySet="tbl_ReceiptDetails">
-                <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
-                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="VoucherDate" ColumnName="VoucherDate" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="ReceiptMode" ColumnName="ReceiptMode" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
-                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblAllowanceDeductions">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAllowanceDeduction">
-              <MappingFragment StoreEntitySet="tblAllowanceDeduction">
-                <ScalarProperty Name="AllowDedId" ColumnName="AllowDedId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="IsPercentage" ColumnName="IsPercentage" />
-                <ScalarProperty Name="IsFixed" ColumnName="IsFixed" />
-                <ScalarProperty Name="IsFlexible" ColumnName="IsFlexible" />
-                <ScalarProperty Name="IsAllowance" ColumnName="IsAllowance" />
-                <ScalarProperty Name="IsDeduction" ColumnName="IsDeduction" />
-                <ScalarProperty Name="IsBasic" ColumnName="IsBasic" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblDebitNotes">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDebitNote">
-              <MappingFragment StoreEntitySet="tblDebitNote">
-                <ScalarProperty Name="DNNo" ColumnName="DNNo" />
-                <ScalarProperty Name="DNDate" ColumnName="DNDate" />
-                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Tax1" ColumnName="Tax1" />
-                <ScalarProperty Name="Tax2" ColumnName="Tax2" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblDebitNoteDetails">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDebitNoteDetail">
-              <MappingFragment StoreEntitySet="tblDebitNoteDetails">
-                <ScalarProperty Name="DNSrNo" ColumnName="DNSrNo" />
-                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="DNNo" ColumnName="DNNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblDesignationMasters">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDesignationMaster">
-              <MappingFragment StoreEntitySet="tblDesignationMaster">
-                <ScalarProperty Name="DesignationCode" ColumnName="DesignationCode" />
-                <ScalarProperty Name="DesignationDesc" ColumnName="DesignationDesc" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblEmployees">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblEmployee">
-              <MappingFragment StoreEntitySet="tblEmployee">
-                <ScalarProperty Name="EmpCode" ColumnName="EmpCode" />
-                <ScalarProperty Name="EmpFirstName" ColumnName="EmpFirstName" />
-                <ScalarProperty Name="EmpMiddleName" ColumnName="EmpMiddleName" />
-                <ScalarProperty Name="EmpLastName" ColumnName="EmpLastName" />
-                <ScalarProperty Name="EmpAddress" ColumnName="EmpAddress" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="DeptId" ColumnName="DeptId" />
-                <ScalarProperty Name="EmpDOB" ColumnName="EmpDOB" />
-                <ScalarProperty Name="EmpDOJ" ColumnName="EmpDOJ" />
-                <ScalarProperty Name="UserType" ColumnName="UserType" />
-                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="BankACNo" ColumnName="BankACNo" />
-                <ScalarProperty Name="PFNo" ColumnName="PFNo" />
-                <ScalarProperty Name="PanNo" ColumnName="PanNo" />
-                <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblFinancialMasters">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblFinancialMaster">
-              <MappingFragment StoreEntitySet="tblFinancialMaster">
-                <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="YearStartDate" ColumnName="YearStartDate" />
-                <ScalarProperty Name="YearEndDate" ColumnName="YearEndDate" />
-                <ScalarProperty Name="FirmName" ColumnName="FirmName" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblMainLedgers">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblMainLedger">
-              <MappingFragment StoreEntitySet="tblMainLedger">
-                <ScalarProperty Name="MainLedgerId" ColumnName="MainLedgerId" />
-                <ScalarProperty Name="MainLedgerName" ColumnName="MainLedgerName" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblProductMasters">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblProductMaster">
-              <MappingFragment StoreEntitySet="tblProductMaster">
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="UOM" ColumnName="UOM" />
-                <ScalarProperty Name="SubUOM" ColumnName="SubUOM" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="IsReusable" ColumnName="IsReusable" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblPurchaseInvoices">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoice">
-              <MappingFragment StoreEntitySet="tblPurchaseInvoice">
-                <ScalarProperty Name="PINo" ColumnName="PINo" />
-                <ScalarProperty Name="PIDate" ColumnName="PIDate" />
-                <ScalarProperty Name="PONo" ColumnName="PONo" />
-                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Tax1" ColumnName="Tax1" />
-                <ScalarProperty Name="Tax2" ColumnName="Tax2" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblPurchaseInvoiceDetails">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoiceDetail">
-              <MappingFragment StoreEntitySet="tblPurchaseInvoiceDetails">
-                <ScalarProperty Name="PINoSrNo" ColumnName="PINoSrNo" />
-                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
-                <ScalarProperty Name="InvoiceQty" ColumnName="InvoiceQty" />
-                <ScalarProperty Name="InvoicePrice" ColumnName="InvoicePrice" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="PINo" ColumnName="PINo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblPurchaseOrders">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseOrder">
-              <MappingFragment StoreEntitySet="tblPurchaseOrder">
-                <ScalarProperty Name="PO_Id" ColumnName="PO_Id" />
-                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
-                <ScalarProperty Name="PO_Date" ColumnName="PO_Date" />
-                <ScalarProperty Name="PO_Amount" ColumnName="PO_Amount" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsPOComplete" ColumnName="IsPOComplete" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblPurchaseOrderDetails">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseOrderDetail">
-              <MappingFragment StoreEntitySet="tblPurchaseOrderDetails">
-                <ScalarProperty Name="SR_No" ColumnName="SR_No" />
-                <ScalarProperty Name="PO_Id" ColumnName="PO_Id" />
-                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="InvoiceQuantity" ColumnName="InvoiceQuantity" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblSalaries">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSalary">
-              <MappingFragment StoreEntitySet="tblSalary">
-                <ScalarProperty Name="SalId" ColumnName="SalId" />
-                <ScalarProperty Name="EmpId" ColumnName="EmpId" />
-                <ScalarProperty Name="SalDate" ColumnName="SalDate" />
-                <ScalarProperty Name="No_of_Days" ColumnName="No_of_Days" />
-                <ScalarProperty Name="LeavesTaken" ColumnName="LeavesTaken" />
-                <ScalarProperty Name="Attend_Days" ColumnName="Attend_Days" />
-                <ScalarProperty Name="Sal_Month" ColumnName="Sal_Month" />
-                <ScalarProperty Name="NetPayment" ColumnName="NetPayment" />
-                <ScalarProperty Name="OTHours" ColumnName="OTHours" />
-                <ScalarProperty Name="IsPaymentDone" ColumnName="IsPaymentDone" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="OTPayment" ColumnName="OTPayment" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblSalaryDetails">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSalaryDetail">
-              <MappingFragment StoreEntitySet="tblSalaryDetails">
-                <ScalarProperty Name="SalDetail_Id" ColumnName="SalDetail_Id" />
-                <ScalarProperty Name="SalId" ColumnName="SalId" />
-                <ScalarProperty Name="SalDate" ColumnName="SalDate" />
-                <ScalarProperty Name="AllowanceDeduction_Id" ColumnName="AllowanceDeduction_Id" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="IsPaymentDone" ColumnName="IsPaymentDone" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblStockDetails">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblStockDetail">
-              <MappingFragment StoreEntitySet="tblStockDetails">
-                <ScalarProperty Name="StockId" ColumnName="StockId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="OpeningQty" ColumnName="OpeningQty" />
-                <ScalarProperty Name="OpeningQtyDate" ColumnName="OpeningQtyDate" />
-                <ScalarProperty Name="InwardQty" ColumnName="InwardQty" />
-                <ScalarProperty Name="InwardPrice" ColumnName="InwardPrice" />
-                <ScalarProperty Name="OutwardQty" ColumnName="OutwardQty" />
-                <ScalarProperty Name="OutwardPrice" ColumnName="OutwardPrice" />
-                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
-                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="InwardAmount" ColumnName="InwardAmount" />
-                <ScalarProperty Name="OutwardAmount" ColumnName="OutwardAmount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblSubLedgers">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSubLedger">
-              <MappingFragment StoreEntitySet="tblSubLedger">
-                <ScalarProperty Name="SubLedgerId" ColumnName="SubLedgerId" />
-                <ScalarProperty Name="SubLedgerName" ColumnName="SubLedgerName" />
-                <ScalarProperty Name="SubLedgerCreationDate" ColumnName="SubLedgerCreationDate" />
-                <ScalarProperty Name="MainLedgerId" ColumnName="MainLedgerId" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblTransactions">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransaction">
-              <MappingFragment StoreEntitySet="tblTransaction">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="FinancialId" ColumnName="FinancialId" />
-                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
-                <ScalarProperty Name="CrLedgerId" ColumnName="CrLedgerId" />
-                <ScalarProperty Name="DrLedger" ColumnName="DrLedger" />
-                <ScalarProperty Name="CrAmount" ColumnName="CrAmount" />
-                <ScalarProperty Name="DrAmount" ColumnName="DrAmount" />
-                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
-                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="ByHand" ColumnName="ByHand" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
-                <ScalarProperty Name="IsPostDated" ColumnName="IsPostDated" />
-                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
-                <ScalarProperty Name="BillNo" ColumnName="BillNo" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="DraweeBank" ColumnName="DraweeBank" />
-                <ScalarProperty Name="IsTax" ColumnName="IsTax" />
-                <ScalarProperty Name="RefBillNo" ColumnName="RefBillNo" />
-                <ScalarProperty Name="IsPartially" ColumnName="IsPartially" />
-                <ScalarProperty Name="IsChequeReturn" ColumnName="IsChequeReturn" />
-                <ScalarProperty Name="IsCheequeReturnChargesApplied" ColumnName="IsCheequeReturnChargesApplied" />
-                <ScalarProperty Name="PartialAmount" ColumnName="PartialAmount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblTransactionTypes">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransactionType">
-              <MappingFragment StoreEntitySet="tblTransactionType">
-                <ScalarProperty Name="TransactionTypeId" ColumnName="TransactionTypeId" />
-                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblUnitMasters">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblUnitMaster">
-              <MappingFragment StoreEntitySet="tblUnitMaster">
-                <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
-                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblUsers">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblUser">
-              <MappingFragment StoreEntitySet="tblUser">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
-                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblUserTypes">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblUserType">
-              <MappingFragment StoreEntitySet="tblUserType">
-                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
-                <ScalarProperty Name="UserType" ColumnName="UserType" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblCustomeTypes">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblCustomeType">
-              <MappingFragment StoreEntitySet="tblCustomeType">
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
-                <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblAccountTypes">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountType">
-              <MappingFragment StoreEntitySet="tblAccountType">
-                <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
-                <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblAccountTypeDetails">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountTypeDetail">
-              <MappingFragment StoreEntitySet="tblAccountTypeDetail">
-                <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
-                <ScalarProperty Name="SRNo" ColumnName="SRNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblLedgers">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblLedger">
-              <MappingFragment StoreEntitySet="tblLedger">
-                <ScalarProperty Name="AcTypeId" ColumnName="AcTypeId" />
-                <ScalarProperty Name="AcType" ColumnName="AcType" />
-                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-                <ScalarProperty Name="Area" ColumnName="Area" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Uploaded" ColumnName="Uploaded" />
-                <ScalarProperty Name="BankBranchName" ColumnName="BankBranchName" />
-                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
-                <ScalarProperty Name="MiscCode" ColumnName="MiscCode" />
-                <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
-                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
-                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
-                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
-                <ScalarProperty Name="SubLedgerId" ColumnName="SubLedgerId" />
-                <ScalarProperty Name="AccOpenDate" ColumnName="AccOpenDate" />
-                <ScalarProperty Name="PanNo" ColumnName="PanNo" />
-                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="LedgerName" ColumnName="LedgerName" />
-                <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tbl_CustomerInfo">
             <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_CustomerInfo">
               <MappingFragment StoreEntitySet="tbl_CustomerInfo">
@@ -1429,6 +1046,322 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Invoice">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_Invoice">
+              <MappingFragment StoreEntitySet="tbl_Invoice">
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="NetInvoiceAmount" ColumnName="NetInvoiceAmount" />
+                <ScalarProperty Name="NetVAT" ColumnName="NetVAT" />
+                <ScalarProperty Name="CustContactNo" ColumnName="CustContactNo" />
+                <ScalarProperty Name="CustAddress" ColumnName="CustAddress" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_InvoiceDetail">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_InvoiceDetail">
+              <MappingFragment StoreEntitySet="tbl_InvoiceDetail">
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="VATAmount" ColumnName="VATAmount" />
+                <ScalarProperty Name="VAT" ColumnName="VAT" />
+                <ScalarProperty Name="ProductAmount" ColumnName="ProductAmount" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="SRNO" ColumnName="SRNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_ReceiptDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_ReceiptDetails">
+              <MappingFragment StoreEntitySet="tbl_ReceiptDetails">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="ReceiptMode" ColumnName="ReceiptMode" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="VoucherDate" ColumnName="VoucherDate" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAccountTypes">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountType">
+              <MappingFragment StoreEntitySet="tblAccountType">
+                <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAccountTypeDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAccountTypeDetail">
+              <MappingFragment StoreEntitySet="tblAccountTypeDetail">
+                <ScalarProperty Name="SubledgerId" ColumnName="SubledgerId" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+                <ScalarProperty Name="SRNo" ColumnName="SRNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAllowanceDeductions">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAllowanceDeduction">
+              <MappingFragment StoreEntitySet="tblAllowanceDeduction">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsBasic" ColumnName="IsBasic" />
+                <ScalarProperty Name="IsDeduction" ColumnName="IsDeduction" />
+                <ScalarProperty Name="IsAllowance" ColumnName="IsAllowance" />
+                <ScalarProperty Name="IsFlexible" ColumnName="IsFlexible" />
+                <ScalarProperty Name="IsFixed" ColumnName="IsFixed" />
+                <ScalarProperty Name="IsPercentage" ColumnName="IsPercentage" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AllowDedId" ColumnName="AllowDedId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCustomeTypes">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblCustomeType">
+              <MappingFragment StoreEntitySet="tblCustomeType">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+                <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDebitNotes">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDebitNote">
+              <MappingFragment StoreEntitySet="tblDebitNote">
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Tax2" ColumnName="Tax2" />
+                <ScalarProperty Name="Tax1" ColumnName="Tax1" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="DNDate" ColumnName="DNDate" />
+                <ScalarProperty Name="DNNo" ColumnName="DNNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDebitNoteDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDebitNoteDetail">
+              <MappingFragment StoreEntitySet="tblDebitNoteDetails">
+                <ScalarProperty Name="DNNo" ColumnName="DNNo" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="DNSrNo" ColumnName="DNSrNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDesignationMasters">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDesignationMaster">
+              <MappingFragment StoreEntitySet="tblDesignationMaster">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="DesignationDesc" ColumnName="DesignationDesc" />
+                <ScalarProperty Name="DesignationCode" ColumnName="DesignationCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEmployees">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblEmployee">
+              <MappingFragment StoreEntitySet="tblEmployee">
+                <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
+                <ScalarProperty Name="PanNo" ColumnName="PanNo" />
+                <ScalarProperty Name="PFNo" ColumnName="PFNo" />
+                <ScalarProperty Name="BankACNo" ColumnName="BankACNo" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="EmpDOJ" ColumnName="EmpDOJ" />
+                <ScalarProperty Name="EmpDOB" ColumnName="EmpDOB" />
+                <ScalarProperty Name="DeptId" ColumnName="DeptId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="EmpAddress" ColumnName="EmpAddress" />
+                <ScalarProperty Name="EmpLastName" ColumnName="EmpLastName" />
+                <ScalarProperty Name="EmpMiddleName" ColumnName="EmpMiddleName" />
+                <ScalarProperty Name="EmpFirstName" ColumnName="EmpFirstName" />
+                <ScalarProperty Name="EmpCode" ColumnName="EmpCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblFinancialMasters">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblFinancialMaster">
+              <MappingFragment StoreEntitySet="tblFinancialMaster">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FirmName" ColumnName="FirmName" />
+                <ScalarProperty Name="YearEndDate" ColumnName="YearEndDate" />
+                <ScalarProperty Name="YearStartDate" ColumnName="YearStartDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblLedgers">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblLedger">
+              <MappingFragment StoreEntitySet="tblLedger">
+                <ScalarProperty Name="AcTypeId" ColumnName="AcTypeId" />
+                <ScalarProperty Name="AcType" ColumnName="AcType" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Uploaded" ColumnName="Uploaded" />
+                <ScalarProperty Name="BankBranchName" ColumnName="BankBranchName" />
+                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+                <ScalarProperty Name="MiscCode" ColumnName="MiscCode" />
+                <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="SubLedgerId" ColumnName="SubLedgerId" />
+                <ScalarProperty Name="AccOpenDate" ColumnName="AccOpenDate" />
+                <ScalarProperty Name="PanNo" ColumnName="PanNo" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LedgerName" ColumnName="LedgerName" />
+                <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMainLedgers">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblMainLedger">
+              <MappingFragment StoreEntitySet="tblMainLedger">
+                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="MainLedgerName" ColumnName="MainLedgerName" />
+                <ScalarProperty Name="MainLedgerId" ColumnName="MainLedgerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProductTypes">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblProductType">
+              <MappingFragment StoreEntitySet="tblProductType">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPurchaseInvoices">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoice">
+              <MappingFragment StoreEntitySet="tblPurchaseInvoice">
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Tax2" ColumnName="Tax2" />
+                <ScalarProperty Name="Tax1" ColumnName="Tax1" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="PONo" ColumnName="PONo" />
+                <ScalarProperty Name="PIDate" ColumnName="PIDate" />
+                <ScalarProperty Name="PINo" ColumnName="PINo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPurchaseInvoiceDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoiceDetail">
+              <MappingFragment StoreEntitySet="tblPurchaseInvoiceDetails">
+                <ScalarProperty Name="PINo" ColumnName="PINo" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="InvoicePrice" ColumnName="InvoicePrice" />
+                <ScalarProperty Name="InvoiceQty" ColumnName="InvoiceQty" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="PINoSrNo" ColumnName="PINoSrNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPurchaseOrders">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseOrder">
+              <MappingFragment StoreEntitySet="tblPurchaseOrder">
+                <ScalarProperty Name="IsPOComplete" ColumnName="IsPOComplete" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="PO_Amount" ColumnName="PO_Amount" />
+                <ScalarProperty Name="PO_Date" ColumnName="PO_Date" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="PO_Id" ColumnName="PO_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPurchaseOrderDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseOrderDetail">
+              <MappingFragment StoreEntitySet="tblPurchaseOrderDetails">
+                <ScalarProperty Name="InvoiceQuantity" ColumnName="InvoiceQuantity" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="PO_Id" ColumnName="PO_Id" />
+                <ScalarProperty Name="SR_No" ColumnName="SR_No" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSalaries">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSalary">
+              <MappingFragment StoreEntitySet="tblSalary">
+                <ScalarProperty Name="OTPayment" ColumnName="OTPayment" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsPaymentDone" ColumnName="IsPaymentDone" />
+                <ScalarProperty Name="OTHours" ColumnName="OTHours" />
+                <ScalarProperty Name="NetPayment" ColumnName="NetPayment" />
+                <ScalarProperty Name="Sal_Month" ColumnName="Sal_Month" />
+                <ScalarProperty Name="Attend_Days" ColumnName="Attend_Days" />
+                <ScalarProperty Name="LeavesTaken" ColumnName="LeavesTaken" />
+                <ScalarProperty Name="No_of_Days" ColumnName="No_of_Days" />
+                <ScalarProperty Name="SalDate" ColumnName="SalDate" />
+                <ScalarProperty Name="EmpId" ColumnName="EmpId" />
+                <ScalarProperty Name="SalId" ColumnName="SalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSalaryDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSalaryDetail">
+              <MappingFragment StoreEntitySet="tblSalaryDetails">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsPaymentDone" ColumnName="IsPaymentDone" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="AllowanceDeduction_Id" ColumnName="AllowanceDeduction_Id" />
+                <ScalarProperty Name="SalDate" ColumnName="SalDate" />
+                <ScalarProperty Name="SalId" ColumnName="SalId" />
+                <ScalarProperty Name="SalDetail_Id" ColumnName="SalDetail_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSubLedgers">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSubLedger">
+              <MappingFragment StoreEntitySet="tblSubLedger">
+                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="MainLedgerId" ColumnName="MainLedgerId" />
+                <ScalarProperty Name="SubLedgerCreationDate" ColumnName="SubLedgerCreationDate" />
+                <ScalarProperty Name="SubLedgerName" ColumnName="SubLedgerName" />
+                <ScalarProperty Name="SubLedgerId" ColumnName="SubLedgerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblSupplierMasters">
             <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSupplierMaster">
               <MappingFragment StoreEntitySet="tblSupplierMaster">
@@ -1456,12 +1389,127 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblProductTypes">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblProductType">
-              <MappingFragment StoreEntitySet="tblProductType">
+          <EntitySetMapping Name="tblTransactions">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransaction">
+              <MappingFragment StoreEntitySet="tblTransaction">
+                <ScalarProperty Name="PartialAmount" ColumnName="PartialAmount" />
+                <ScalarProperty Name="IsCheequeReturnChargesApplied" ColumnName="IsCheequeReturnChargesApplied" />
+                <ScalarProperty Name="IsChequeReturn" ColumnName="IsChequeReturn" />
+                <ScalarProperty Name="IsPartially" ColumnName="IsPartially" />
+                <ScalarProperty Name="RefBillNo" ColumnName="RefBillNo" />
+                <ScalarProperty Name="IsTax" ColumnName="IsTax" />
+                <ScalarProperty Name="DraweeBank" ColumnName="DraweeBank" />
                 <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+                <ScalarProperty Name="BillNo" ColumnName="BillNo" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="IsPostDated" ColumnName="IsPostDated" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ByHand" ColumnName="ByHand" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="DrAmount" ColumnName="DrAmount" />
+                <ScalarProperty Name="CrAmount" ColumnName="CrAmount" />
+                <ScalarProperty Name="DrLedger" ColumnName="DrLedger" />
+                <ScalarProperty Name="CrLedgerId" ColumnName="CrLedgerId" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="FinancialId" ColumnName="FinancialId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTransactionTypes">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransactionType">
+              <MappingFragment StoreEntitySet="tblTransactionType">
+                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="TransactionTypeId" ColumnName="TransactionTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUnitMasters">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblUnitMaster">
+              <MappingFragment StoreEntitySet="tblUnitMaster">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="UnitCode" ColumnName="UnitCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblUser">
+              <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUserTypes">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblUserType">
+              <MappingFragment StoreEntitySet="tblUserType">
+                <ScalarProperty Name="IsModify" ColumnName="IsModify" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProductMasters">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblProductMaster">
+              <MappingFragment StoreEntitySet="tblProductMaster">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ProductDescription" ColumnName="ProductDescription" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="SubUOMId" ColumnName="SubUOMId" />
+                <ScalarProperty Name="UOMId" ColumnName="UOMId" />
                 <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStockDetails">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblStockDetail">
+              <MappingFragment StoreEntitySet="tblStockDetails">
+                <ScalarProperty Name="OutwardAmount" ColumnName="OutwardAmount" />
+                <ScalarProperty Name="InwardAmount" ColumnName="InwardAmount" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="OutwardPrice" ColumnName="OutwardPrice" />
+                <ScalarProperty Name="OutwardQty" ColumnName="OutwardQty" />
+                <ScalarProperty Name="InwardPrice" ColumnName="InwardPrice" />
+                <ScalarProperty Name="InwardQty" ColumnName="InwardQty" />
+                <ScalarProperty Name="OpeningQtyDate" ColumnName="OpeningQtyDate" />
+                <ScalarProperty Name="OpeningQty" ColumnName="OpeningQty" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="StockId" ColumnName="StockId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblOpeningBalances">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tblOpeningBalance">
+              <MappingFragment StoreEntitySet="tblOpeningBalance">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
+                <ScalarProperty Name="DebitBal" ColumnName="DebitBal" />
+                <ScalarProperty Name="CreditBal" ColumnName="CreditBal" />
+                <ScalarProperty Name="OpeningBalnceEffectFrom" ColumnName="OpeningBalnceEffectFrom" />
+                <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+                <ScalarProperty Name="OpeningBalanceId" ColumnName="OpeningBalanceId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

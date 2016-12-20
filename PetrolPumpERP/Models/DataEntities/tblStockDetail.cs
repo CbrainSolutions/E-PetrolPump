@@ -15,7 +15,7 @@ namespace PetrolPumpERP.Models.DataEntities
     public partial class tblStockDetail
     {
         public int StockId { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public Nullable<int> OpeningQty { get; set; }
         public Nullable<System.DateTime> OpeningQtyDate { get; set; }
         public Nullable<int> InwardQty { get; set; }

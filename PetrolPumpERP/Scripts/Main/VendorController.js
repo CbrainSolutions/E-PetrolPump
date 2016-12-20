@@ -81,9 +81,9 @@
     }
 
     $scope.FilterList = function () {
-        var reg = new RegExp($scope.Prefix);
+        var reg = new RegExp($scope.Prefix.toLowerCase());
         $scope.VendorList = JSON.parse($("#vendorlist").val()).filter(function (customer) {
-            return (reg.test(customer.CustomerFirstName) || reg.test(customer.Address) || reg.test(customer.City));
+            return (reg.test(customer.SupplierName.toLowerCase()) || reg.test(customer.Address.toLowerCase()) || reg.test(customer.City.toLowerCase()));
         });
         $scope.First();
     }
@@ -114,7 +114,7 @@
     }
 
     $scope.EditClick = function (VendorModel) {
-        $scope.CustomerId = VendorModel.CustomerId;
+        $scope.VendorId = VendorModel.SupplierCode;
         $("#AccountType").val(VendorModel.AccountTypeId);
         $scope.AcTypeChanged();
         $("#SupplierName").val(VendorModel.SupplierName);
@@ -174,7 +174,7 @@
             $http(req).then(function (response) {
                 if (isEdit == false) {
                     angular.forEach($scope.VendorList, function (value, key) {
-                        if (value.SupplierCode == response.data.Id) {
+                        if (value.SupplierCode == model.SupplierCode) {
                             $scope.VendorList[key].SupplierName = model.SupplierName;
                             $scope.VendorList[key].VATCSTNo = model.VATCSTNo;
                             $scope.VendorList[key].ExciseNo = model.ExciseNo;
