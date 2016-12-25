@@ -88,6 +88,7 @@
         $("#ProductDescription").val("");
         $("#UOM").val("0");
         $("#SUBUOM").val("0");
+        $("#OpeningQty").val("");
         
         $scope.Details = true;
         $scope.Add = false;
@@ -102,7 +103,7 @@
         $("#ProductDescription").val(ProductModel.ProductDescription);
         $("#Price").val(ProductModel.Price);
         $("#ProductName").val(ProductModel.ProductName);
-
+        $("#OpeningQty").val(ProductModel.OpeningQty);
         $scope.Details = false;
         $scope.Add = false;
         $scope.Edit = true;
@@ -123,6 +124,7 @@
                     ProductDescription: $("#ExciseNo").val(),
                     Price: $("#Price").val(),
                     ProductTypeId: $("#ProductType").val(),
+                    OpeningQty:$("#OpeningQty").val(),
                 };
 
             var url = GetVirtualDirectory() + '/Product/Save';
@@ -147,11 +149,19 @@
                                 $scope.ProductList[key].SubUOMId = model.SubUOMId;
                                 $scope.ProductList[key].ProductDescription = model.ProductDescription;
                                 $scope.ProductList[key].Price = model.Price;
+                                $scope.ProductList[key].OpeningQty = model.OpeningQty;
+                                $scope.ProductList[key].UOM = $("#UOM option:selected").text();
+                                $scope.ProductList[key].SubUOM = $("#SUBUOM option:selected").text();
+                                $scope.ProductList[key].ProductType = $("#ProductType option:selected").text();
+
                             }
                         });
                     }
                     else {
                         model.ProductId = response.data.Id;
+                        model.UOM = $("#UOM option:selected").text();
+                        model.SubUOM = $("#SubUOM option:selected").text();
+                        model.ProductType = $("#ProductType option:selected").text();
                         //model.ProductType = $("#ProductType").val();
                         $scope.ProductList.push(model);
                     }

@@ -18,7 +18,8 @@ namespace PetrolPumpERP.Models.DataModels
         public Nullable<bool> IsDelete { get; set; }
         public string ProductDescription { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-        public IQueryable<StockModel> StockDetail { get; set; }
+
+        public int? OpeningQty { get; set; }
 
         public string ProductType { get; set; }
 
@@ -27,24 +28,7 @@ namespace PetrolPumpERP.Models.DataModels
         public string SubUOM { get; set; }
     }
 
-    public class StockModel
-    {
-        public int StockId { get; set; }
-        public long ProductId { get; set; }
-        public Nullable<int> OpeningQty { get; set; }
-        public Nullable<System.DateTime> OpeningQtyDate { get; set; }
-        public Nullable<int> InwardQty { get; set; }
-        public Nullable<decimal> InwardPrice { get; set; }
-        public Nullable<int> OutwardQty { get; set; }
-        public Nullable<decimal> OutwardPrice { get; set; }
-        public Nullable<int> DocumentNo { get; set; }
-        public string TransactionType { get; set; }
-        public bool IsDelete { get; set; }
-        public string BatchNo { get; set; }
-        public Nullable<System.DateTime> ExpiryDate { get; set; }
-        public Nullable<decimal> InwardAmount { get; set; }
-        public Nullable<decimal> OutwardAmount { get; set; }
-    }
+    
 
 
     public class ProductResponse : Error
@@ -83,7 +67,10 @@ namespace PetrolPumpERP.Models.DataModels
                                    on tbl.UOMId equals tbluom.UnitCode
                                    join tblsubuom in _db.tblUnitMasters
                                    on tbl.SubUOMId equals tblsubuom.UnitCode
+                                   join tblstock in _db.tblStockDetails
+                                   on tbl.ProductId equals tblstock.ProductId
                                    where tbl.IsDelete == false
+                                   && tblstock.IsOpeningStockEntry==true
                                    select new ProductModel
                                    {
                                        ProductId=tbl.ProductId,
@@ -98,6 +85,7 @@ namespace PetrolPumpERP.Models.DataModels
                                        SubUOMId=tbl.SubUOMId,
                                        UOM=tbluom.UnitDesc,
                                        UOMId=tbl.UOMId,
+                                       OpeningQty=tblstock.OpeningQty,
                                    };
             return response;
         }
@@ -134,8 +122,10 @@ namespace PetrolPumpERP.Models.DataModels
                         tblStockDetail stock = new tblStockDetail()
                         {
                              InwardPrice=model.Price,
-                             OpeningQty=0,
-                             IsDelete=false,  
+                             OpeningQty= model.OpeningQty,
+                             IsDelete=false,
+                             ProductId=tbl.ProductId, 
+                             IsOpeningStockEntry=true, 
                         };
                         _db.tblStockDetails.Add(stock);
                         _db.SaveChanges();
@@ -181,6 +171,12 @@ namespace PetrolPumpERP.Models.DataModels
                     tbl.SubUOMId = model.SubUOMId;
                     if (_db.SaveChanges() > 0)
                     {
+                        tblStockDetail tblstock = _db.tblStockDetails.Where(p => p.ProductId == model.ProductId && p.IsOpeningStockEntry==true).FirstOrDefault();
+                        if (tblstock!=null)
+                        {
+                            tblstock.OpeningQty = model.OpeningQty;
+                            _db.SaveChanges();
+                        }
                         response.Status = true;
                     }
                     else
@@ -220,6 +216,12 @@ namespace PetrolPumpERP.Models.DataModels
                         tbl.SubUOMId = model.SubUOMId;
                         if (_db.SaveChanges() > 0)
                         {
+                            tblStockDetail tblstock = _db.tblStockDetails.Where(p => p.ProductId == model.ProductId && p.IsOpeningStockEntry == true).FirstOrDefault();
+                            if (tblstock != null)
+                            {
+                                tblstock.OpeningQty = model.OpeningQty;
+                                _db.SaveChanges();
+                            }
                             response.Status = true;
                         }
                         else

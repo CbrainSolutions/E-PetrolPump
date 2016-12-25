@@ -202,6 +202,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OpenignBalanceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\SubledgerController.cs" />
@@ -225,6 +226,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PetrolPumpERP.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataEntities\STP_GetAllOpeningBalLedgers_Result.cs">
+      <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntities\tblAccountType.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
@@ -324,6 +328,7 @@
     </Compile>
     <Compile Include="Models\DataModels\AccountTypeModel.cs" />
     <Compile Include="Models\DataModels\CustomerModel.cs" />
+    <Compile Include="Models\DataModels\OpeningBalanceModel.cs" />
     <Compile Include="Models\DataModels\ProductModel.cs" />
     <Compile Include="Models\DataModels\ProductType.cs" />
     <Compile Include="Models\DataModels\SubledgerModel.cs" />
@@ -412,6 +417,7 @@
     <Content Include="Scripts\Main\CustomerController.js" />
     <Content Include="Scripts\Main\jquery.min.js" />
     <Content Include="Scripts\Main\LoginController.js" />
+    <Content Include="Scripts\Main\OpeningController.js" />
     <Content Include="Scripts\Main\ProductController.js" />
     <Content Include="Scripts\Main\ProductTypeController.js" />
     <Content Include="Scripts\Main\ShowCustomAlert.js" />
@@ -467,6 +473,7 @@
     <Content Include="Views\UOM\Index.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\OpenignBalance\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

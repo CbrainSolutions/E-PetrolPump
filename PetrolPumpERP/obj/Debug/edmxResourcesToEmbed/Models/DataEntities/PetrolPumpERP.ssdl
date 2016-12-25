@@ -359,6 +359,7 @@
     <Property Name="ExpiryDate" Type="datetime" />
     <Property Name="InwardAmount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="OutwardAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="IsOpeningStockEntry" Type="bit" />
   </EntityType>
   <EntityType Name="tblSubLedger">
     <Key>
@@ -466,6 +467,7 @@
     <Property Name="IsDelete" Type="bit" />
     <Property Name="IsModify" Type="bit" />
   </EntityType>
+  <Function Name="STP_GetAllOpeningBalLedgers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="PetrolPumpERPModelStoreContainer">
     <EntitySet Name="tbl_CustomerInfo" EntityType="Self.tbl_CustomerInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tbl_Invoice" EntityType="Self.tbl_Invoice" Schema="dbo" store:Type="Tables" />

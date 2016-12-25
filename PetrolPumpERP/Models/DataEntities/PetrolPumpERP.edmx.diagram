@@ -35,8 +35,8 @@
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblUser" Width="1.5" PointX="4" PointY="9" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblUserType" Width="1.5" PointX="10.875" PointY="8.25" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblProductMaster" Width="1.5" PointX="12.625" PointY="0.625" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblStockDetail" Width="1.5" PointX="0.75" PointY="12.75" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblOpeningBalance" Width="1.5" PointX="3.375" PointY="13.75" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblStockDetail" Width="1.5" PointX="0.75" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

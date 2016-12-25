@@ -29,5 +29,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public Nullable<System.DateTime> ExpiryDate { get; set; }
         public Nullable<decimal> InwardAmount { get; set; }
         public Nullable<decimal> OutwardAmount { get; set; }
+        public Nullable<bool> IsOpeningStockEntry { get; set; }
     }
 }

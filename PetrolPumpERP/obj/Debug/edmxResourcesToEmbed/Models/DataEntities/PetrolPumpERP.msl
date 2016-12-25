@@ -464,9 +464,24 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblOpeningBalances">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblOpeningBalance">
+        <MappingFragment StoreEntitySet="tblOpeningBalance">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
+          <ScalarProperty Name="DebitBal" ColumnName="DebitBal" />
+          <ScalarProperty Name="CreditBal" ColumnName="CreditBal" />
+          <ScalarProperty Name="OpeningBalnceEffectFrom" ColumnName="OpeningBalnceEffectFrom" />
+          <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+          <ScalarProperty Name="OpeningBalanceId" ColumnName="OpeningBalanceId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tblStockDetails">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tblStockDetail">
         <MappingFragment StoreEntitySet="tblStockDetails">
+          <ScalarProperty Name="IsOpeningStockEntry" ColumnName="IsOpeningStockEntry" />
           <ScalarProperty Name="OutwardAmount" ColumnName="OutwardAmount" />
           <ScalarProperty Name="InwardAmount" ColumnName="InwardAmount" />
           <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
@@ -485,19 +500,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblOpeningBalances">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblOpeningBalance">
-        <MappingFragment StoreEntitySet="tblOpeningBalance">
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
-          <ScalarProperty Name="DebitBal" ColumnName="DebitBal" />
-          <ScalarProperty Name="CreditBal" ColumnName="CreditBal" />
-          <ScalarProperty Name="OpeningBalnceEffectFrom" ColumnName="OpeningBalnceEffectFrom" />
-          <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+    <FunctionImportMapping FunctionImportName="STP_GetAllOpeningBalLedgers" FunctionName="PetrolPumpERPModel.Store.STP_GetAllOpeningBalLedgers">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PetrolPumpERPModel.STP_GetAllOpeningBalLedgers_Result">
           <ScalarProperty Name="OpeningBalanceId" ColumnName="OpeningBalanceId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
+          <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+          <ScalarProperty Name="OpeningBalnceEffectFrom" ColumnName="OpeningBalnceEffectFrom" />
+          <ScalarProperty Name="CreditBal" ColumnName="CreditBal" />
+          <ScalarProperty Name="DebitBal" ColumnName="DebitBal" />
+          <ScalarProperty Name="FinancialYearId" ColumnName="FinancialYearId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="AccOpenDate" ColumnName="AccOpenDate" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

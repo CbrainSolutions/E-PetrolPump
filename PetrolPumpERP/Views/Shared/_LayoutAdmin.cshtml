@@ -40,11 +40,26 @@
                                     <li>
                                         <a href="@Url.Action("Index","Product")">Product Master</a>
                                     </li>
+                                    <li>
+                                        <a href="@Url.Action("Index","OpenignBalance")">Opening Balance</a>
+                                    </li>
                                 </ul>
                             </div>
                         </a>
                     </li>
-                    <li id="lnkactype"><a href="@Url.Action("Index","AccountType")">Account Types</a></li>
+                    <li id="lnkactype">
+                        <a data-toggle="collapse" data-target="#toggleDemo" data-parent="#sidenav01" class="collapsed" href="#">
+                            Sales and Purchase
+                            <div class="collapse" id="toggleDemo" style="height: 0px;">
+                                <ul class="nav nav-list">
+                                    <li>
+                                        <a href="@Url.Action("Index","Sales")">Sale</a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </a>
+                    </li>
                     <li id="lnkcustomer"><a href="#section3">Family</a></li>
                     <li id="lnkproduct"><a href="#section3">Photos</a></li>
                 </ul>

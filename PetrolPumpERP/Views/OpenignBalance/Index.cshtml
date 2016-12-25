@@ -1,0 +1,80 @@
+﻿@model PetrolPumpERP.Models.DataModels.OpeningBalanceResponse
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@Scripts.Render("~/bundles/Opening")
+<h2>Opening Balance</h2>
+<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.OpeningBalanceList)" id="openingbalanceList" />
+<div class="table-responsive" data-ng-app="PetroliumApp" data-ng-controller="OpeningController">
+    <div class="col-md-12">
+        <div class="col-md-8 divsearch">
+            <input type="text" placeholder="Search" class="form-control" data-ng-model="Prefix" data-ng-change="FilterList()" />
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary" data-ng-click="FilterList()">Search</button>
+        </div>
+        <hr />
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>
+                Opening Id
+            </th>
+            <th>
+                Ledger Name
+            </th>
+            <th>
+                Balance Type
+            </th>
+            <th>
+                Balance Amount
+            </th>
+            <th>
+                Edit
+            </th>
+            <th>
+                Update
+            </th>
+        </tr>
+        <tr data-ng-repeat="opening in SearchOpeningBalanceList">
+            <td>
+                {{opening.OpeningBalanceId}}
+            </td>
+            <td>
+                {{opening.Name}}
+            </td>
+            <td>
+                <span id="spanbaltype_{{opening.OpeningBalanceId}}">
+                    {{opening.CreditBal==0 && opening.DebitBal==0?'-':(opening.CreditBal>0?"CR":"DR")}}
+                </span>
+                <select id="ddlbaltype_{{opening.OpeningBalanceId}}" style="display:none">
+                    <option value="0">--Select--</option>
+                    <option value="CR">CR</option>
+                    <option value="DR">DR</option>
+                </select>
+            </td>
+            <td>
+                <span id="spanopening_{{opening.OpeningBalanceId}}">
+                    {{opening.CreditBal==0 && opening.DebitBal==0?0:(opening.CreditBal>0?opening.CreditBal:opening.DebitBal)}}
+                </span>
+                <input type="text" id="txt_{{opening.OpeningBalanceId}}" placeholder="Opening Balance" style="display:none"
+                       class="form-control setMargin" />
+            </td>
+            <td>
+                <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(opening)"></span>
+            </td>
+            <td>
+                <button class="btn btn-primary">Update</button>
+            </td>
+        </tr>
+    </table>
+
+    <ul class="pagination">
+        <li data-ng-click="First()"><a href="#"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+        <li data-ng-click="Prev()"><a href="#"><span class="glyphicon glyphicon-backward"></span></a></li>
+        <li data-ng-click="Next()"><a href="#"><span class="glyphicon glyphicon-forward"></span></a></li>
+        <li data-ng-click="Last()"><a href="#"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+    </ul>
+</div>

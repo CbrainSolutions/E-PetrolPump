@@ -108,6 +108,8 @@
         $("#Country").val("");
         $("#Pin").val("");
         $("#AccountType").val("0");
+        //$("#BalType").val("0");
+        //$("#OpeningBalance").val(""),
         $scope.Details = true;
         $scope.Add = false;
         $scope.Edit = false;
@@ -129,6 +131,8 @@
         $("#MobileNo").val(VendorModel.MobileNo);
         $("#Email").val(VendorModel.Email);
         $("#PhoneNo").val(VendorModel.PhoneNo);
+        //$("#BalType").val(VendorModel.BalType);
+        //$("#OpeningBalance").val(VendorModel.OpeningBalance);
 
         $scope.Details = false;
         $scope.Add = false;
@@ -157,6 +161,8 @@
                     Email: $("#Email").val(),
                     AccountTypeId: $("#AccountType").val(),
                     PhoneNo: $("#PhoneNo").val(),
+                    //BalType: $("#BalType").val()!="0"?$("#BalType").val():"",
+                    //OpeningBalance: $("#OpeningBalance").val() == "" ? 0 : $("#OpeningBalance").val(),
                 };
 
             var url = GetVirtualDirectory() + '/Vendor/Save';
@@ -186,6 +192,8 @@
                             $scope.VendorList[key].MobileNo = model.MobileNo;
                             $scope.VendorList[key].Email = model.Email;
                             $scope.VendorList[key].PhoneNo = model.PhoneNo;
+                            //$scope.VendorList[key].BalType = model.BalType;
+                            //$scope.VendorList[key].OpeningBalance = model.OpeningBalance;
                         }
                     });
                 }

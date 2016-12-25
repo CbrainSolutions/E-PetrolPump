@@ -39,6 +39,10 @@ namespace PetrolPumpERP.Models.DataModels
         public string CustomerType { get; set; }
 
         public int? AccountTypeId { get; set; }
+
+        //public decimal? OpeningBalance { get; set; }
+
+        //public string BalType { get; set; }
     }
 
     public class CustomerTypeResponse : Error
@@ -87,6 +91,7 @@ namespace PetrolPumpERP.Models.DataModels
                                     on tbl.CustomerTypeId equals tblctype.CustomerTypeId
                                     join tblledger in _db.tblLedgers
                                     on tbl.LedgerId equals tblledger.LedgerId
+                                    
                                     where tbl.IsDelete==false
                                     select
                                 new CustomerModel()
@@ -119,8 +124,10 @@ namespace PetrolPumpERP.Models.DataModels
                                     
                                     CustomerType = tblctype.CustomerType,
                                     AccountTypeId=tblledger.AcTypeId,
-                                    SubledgerId=tblledger.SubLedgerId
-                                    
+                                    SubledgerId=tblledger.SubLedgerId,
+                                    //BalType = tblopening.CreditBal > 0 ? "CR" : (tblopening.DebitBal > 0 ? "DR" : ""),
+                                    //OpeningBalance = tblopening.CreditBal > 0 ? tblopening.CreditBal : (tblopening.DebitBal > 0 ? tblopening.DebitBal : 0)
+
                                 };
             if (response.CustomerList.Count() > 0)
             {
@@ -177,8 +184,8 @@ namespace PetrolPumpERP.Models.DataModels
                 tblOpeningBalance opening = new tblOpeningBalance()
                 {
                     CreatedDate = DateTime.Now.Date,
-                    CreditBal = 0,
-                    DebitBal = 0,
+                    CreditBal = 0,// ? model.OpeningBalance : 0,
+                    DebitBal = 0,//model.BalType == "DR" ? model.OpeningBalance : 0,
                     FinancialYearId = 1,
                     IsDelete = false,
                     LedgerId = ledger.LedgerId,

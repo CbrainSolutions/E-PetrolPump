@@ -35,6 +35,10 @@ namespace PetrolPumpERP.Models.DataModels
         public string State { get; set; }
         public string Country { get; set; }
         public string Pin { get; set; }
+
+        //public decimal? OpeningBalance { get; set; }
+
+        //public string BalType { get; set; }
     }
 
     
@@ -71,6 +75,8 @@ namespace PetrolPumpERP.Models.DataModels
             response.VendorList = from tbl in _db.tblSupplierMasters
                                   join tblledger in _db.tblLedgers
                                   on tbl.LedgerId equals tblledger.LedgerId
+                                  join tblopening in _db.tblOpeningBalances
+                                  on tblledger.LedgerId equals tblopening.LedgerId
                                   where tbl.IsDelete==false
                                   select new VendorModel
                                   {
@@ -94,6 +100,8 @@ namespace PetrolPumpERP.Models.DataModels
                                       SupplierCode=tbl.SupplierCode,
                                       AccountTypeId=tblledger.AcTypeId,
                                       SubledgerId=tblledger.SubLedgerId,
+                                      //BalType=tblopening.CreditBal>0?"CR": (tblopening.DebitBal > 0?"DR":""),
+                                      //OpeningBalance= tblopening.CreditBal > 0 ? tblopening.CreditBal : (tblopening.DebitBal > 0 ?tblopening.DebitBal : 0)
                                   };
             return response;
         }
@@ -148,8 +156,8 @@ namespace PetrolPumpERP.Models.DataModels
                         tblOpeningBalance opening = new tblOpeningBalance()
                         {
                             CreatedDate=DateTime.Now.Date,
-                            CreditBal=0,
-                            DebitBal=0,
+                            CreditBal=0,//model.BalType=="CR"?model.OpeningBalance:0,
+                            DebitBal= 0,//model.BalType == "DR" ? model.OpeningBalance : 0,
                             FinancialYearId=1,
                             IsDelete=false,
                             LedgerId=ledger.LedgerId,

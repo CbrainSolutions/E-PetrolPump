@@ -141,6 +141,8 @@
         $("#VehicleWiseBill").val("0");
         $("#IsRoundOff").val("0");
         $("#AccountType").val("0");
+        //$("#BalType").val("0");
+        //$("#OpeningBalance").val("");
         $scope.Details = true;
         $scope.Add = false;
         $scope.Edit = false;
@@ -173,6 +175,8 @@
         $("#NoofCreditDays").val(CustomerModel.NoofCreditDays);
         $("#IsSeperateBill").val(String(CustomerModel.VehicleWiseBill));
         $("#IsRoundOff").val(String(CustomerModel.IsRoundOff));
+        //$("#BalType").val(CustomerModel.BalType);
+        //$("#OpeningBalance").val(CustomerModel.OpeningBalance);
         
         $scope.Details = false;
         $scope.Add = false;
@@ -211,7 +215,9 @@
                     NoofCreditDays: $("#NoofCreditDays").val(),
                     IsSeperateBill: $("#IsSeperateBill").val(),
                     IsRoundOff: $("#IsRoundOff").val(),
-                    AccountTypeId:$("#AccountType").val(),
+                    AccountTypeId: $("#AccountType").val(),
+                    //BalType: $("#BalType").val() != "0" ? $("#BalType").val() : "",
+                    //OpeningBalance: $("#OpeningBalance").val() == "" ? 0 : $("#OpeningBalance").val(),
                 };
             
             var url = GetVirtualDirectory() + '/Customer/Save';
@@ -253,6 +259,8 @@
                             $scope.CustomerList[key].NoofCreditDays = model.NoofCreditDays;
                             $scope.CustomerList[key].IsSeperateBill = model.IsSeperateBill;
                             $scope.CustomerList[key].IsRoundOff = model.IsRoundOff;
+                            //$scope.CustomerList[key].BalType = model.BalType;
+                            //$scope.CustomerList[key].OpeningBalance = model.OpeningBalance;
                         }
                     });
                 }

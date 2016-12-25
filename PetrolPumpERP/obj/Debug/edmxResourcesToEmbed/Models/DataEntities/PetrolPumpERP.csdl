@@ -31,8 +31,9 @@
     <EntitySet Name="tblUsers" EntityType="PetrolPumpERPModel.tblUser" />
     <EntitySet Name="tblUserTypes" EntityType="PetrolPumpERPModel.tblUserType" />
     <EntitySet Name="tblProductMasters" EntityType="PetrolPumpERPModel.tblProductMaster" />
-    <EntitySet Name="tblStockDetails" EntityType="PetrolPumpERPModel.tblStockDetail" />
     <EntitySet Name="tblOpeningBalances" EntityType="PetrolPumpERPModel.tblOpeningBalance" />
+    <EntitySet Name="tblStockDetails" EntityType="PetrolPumpERPModel.tblStockDetail" />
+    <FunctionImport Name="STP_GetAllOpeningBalLedgers" ReturnType="Collection(PetrolPumpERPModel.STP_GetAllOpeningBalLedgers_Result)" />
   </EntityContainer>
   <EntityType Name="tbl_CustomerInfo">
     <Key>
@@ -467,6 +468,19 @@
     <Property Name="ProductDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="CreatedDate" Type="DateTime" Precision="0" />
   </EntityType>
+  <EntityType Name="tblOpeningBalance">
+    <Key>
+      <PropertyRef Name="OpeningBalanceId" />
+    </Key>
+    <Property Name="OpeningBalanceId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LedgerId" Type="Int64" />
+    <Property Name="OpeningBalnceEffectFrom" Type="DateTime" Precision="3" />
+    <Property Name="CreditBal" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DebitBal" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FinancialYearId" Type="Int64" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+  </EntityType>
   <EntityType Name="tblStockDetail">
     <Key>
       <PropertyRef Name="StockId" />
@@ -486,18 +500,18 @@
     <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
     <Property Name="InwardAmount" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="OutwardAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="IsOpeningStockEntry" Type="Boolean" />
   </EntityType>
-  <EntityType Name="tblOpeningBalance">
-    <Key>
-      <PropertyRef Name="OpeningBalanceId" />
-    </Key>
-    <Property Name="OpeningBalanceId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="LedgerId" Type="Int64" />
-    <Property Name="OpeningBalnceEffectFrom" Type="DateTime" Precision="3" />
-    <Property Name="CreditBal" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="DebitBal" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="FinancialYearId" Type="Int64" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-  </EntityType>
+  <ComplexType Name="STP_GetAllOpeningBalLedgers_Result">
+    <Property Type="Int64" Name="OpeningBalanceId" Nullable="false" />
+    <Property Type="Int64" Name="LedgerId" Nullable="true" />
+    <Property Type="DateTime" Name="OpeningBalnceEffectFrom" Nullable="true" Precision="23" />
+    <Property Type="Decimal" Name="CreditBal" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="DebitBal" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int64" Name="FinancialYearId" Nullable="true" />
+    <Property Type="Boolean" Name="IsDelete" Nullable="true" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="152" />
+    <Property Type="DateTime" Name="AccOpenDate" Nullable="true" Precision="23" />
+  </ComplexType>
 </Schema>

@@ -12,12 +12,15 @@ namespace PetrolPumpERP.Models.DataEntities
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class PetrolPumpERPEntities : DbContext
     {
         public PetrolPumpERPEntities()
             : base("name=PetrolPumpERPEntities")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -55,7 +58,12 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblUser> tblUsers { get; set; }
         public virtual DbSet<tblUserType> tblUserTypes { get; set; }
         public virtual DbSet<tblProductMaster> tblProductMasters { get; set; }
-        public virtual DbSet<tblStockDetail> tblStockDetails { get; set; }
         public virtual DbSet<tblOpeningBalance> tblOpeningBalances { get; set; }
+        public virtual DbSet<tblStockDetail> tblStockDetails { get; set; }
+    
+        public virtual ObjectResult<STP_GetAllOpeningBalLedgers_Result> STP_GetAllOpeningBalLedgers()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<STP_GetAllOpeningBalLedgers_Result>("STP_GetAllOpeningBalLedgers");
+        }
     }
 }
