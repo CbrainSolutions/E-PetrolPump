@@ -17,11 +17,16 @@ namespace PetrolPumpERP.Models.DataEntities
         public int PINo { get; set; }
         public Nullable<System.DateTime> PIDate { get; set; }
         public Nullable<int> PONo { get; set; }
-        public Nullable<int> SupplierId { get; set; }
+        public Nullable<long> SupplierLedgerId { get; set; }
         public Nullable<bool> IsDelete { get; set; }
         public Nullable<decimal> Amount { get; set; }
         public Nullable<int> Tax1 { get; set; }
         public Nullable<int> Tax2 { get; set; }
         public Nullable<int> Discount { get; set; }
+        public Nullable<bool> ISCASH { get; set; }
+        public string SupplierName { get; set; }
+        public string Address { get; set; }
+        public string ContactNo { get; set; }
+        public string RefDocNo { get; set; }
     }
 }

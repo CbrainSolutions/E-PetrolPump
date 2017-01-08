@@ -47,9 +47,9 @@
             </td>
             <td>
                 <span id="spanbaltype_{{opening.OpeningBalanceId}}">
-                    {{opening.CreditBal==0 && opening.DebitBal==0?'-':(opening.CreditBal>0?"CR":"DR")}}
+                    {{opening.BalType}}
                 </span>
-                <select id="ddlbaltype_{{opening.OpeningBalanceId}}" style="display:none">
+                <select id="ddlbaltype_{{opening.OpeningBalanceId}}" style="display:none" class="form-control">
                     <option value="0">--Select--</option>
                     <option value="CR">CR</option>
                     <option value="DR">DR</option>
@@ -57,7 +57,7 @@
             </td>
             <td>
                 <span id="spanopening_{{opening.OpeningBalanceId}}">
-                    {{opening.CreditBal==0 && opening.DebitBal==0?0:(opening.CreditBal>0?opening.CreditBal:opening.DebitBal)}}
+                    {{opening.OpeningBal}}
                 </span>
                 <input type="text" id="txt_{{opening.OpeningBalanceId}}" placeholder="Opening Balance" style="display:none"
                        class="form-control setMargin" />
@@ -66,7 +66,7 @@
                 <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(opening)"></span>
             </td>
             <td>
-                <button class="btn btn-primary">Update</button>
+                <button class="btn btn-primary" data-ng-click="UpdateClick(opening)">Update</button>
             </td>
         </tr>
     </table>

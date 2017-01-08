@@ -15,7 +15,7 @@ namespace PetrolPumpERP.Models.DataEntities
     public partial class tblPurchaseInvoiceDetail
     {
         public int PINoSrNo { get; set; }
-        public Nullable<int> ProductCode { get; set; }
+        public Nullable<long> ProductCode { get; set; }
         public Nullable<int> InvoiceQty { get; set; }
         public Nullable<decimal> InvoicePrice { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }

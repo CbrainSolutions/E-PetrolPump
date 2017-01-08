@@ -15,12 +15,14 @@ namespace PetrolPumpERP.Controllers
         ProductTypeBL objproduttype = ProductTypeBL.Instance;
         UOMBL objuombl = UOMBL.Instance;
         ProductModelBL objVendor = ProductModelBL.Instance;
+        WareHouseBL objWh = WareHouseBL.Instance;
         // GET: Vendor
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
             ViewBag.ProductTypeList = objproduttype.GetProductTypeList();
             ViewBag.UOMList = objuombl.GetUOMList();
+            ViewBag.WareHouseList = objWh.GetWareHouseList();
             return View(objVendor.GetProducts());
         }
 

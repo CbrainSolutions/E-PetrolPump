@@ -4,7 +4,7 @@
     $scope.SearchProductList = [];
     $scope.ProductTypeList = [];
     $scope.UOMList = [];
-
+    $scope.WareHouseList = [];
     $scope.Details = true;
     $scope.ErrorModel = {
         IsProductType: false,
@@ -31,32 +31,17 @@
             $scope.ErrorModel.IsAccountType = true;
             return valid;
         }
-        if ($("#ddlsubledger").val() == "0") {
-            $scope.ErrorMessage = "Subledger should be selected.";
-            $scope.ErrorModel.IsSubledger = true;
+        if ($("#ProductName").val() == "") {
+            $scope.ErrorMessage = "Product Name should be selected.";
+            $scope.ErrorModel.IsProductName = true;
             return valid;
         }
-        if ($("#SupplierName").val() == "") {
-            $scope.ErrorMessage = "Supplier Name should be filled.";
-            $scope.ErrorModel.IsSupplierName = true;
+        if ($("#UOM").val() == "") {
+            $scope.ErrorMessage = "Unit of Measurement should be filled.";
+            $scope.ErrorModel.IsUOM = true;
             return valid;
         }
-        if ($("#Address").val() == "") {
-            $scope.ErrorMessage = "Address should be filled.";
-            $scope.ErrorModel.IsAddressFilled = true;
-            return valid;
-        }
-        if ($("#MobileNo").val() == "") {
-            $scope.ErrorMessage = "Mobile no should be filled.";
-            $scope.ErrorModel.IsPhoneNo = true;
-            return valid;
-        }
-        if ($("#VATCSTNo").val() == "") {
-            $scope.ErrorMessage = "VAT CST No should be filled.";
-            $scope.ErrorModel.IsVATCSTNo = true;
-            return valid;
-        }
-
+        
         valid = true;
         return valid;
     }
@@ -104,6 +89,7 @@
         $("#Price").val(ProductModel.Price);
         $("#ProductName").val(ProductModel.ProductName);
         $("#OpeningQty").val(ProductModel.OpeningQty);
+        $("#WareHouse").val(ProductModel.WareHouseNo);
         $scope.Details = false;
         $scope.Add = false;
         $scope.Edit = true;
@@ -121,10 +107,12 @@
                     ProductName: $("#ProductName").val(),
                     UOMId: $("#UOM").val(),
                     SubUOMId: $("#SUBUOM").val(),
-                    ProductDescription: $("#ExciseNo").val(),
+                    ProductDescription: $("#ProductDescription").val(),
                     Price: $("#Price").val(),
                     ProductTypeId: $("#ProductType").val(),
-                    OpeningQty:$("#OpeningQty").val(),
+                    OpeningQty: $("#OpeningQty").val(),
+                    WareHouseNo: $("#WareHouse").val() == "0" ? 1 : $("#WareHouse").val(),
+                    
                 };
 
             var url = GetVirtualDirectory() + '/Product/Save';
@@ -153,6 +141,7 @@
                                 $scope.ProductList[key].UOM = $("#UOM option:selected").text();
                                 $scope.ProductList[key].SubUOM = $("#SUBUOM option:selected").text();
                                 $scope.ProductList[key].ProductType = $("#ProductType option:selected").text();
+                                $scope.ProductList[key].WareHouseNo = $("#WareHouse").val();
 
                             }
                         });
@@ -239,6 +228,7 @@
         $scope.ProductTypeList = JSON.parse($("#ProductTypeList").val()).ProductTypeList;
         //console.log($scope.AccountTypes);
         $scope.UOMList = JSON.parse($("#UOMList").val()).UOMList;
+        $scope.WareHouseList = JSON.parse($("#WareHouseList").val()).WareHouseList;
     }
 
     $scope.init();

@@ -91,7 +91,7 @@
                             </div>
                             <br />
                             <div>
-                                <input type="password" class="form-control" name="Password" required data-ng-model="LoginModel.Password"
+                                <input type="password" class="form-control" name="Password" required data-ng-model="LoginModel.Password" data-ng-blur="ValidateAndLogin()"
                                        placeholder="पासवर्ड" data-ng-class="{'borderred':frmLogin.Password.$dirty && frmLogin.Password.$error.required}" />
                             </div>
                             <hr />

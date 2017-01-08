@@ -1,15 +1,14 @@
-﻿@model PetrolPumpERP.Models.DataModels.ProductResponse
+﻿@model PetrolPumpERP.Models.DataModels.BankModelResponse
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-@Scripts.Render("~/bundles/Product")
-<div data-ng-controller="ProductController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.ProductList)" id="productlist" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ProductTypeList)" id="ProductTypeList" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.UOMList)" id="UOMList" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.WareHouseList)" id="WareHouseList" />
-    <h2>Product</h2>
+@Scripts.Render("~/bundles/Bank")
+<div data-ng-controller="BankController" data-ng-app="PetroliumApp">
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.BankList)" id="banklist" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AccontTypeList)" id="AccontTypeList" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
+    <h2>Bank Master</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">
             <div class="col-md-8 divsearch">
@@ -26,22 +25,25 @@
         <table class="table">
             <tr>
                 <th>
-                    Product Id
+                    Bank Id
                 </th>
                 <th>
-                    Product Name
+                    Account No
                 </th>
                 <th>
-                    Description
+                    Bank Name
                 </th>
                 <th>
-                    Price
+                    Branch Name
                 </th>
                 <th>
-                    Product Type
+                    Mobile No
                 </th>
                 <th>
-                    UOM
+                    IFSC Code
+                </th>
+                <th>
+                    MICR Code
                 </th>
                 <th>
                     Edit
@@ -50,27 +52,30 @@
                     Delete
                 </th>
             </tr>
-            <tr data-ng-repeat="product in SearchProductList">
+            <tr data-ng-repeat="bank in SearchBankList">
                 <td>
-                    {{product.ProductId}}
+                    {{bank.BankId}}
                 </td>
                 <td>
-                    {{product.ProductName}}
+                    {{bank.AccountNo}}
                 </td>
                 <td>
-                    {{product.ProductDescription}}
+                    {{bank.BankName}}
                 </td>
                 <td>
-                    {{product.Price}}
+                    {{bank.BranchName}}
                 </td>
                 <td>
-                    {{product.ProductType}}
+                    {{bank.MobileNo}}
                 </td>
                 <td>
-                    {{product.UOM}}
+                    {{bank.IFSC}}
                 </td>
                 <td>
-                    <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(product)"></span>
+                    {{bank.MICR}}
+                </td>
+                <td>
+                    <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(bank)"></span>
                 </td>
                 <td>
                     <span class="glyphicon glyphicon-trash"></span>
@@ -92,21 +97,22 @@
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <select id="ProductType" class="form-control">
-                                <option value="0">--Product Type--</option>
-                                <option data-ng-repeat="producttype in ProductTypeList" value="{{producttype.ProductTypeId}}">{{producttype.ProductType}}</option>
+                            <select id="AccountType" class="form-control" data-ng-click="AcTypeChanged()">
+                                <option value="0">--Account Type--</option>
+                                <option data-ng-repeat="accountType in AccountTypes" value="{{accountType.AccountTypeId}}">{{accountType.AccountType}}</option>
                             </select>
                         </div>
-                        <div class="col-md-12" data-ng-show="ErrorModel.IsProductType==true">
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsAccountType==true">
                             <span>{{ErrorMessage}}</span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <input type="text" id="ProductName" placeholder="Product Name*" maxlength="30" minlength="2"
-                                   class="form-control setMargin" />
+                            <select id="ddlsubledger" class="form-control">
+                                <option value="0">---Select Subledger---</option>
+                            </select>
                         </div>
-                        <div class="col-md-12" data-ng-show="ErrorModel.IsProductName==true">
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsSubledger==true">
                             <span>{{ErrorMessage}}</span>
                         </div>
                     </div>
@@ -117,21 +123,20 @@
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <select id="UOM" class="form-control">
-                                <option value="0">--Unit of Measurment--</option>
-                                <option data-ng-repeat="uom in UOMList" value="{{uom.UnitCode}}">{{uom.UnitDesc}}</option>
-                            </select>
+                            <input type="text" id="BankName" placeholder="Bank Name*" maxlength="20" minlength="2"
+                                   class="form-control setMargin" />
                         </div>
-                        <div class="col-md-12" data-ng-show="ErrorModel.IsUOM==true">
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsBankName==true">
                             <span>{{ErrorMessage}}</span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <select id="SUBUOM" class="form-control">
-                                <option value="0">--Sub Unit of Measurment--</option>
-                                <option data-ng-repeat="uom in UOMList" value="{{uom.UnitCode}}">{{uom.UnitDesc}}</option>
-                            </select>
+                            <input type="text" id="AccountNo" placeholder="Account No*" maxlength="20" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsAccountNo==true">
+                            <span>{{ErrorMessage}}</span>
                         </div>
                     </div>
                 </div>
@@ -141,13 +146,35 @@
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <input type="text" id="Price" placeholder="Price" 
+                            <input type="text" id="BranchName" placeholder="Branch Name" maxlength="20" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="MobileNo" placeholder="Mobile No" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsMobileNo==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="Address" placeholder="Address" maxlength="25" minlength="2"
                                    class="form-control setMargin" />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <input type="text" id="ProductDescription" placeholder="Product Description" maxlength="25" minlength="2"
+                            <input type="text" id="PhoneNo" placeholder="Phone No" maxlength="25" minlength="2"
                                    class="form-control setMargin" />
                         </div>
                     </div>
@@ -158,22 +185,31 @@
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <input type="text" id="OpeningQty" placeholder="Opening Stock"
+                            <input type="text" id="IFSC" placeholder="IFSC" maxlength="25" minlength="2"
                                    class="form-control setMargin" />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <select id="WareHouse" class="form-control">
-                                <option value="0">--Select Warehouse--</option>
-                                <option data-ng-repeat="warehouse in WareHouseList" value="{{warehouse.WareHouseNo}}">{{warehouse.WareHouseName}}</option>
-                            </select>
+                            <input type="text" id="MICR" placeholder="MICR" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
                         </div>
                     </div>
                 </div>
                 <br />
             </div>
-            <hr />
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="ContactPerson" placeholder="Contact Person" maxlength="25" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
 
             <div class="col-md-3">
                 <button class="btn btn-primary" data-ng-click="Save(true)" data-ng-show="Add==true">Save</button>

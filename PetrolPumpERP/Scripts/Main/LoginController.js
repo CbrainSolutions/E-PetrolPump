@@ -59,6 +59,7 @@
         $("#forGotPassword").show();
     }
 
+
     $scope.lnkLoginClick = function () {
         $("#divLogin").show();
         $("#forGotPassword").hide();

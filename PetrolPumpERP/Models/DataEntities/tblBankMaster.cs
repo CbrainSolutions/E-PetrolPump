@@ -12,17 +12,20 @@ namespace PetrolPumpERP.Models.DataEntities
     using System;
     using System.Collections.Generic;
     
-    public partial class tblProductMaster
+    public partial class tblBankMaster
     {
-        public long ProductId { get; set; }
-        public string ProductName { get; set; }
-        public Nullable<decimal> Price { get; set; }
-        public Nullable<long> ProductTypeId { get; set; }
-        public Nullable<int> UOMId { get; set; }
-        public Nullable<int> SubUOMId { get; set; }
+        public long BankId { get; set; }
+        public string BankName { get; set; }
+        public string BranchName { get; set; }
+        public string Address { get; set; }
+        public string IFSC { get; set; }
+        public string MICR { get; set; }
+        public string ContactPerson { get; set; }
+        public string PhoneNo { get; set; }
+        public string MobileNo { get; set; }
         public Nullable<bool> IsDelete { get; set; }
-        public string ProductDescription { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<long> WareHouseNo { get; set; }
+        public Nullable<long> LedgerId { get; set; }
+        public string AccountNo { get; set; }
+        public Nullable<bool> IsLoan { get; set; }
     }
 }

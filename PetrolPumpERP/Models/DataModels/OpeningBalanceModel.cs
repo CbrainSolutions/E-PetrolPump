@@ -79,9 +79,28 @@ namespace PetrolPumpERP.Models.DataModels
                               LedgerId=tbl.LedgerId,
                               OpeningBalanceId=tbl.OpeningBalanceId,
                               OpeningBalnceEffectFrom=tbl.OpeningBalnceEffectFrom,
-                              BalType=tbl.CreditBal==0 && tbl.DebitBal==0?"":(tbl.CreditBal>0?"CR":"DR"),
+                              BalType=tbl.CreditBal==0 && tbl.DebitBal==0?"-":(tbl.CreditBal>0?"CR":"DR"),
                               OpeningBal = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? 0 : (tbl.CreditBal > 0 ? tbl.CreditBal : tbl.DebitBal),
                           }).Union(from tbl in _db.tblOpeningBalances
+                                   join tblledger in _db.tblLedgers
+                                   on tbl.LedgerId equals tblledger.LedgerId
+                                   join tblc in _db.tblBankMasters
+                                   on tbl.LedgerId equals tblc.LedgerId
+                                   select new OpeningBalanceModel
+                                   {
+                                       AccOpenDate = tblledger.AccOpenDate,
+                                       CreatedDate = tbl.CreatedDate,
+                                       CreditBal = tbl.CreditBal,
+                                       DebitBal = tbl.DebitBal,
+                                       FinancialYearId = tbl.FinancialYearId,
+                                       IsDelete = tbl.IsDelete,
+                                       Name = tblc.BankName + tblc.AccountNo,
+                                       LedgerId = tbl.LedgerId,
+                                       OpeningBalanceId = tbl.OpeningBalanceId,
+                                       OpeningBalnceEffectFrom = tbl.OpeningBalnceEffectFrom,
+                                       BalType = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? "-" : (tbl.CreditBal > 0 ? "CR" : "DR"),
+                                       OpeningBal = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? 0 : (tbl.CreditBal > 0 ? tbl.CreditBal : tbl.DebitBal),
+                                   }).Union(from tbl in _db.tblOpeningBalances
                                    join tblledger in _db.tblLedgers
                                    on tbl.LedgerId equals tblledger.LedgerId
                                    join tblc in _db.tblSupplierMasters
@@ -98,7 +117,7 @@ namespace PetrolPumpERP.Models.DataModels
                                        LedgerId = tbl.LedgerId,
                                        OpeningBalanceId = tbl.OpeningBalanceId,
                                        OpeningBalnceEffectFrom = tbl.OpeningBalnceEffectFrom,
-                                       BalType = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? "" : (tbl.CreditBal > 0 ? "CR" : "DR"),
+                                       BalType = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? "-" : (tbl.CreditBal > 0 ? "CR" : "DR"),
                                        OpeningBal = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? 0 : (tbl.CreditBal > 0 ? tbl.CreditBal : tbl.DebitBal),
                                    }).Union(from tbl in _db.tblOpeningBalances
                                             join tblledger in _db.tblLedgers
@@ -117,10 +136,30 @@ namespace PetrolPumpERP.Models.DataModels
                                                 LedgerId = tbl.LedgerId,
                                                 OpeningBalanceId = tbl.OpeningBalanceId,
                                                 OpeningBalnceEffectFrom = tbl.OpeningBalnceEffectFrom,
-                                                BalType = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? "" : (tbl.CreditBal > 0 ? "CR" : "DR"),
+                                                BalType = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? "-" : (tbl.CreditBal > 0 ? "CR" : "DR"),
                                                 OpeningBal = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? 0 : (tbl.CreditBal > 0 ? tbl.CreditBal : tbl.DebitBal),
                                             });
             response.OpeningBalanceList = result;
+            return response;
+        }
+
+        public OpeningBalanceResponse Update(OpeningBalanceModel model)
+        {
+            OpeningBalanceResponse response = new OpeningBalanceResponse() { Status=false};
+            tblOpeningBalance bal = _db.tblOpeningBalances.Where(p => p.OpeningBalanceId == model.OpeningBalanceId).FirstOrDefault();
+            if (bal!=null)
+            {
+                if (model.BalType.ToUpper()=="CR")
+                {
+                    bal.CreditBal = model.OpeningBal;
+                }
+                else
+                {
+                    bal.DebitBal = model.OpeningBal;
+                }
+                _db.SaveChanges();
+                response.Status = true;
+            }
             return response;
         }
     }

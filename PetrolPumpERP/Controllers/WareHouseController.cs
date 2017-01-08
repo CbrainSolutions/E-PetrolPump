@@ -1,4 +1,5 @@
 ﻿using PetrolPumpERP.Models;
+using PetrolPumpERP.Models.DataEntities;
 using PetrolPumpERP.Models.DataModels;
 using System;
 using System.Collections.Generic;
@@ -8,19 +9,27 @@ using System.Web.Mvc;
 
 namespace PetrolPumpERP.Controllers
 {
-    public class OpenignBalanceController : Controller
+    public class WareHouseController : Controller
     {
-        OpeningBalanceBL objOpeningBal = OpeningBalanceBL.Instance;
+        // GET: WareHouse
+        WareHouseBL objOpeningBal = WareHouseBL.Instance;
         // GET: OpenignBalance
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            return View(objOpeningBal.GetAllOpeningBalLedgers());
+            return View(objOpeningBal.GetWareHouseList());
         }
 
         [MyAuthorizeAttribute]
         [HttpPost]
-        public ActionResult Save(OpeningBalanceModel model)
+        public ActionResult Save(tblWareHouse model)
+        {
+            return Json(objOpeningBal.Save(model));
+        }
+
+        [MyAuthorizeAttribute]
+        [HttpPost]
+        public ActionResult Update(tblWareHouse model)
         {
             return Json(objOpeningBal.Update(model));
         }

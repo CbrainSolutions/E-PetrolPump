@@ -2,8 +2,6 @@
 <Schema Namespace="PetrolPumpERPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="PetrolPumpERPEntities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="tbl_CustomerInfo" EntityType="PetrolPumpERPModel.tbl_CustomerInfo" />
-    <EntitySet Name="tbl_Invoice" EntityType="PetrolPumpERPModel.tbl_Invoice" />
-    <EntitySet Name="tbl_InvoiceDetail" EntityType="PetrolPumpERPModel.tbl_InvoiceDetail" />
     <EntitySet Name="tbl_ReceiptDetails" EntityType="PetrolPumpERPModel.tbl_ReceiptDetails" />
     <EntitySet Name="tblAccountTypes" EntityType="PetrolPumpERPModel.tblAccountType" />
     <EntitySet Name="tblAccountTypeDetails" EntityType="PetrolPumpERPModel.tblAccountTypeDetail" />
@@ -17,8 +15,6 @@
     <EntitySet Name="tblLedgers" EntityType="PetrolPumpERPModel.tblLedger" />
     <EntitySet Name="tblMainLedgers" EntityType="PetrolPumpERPModel.tblMainLedger" />
     <EntitySet Name="tblProductTypes" EntityType="PetrolPumpERPModel.tblProductType" />
-    <EntitySet Name="tblPurchaseInvoices" EntityType="PetrolPumpERPModel.tblPurchaseInvoice" />
-    <EntitySet Name="tblPurchaseInvoiceDetails" EntityType="PetrolPumpERPModel.tblPurchaseInvoiceDetail" />
     <EntitySet Name="tblPurchaseOrders" EntityType="PetrolPumpERPModel.tblPurchaseOrder" />
     <EntitySet Name="tblPurchaseOrderDetails" EntityType="PetrolPumpERPModel.tblPurchaseOrderDetail" />
     <EntitySet Name="tblSalaries" EntityType="PetrolPumpERPModel.tblSalary" />
@@ -30,10 +26,17 @@
     <EntitySet Name="tblUnitMasters" EntityType="PetrolPumpERPModel.tblUnitMaster" />
     <EntitySet Name="tblUsers" EntityType="PetrolPumpERPModel.tblUser" />
     <EntitySet Name="tblUserTypes" EntityType="PetrolPumpERPModel.tblUserType" />
-    <EntitySet Name="tblProductMasters" EntityType="PetrolPumpERPModel.tblProductMaster" />
     <EntitySet Name="tblOpeningBalances" EntityType="PetrolPumpERPModel.tblOpeningBalance" />
-    <EntitySet Name="tblStockDetails" EntityType="PetrolPumpERPModel.tblStockDetail" />
     <FunctionImport Name="STP_GetAllOpeningBalLedgers" ReturnType="Collection(PetrolPumpERPModel.STP_GetAllOpeningBalLedgers_Result)" />
+    <EntitySet Name="tblProductMasters" EntityType="PetrolPumpERPModel.tblProductMaster" />
+    <EntitySet Name="tblWareHouses" EntityType="PetrolPumpERPModel.tblWareHouse" />
+    <EntitySet Name="tblBankMasters" EntityType="PetrolPumpERPModel.tblBankMaster" />
+    <EntitySet Name="tbl_Invoice" EntityType="PetrolPumpERPModel.tbl_Invoice" />
+    <EntitySet Name="tbl_InvoiceDetail" EntityType="PetrolPumpERPModel.tbl_InvoiceDetail" />
+    <EntitySet Name="tblStockDetails" EntityType="PetrolPumpERPModel.tblStockDetail" />
+    <EntitySet Name="tblOtherAccounts" EntityType="PetrolPumpERPModel.tblOtherAccount" />
+    <EntitySet Name="tblPurchaseInvoices" EntityType="PetrolPumpERPModel.tblPurchaseInvoice" />
+    <EntitySet Name="tblPurchaseInvoiceDetails" EntityType="PetrolPumpERPModel.tblPurchaseInvoiceDetail" />
   </EntityContainer>
   <EntityType Name="tbl_CustomerInfo">
     <Key>
@@ -64,39 +67,6 @@
     <Property Name="IsRoundOff" Type="Boolean" />
     <Property Name="IsDelete" Type="Boolean" />
     <Property Name="LedgerId" Type="Int64" />
-  </EntityType>
-  <EntityType Name="tbl_Invoice">
-    <Key>
-      <PropertyRef Name="InvoiceNo" />
-    </Key>
-    <Property Name="InvoiceNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-    <Property Name="CustomerCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ISCASH" Type="Boolean" />
-    <Property Name="CustName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="CustAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="CustContactNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="NetVAT" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-    <Property Name="NetInvoiceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-    <Property Name="BalanceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-    <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="NetAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-  </EntityType>
-  <EntityType Name="tbl_InvoiceDetail">
-    <Key>
-      <PropertyRef Name="SRNO" />
-    </Key>
-    <Property Name="SRNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="InvoiceNo" Type="Int32" />
-    <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Quantity" Type="Int32" Nullable="false" />
-    <Property Name="BatchNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
-    <Property Name="Rate" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-    <Property Name="ProductAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-    <Property Name="VAT" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="VATAmount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="tbl_ReceiptDetails">
     <Key>
@@ -267,34 +237,6 @@
     <Property Name="ProductType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="IsDelete" Type="Boolean" />
   </EntityType>
-  <EntityType Name="tblPurchaseInvoice">
-    <Key>
-      <PropertyRef Name="PINo" />
-    </Key>
-    <Property Name="PINo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PIDate" Type="DateTime" Precision="3" />
-    <Property Name="PONo" Type="Int32" />
-    <Property Name="SupplierId" Type="Int32" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Tax1" Type="Int32" />
-    <Property Name="Tax2" Type="Int32" />
-    <Property Name="Discount" Type="Int32" />
-  </EntityType>
-  <EntityType Name="tblPurchaseInvoiceDetail">
-    <Key>
-      <PropertyRef Name="PINoSrNo" />
-    </Key>
-    <Property Name="PINoSrNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProductCode" Type="Int32" />
-    <Property Name="InvoiceQty" Type="Int32" />
-    <Property Name="InvoicePrice" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
-    <Property Name="BatchNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="PINo" Type="Int32" />
-  </EntityType>
   <EntityType Name="tblPurchaseOrder">
     <Key>
       <PropertyRef Name="PO_Id" />
@@ -454,20 +396,6 @@
     <Property Name="IsDelete" Type="Boolean" />
     <Property Name="IsModify" Type="Boolean" />
   </EntityType>
-  <EntityType Name="tblProductMaster">
-    <Key>
-      <PropertyRef Name="ProductId" />
-    </Key>
-    <Property Name="ProductId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="ProductTypeId" Type="Int64" />
-    <Property Name="UOMId" Type="Int32" />
-    <Property Name="SubUOMId" Type="Int32" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="ProductDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
-  </EntityType>
   <EntityType Name="tblOpeningBalance">
     <Key>
       <PropertyRef Name="OpeningBalanceId" />
@@ -481,27 +409,6 @@
     <Property Name="IsDelete" Type="Boolean" />
     <Property Name="CreatedDate" Type="DateTime" Precision="3" />
   </EntityType>
-  <EntityType Name="tblStockDetail">
-    <Key>
-      <PropertyRef Name="StockId" />
-    </Key>
-    <Property Name="StockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProductId" Type="Int64" Nullable="false" />
-    <Property Name="OpeningQty" Type="Int32" />
-    <Property Name="OpeningQtyDate" Type="DateTime" Precision="3" />
-    <Property Name="InwardQty" Type="Int32" />
-    <Property Name="InwardPrice" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="OutwardQty" Type="Int32" />
-    <Property Name="OutwardPrice" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="DocumentNo" Type="Int32" />
-    <Property Name="TransactionType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="IsDelete" Type="Boolean" Nullable="false" />
-    <Property Name="BatchNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
-    <Property Name="InwardAmount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="OutwardAmount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="IsOpeningStockEntry" Type="Boolean" />
-  </EntityType>
   <ComplexType Name="STP_GetAllOpeningBalLedgers_Result">
     <Property Type="Int64" Name="OpeningBalanceId" Nullable="false" />
     <Property Type="Int64" Name="LedgerId" Nullable="true" />
@@ -514,4 +421,145 @@
     <Property Type="String" Name="Name" Nullable="true" MaxLength="152" />
     <Property Type="DateTime" Name="AccOpenDate" Nullable="true" Precision="23" />
   </ComplexType>
+  <EntityType Name="tblProductMaster">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ProductTypeId" Type="Int64" />
+    <Property Name="UOMId" Type="Int32" />
+    <Property Name="SubUOMId" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="ProductDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="WareHouseNo" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblWareHouse">
+    <Key>
+      <PropertyRef Name="WareHouseNo" />
+    </Key>
+    <Property Name="WareHouseNo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WareHouseName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblBankMaster">
+    <Key>
+      <PropertyRef Name="BankId" />
+    </Key>
+    <Property Name="BankId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BankName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="BranchName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="IFSC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MICR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MobileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="LedgerId" Type="Int64" />
+    <Property Name="AccountNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsLoan" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tbl_Invoice">
+    <Key>
+      <PropertyRef Name="InvoiceNo" />
+    </Key>
+    <Property Name="InvoiceNo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CustomerLedgerId" Type="Int64" Nullable="false" />
+    <Property Name="ISCASH" Type="Boolean" Nullable="false" />
+    <Property Name="CustName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CustAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CustContactNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="NetVAT" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="NetInvoiceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="BalanceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="Discount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="NetAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="IsDelete" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tbl_InvoiceDetail">
+    <Key>
+      <PropertyRef Name="SRNO" />
+    </Key>
+    <Property Name="SRNO" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InvoiceNo" Type="Int64" />
+    <Property Name="ItemCode" Type="Int64" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="BatchNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+    <Property Name="Rate" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="ProductAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="VAT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="VATAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="IsDelete" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblStockDetail">
+    <Key>
+      <PropertyRef Name="StockId" />
+    </Key>
+    <Property Name="StockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductId" Type="Int64" />
+    <Property Name="OpeningQty" Type="Int32" />
+    <Property Name="OpeningQtyDate" Type="DateTime" Precision="3" />
+    <Property Name="InwardQty" Type="Int32" />
+    <Property Name="InwardPrice" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="OutwardQty" Type="Int32" />
+    <Property Name="OutwardPrice" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DocumentNo" Type="Int64" />
+    <Property Name="TransactionType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+    <Property Name="BatchNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+    <Property Name="InwardAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="OutwardAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="IsOpeningStockEntry" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblOtherAccount">
+    <Key>
+      <PropertyRef Name="OtherAccountId" />
+    </Key>
+    <Property Name="OtherAccountId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="LedgerId" Type="Int64" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="IsDelete" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblPurchaseInvoice">
+    <Key>
+      <PropertyRef Name="PINo" />
+    </Key>
+    <Property Name="PINo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PIDate" Type="DateTime" Precision="3" />
+    <Property Name="PONo" Type="Int32" />
+    <Property Name="SupplierLedgerId" Type="Int64" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Tax1" Type="Int32" />
+    <Property Name="Tax2" Type="Int32" />
+    <Property Name="Discount" Type="Int32" />
+    <Property Name="ISCASH" Type="Boolean" />
+    <Property Name="SupplierName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RefDocNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblPurchaseInvoiceDetail">
+    <Key>
+      <PropertyRef Name="PINoSrNo" />
+    </Key>
+    <Property Name="PINoSrNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductCode" Type="Int64" />
+    <Property Name="InvoiceQty" Type="Int32" />
+    <Property Name="InvoicePrice" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+    <Property Name="BatchNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="PINo" Type="Int32" />
+  </EntityType>
 </Schema>

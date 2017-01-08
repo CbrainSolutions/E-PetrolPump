@@ -5,38 +5,41 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="a2b0cce83b1c47848f7b5276f23a1d90" Name="Diagram1" ZoomLevel="98">
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_CustomerInfo" Width="1.5" PointX="0.5" PointY="0.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_Invoice" Width="1.5" PointX="2.25" PointY="0.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_InvoiceDetail" Width="1.5" PointX="4" PointY="0.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_ReceiptDetails" Width="1.5" PointX="2.25" PointY="4" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAccountType" Width="1.5" PointX="5.75" PointY="0.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAccountTypeDetail" Width="1.5" PointX="5.75" PointY="2.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAllowanceDeduction" Width="1.5" PointX="4" PointY="3.875" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblCustomeType" Width="1.5" PointX="0.5" PointY="6.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblDebitNote" Width="1.5" PointX="7.5" PointY="0.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblDebitNoteDetail" Width="1.5" PointX="2.25" PointY="7" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblDesignationMaster" Width="1.5" PointX="9.125" PointY="2.75" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblEmployee" Width="1.5" PointX="5.75" PointY="4.375" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblFinancialMaster" Width="1.5" PointX="9.125" PointY="0.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblLedger" Width="1.5" PointX="7.5" PointY="3.375" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblMainLedger" Width="1.5" PointX="4" PointY="7.125" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblProductType" Width="1.5" PointX="9.125" PointY="7.125" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseInvoice" Width="1.5" PointX="10.75" PointY="0.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseInvoiceDetail" Width="1.5" PointX="0.5" PointY="8.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseOrder" Width="1.5" PointX="10.75" PointY="3.375" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseOrderDetail" Width="1.5" PointX="9.125" PointY="4.5" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSalary" Width="1.5" PointX="9.125" PointY="8.875" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSalaryDetail" Width="1.5" PointX="10.75" PointY="5.75" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSubLedger" Width="1.5" PointX="5.75" PointY="10.625" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSupplierMaster" Width="1.5" PointX="7.5" PointY="10.25" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransaction" Width="1.5" PointX="10.75" PointY="10.25" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransactionType" Width="1.5" PointX="7.5" PointY="8.375" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblUnitMaster" Width="1.5" PointX="5.75" PointY="8.875" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblUser" Width="1.5" PointX="4" PointY="9" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblUserType" Width="1.5" PointX="10.875" PointY="8.25" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblProductMaster" Width="1.5" PointX="12.625" PointY="0.625" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblOpeningBalance" Width="1.5" PointX="3.375" PointY="13.75" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblStockDetail" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_CustomerInfo" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_ReceiptDetails" Width="1.5" PointX="0.5" PointY="1" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAccountType" Width="1.5" PointX="3.75" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAccountTypeDetail" Width="1.5" PointX="3.75" PointY="1" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAllowanceDeduction" Width="1.5" PointX="0.5" PointY="1.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblCustomeType" Width="1.5" PointX="3.75" PointY="2.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblDebitNote" Width="1.5" PointX="5.375" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblDebitNoteDetail" Width="1.5" PointX="2.125" PointY="1.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblDesignationMaster" Width="1.5" PointX="0.5" PointY="2" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblEmployee" Width="1.5" PointX="3.75" PointY="1.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblFinancialMaster" Width="1.5" PointX="5.375" PointY="1.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblLedger" Width="1.5" PointX="5.375" PointY="1" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblMainLedger" Width="1.5" PointX="2.125" PointY="2.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblProductType" Width="1.5" PointX="3.75" PointY="3" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseOrder" Width="1.5" PointX="5.375" PointY="2" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseOrderDetail" Width="1.5" PointX="2.125" PointY="2" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSalary" Width="1.5" PointX="3.75" PointY="4" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSalaryDetail" Width="1.5" PointX="5.375" PointY="3" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSubLedger" Width="1.5" PointX="2.125" PointY="4.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblSupplierMaster" Width="1.5" PointX="5.375" PointY="4.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransaction" Width="1.5" PointX="5.375" PointY="4" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransactionType" Width="1.5" PointX="5.375" PointY="3.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblUnitMaster" Width="1.5" PointX="0.5" PointY="2.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblUser" Width="1.5" PointX="0.5" PointY="3" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblUserType" Width="1.5" PointX="3.75" PointY="3.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblOpeningBalance" Width="1.5" PointX="5.375" PointY="2.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblProductMaster" Width="1.5" PointX="2.125" PointY="1" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblWareHouse" Width="1.5" PointX="2.125" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblBankMaster" Width="1.5" PointX="0.5" PointY="4" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_Invoice" Width="1.5" PointX="3.75" PointY="2" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tbl_InvoiceDetail" Width="1.5" PointX="2.125" PointY="4" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblStockDetail" Width="1.5" PointX="0.5" PointY="3.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblOtherAccount" Width="1.5" PointX="2.125" PointY="3.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseInvoice" Width="1.5" PointX="3.75" PointY="4.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblPurchaseInvoiceDetail" Width="1.5" PointX="0.5" PointY="4.5" IsExpanded="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

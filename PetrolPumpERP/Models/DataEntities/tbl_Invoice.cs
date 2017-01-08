@@ -14,17 +14,18 @@ namespace PetrolPumpERP.Models.DataEntities
     
     public partial class tbl_Invoice
     {
-        public int InvoiceNo { get; set; }
-        public Nullable<System.DateTime> InvoiceDate { get; set; }
-        public string CustomerCode { get; set; }
-        public Nullable<bool> ISCASH { get; set; }
+        public long InvoiceNo { get; set; }
+        public System.DateTime InvoiceDate { get; set; }
+        public long CustomerLedgerId { get; set; }
+        public bool ISCASH { get; set; }
         public string CustName { get; set; }
         public string CustAddress { get; set; }
         public string CustContactNo { get; set; }
         public decimal NetVAT { get; set; }
         public decimal NetInvoiceAmount { get; set; }
         public decimal BalanceAmount { get; set; }
-        public Nullable<decimal> Discount { get; set; }
+        public decimal Discount { get; set; }
         public decimal NetAmount { get; set; }
+        public Nullable<bool> IsDelete { get; set; }
     }
 }

@@ -26,6 +26,8 @@ namespace PetrolPumpERP.Models.DataModels
         public string UOM { get; set; }
 
         public string SubUOM { get; set; }
+
+        public long? WareHouseNo { get; set; }
     }
 
     
@@ -86,6 +88,7 @@ namespace PetrolPumpERP.Models.DataModels
                                        UOM=tbluom.UnitDesc,
                                        UOMId=tbl.UOMId,
                                        OpeningQty=tblstock.OpeningQty,
+                                       WareHouseNo=tbl.WareHouseNo,
                                    };
             return response;
         }
@@ -110,7 +113,8 @@ namespace PetrolPumpERP.Models.DataModels
                         ProductName=model.ProductName,
                         ProductTypeId=model.ProductTypeId,
                         UOMId=model.UOMId,
-                        SubUOMId=model.SubUOMId
+                        SubUOMId=model.SubUOMId,
+                        WareHouseNo=model.WareHouseNo,
                     };
                     _db.tblProductMasters.Add(tbl);
 
@@ -169,6 +173,7 @@ namespace PetrolPumpERP.Models.DataModels
                     tbl.ProductTypeId = model.ProductTypeId;
                     tbl.UOMId = model.UOMId;
                     tbl.SubUOMId = model.SubUOMId;
+                    tbl.WareHouseNo = model.WareHouseNo;
                     if (_db.SaveChanges() > 0)
                     {
                         tblStockDetail tblstock = _db.tblStockDetails.Where(p => p.ProductId == model.ProductId && p.IsOpeningStockEntry==true).FirstOrDefault();
@@ -214,6 +219,7 @@ namespace PetrolPumpERP.Models.DataModels
                         tbl.ProductTypeId = model.ProductTypeId;
                         tbl.UOMId = model.UOMId;
                         tbl.SubUOMId = model.SubUOMId;
+                        tbl.WareHouseNo = model.WareHouseNo;
                         if (_db.SaveChanges() > 0)
                         {
                             tblStockDetail tblstock = _db.tblStockDetails.Where(p => p.ProductId == model.ProductId && p.IsOpeningStockEntry == true).FirstOrDefault();

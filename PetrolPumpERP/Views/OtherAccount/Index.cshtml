@@ -1,0 +1,116 @@
+﻿@model PetrolPumpERP.Models.DataModels.OtherAccountModelResponse
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@Scripts.Render("~/bundles/OtherAccount")
+<div data-ng-controller="OtherAccountController" data-ng-app="PetroliumApp">
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.OtherAccountList)" id="otherlist" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AccontTypeList)" id="AccontTypeList" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
+    <h2>OtherAccount Master</h2>
+    <div class="table-responsive" data-ng-show="Details==true">
+        <div class="col-md-12">
+            <div class="col-md-8 divsearch">
+                <input type="text" placeholder="Search" class="form-control" data-ng-model="Prefix" data-ng-change="FilterList()" />
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" data-ng-click="FilterList()">Search</button>
+                <button class="btn btn-primary" data-ng-click="AddNewUI()">New</button>
+                <button class="btn btn-primary" data-ng-click="Reset()">Reset</button>
+            </div>
+            <hr />
+        </div>
+
+        <table class="table">
+            <tr>
+                <th>
+                    Account Id
+                </th>
+                <th>
+                    Account Name
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+            <tr data-ng-repeat="otherac in SearchOtherAccountList">
+                <td>
+                    {{otherac.OtherAccountId}}
+                </td>
+                <td>
+                    {{otherac.AccountName}}
+                </td>
+                <td>
+                    <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(otherac)"></span>
+                </td>
+                <td>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </td>
+            </tr>
+        </table>
+
+        <ul class="pagination">
+            <li data-ng-click="First()"><a href="#"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li data-ng-click="Prev()"><a href="#"><span class="glyphicon glyphicon-backward"></span></a></li>
+            <li data-ng-click="Next()"><a href="#"><span class="glyphicon glyphicon-forward"></span></a></li>
+            <li data-ng-click="Last()"><a href="#"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+        </ul>
+    </div>
+
+    <div data-ng-show="Add==true || Edit==true">
+        <ng-form role="form" name="frmReg" novalidate>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <select id="AccountType" class="form-control" data-ng-click="AcTypeChanged()">
+                                <option value="0">--Account Type--</option>
+                                <option data-ng-repeat="accountType in AccountTypes" value="{{accountType.AccountTypeId}}">{{accountType.AccountType}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsAccountType==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <select id="ddlsubledger" class="form-control">
+                                <option value="0">---Select Subledger---</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsSubledger==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="AccountName" placeholder="Account Name*" maxlength="20" minlength="2"
+                                   class="form-control setMargin" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsOtherAccountName==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            
+
+            <div class="col-md-3">
+                <button class="btn btn-primary" data-ng-click="Save(true)" data-ng-show="Add==true">Save</button>
+                <button class="btn btn-primary" data-ng-click="Save(false)" data-ng-show="Edit==true">Update</button>
+                <button class="btn btn-primary" data-ng-click="CancelClick()">Cancel</button>
+            </div>
+        </ng-form>
+    </div>
+</div>

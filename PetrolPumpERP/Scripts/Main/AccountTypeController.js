@@ -34,7 +34,7 @@
     }
 
     $scope.FilterList = function () {
-        $scope.AccountTypeList = $filter('filter')(JSON.parse($("#accounttypelist").val()), { SubLedgerName: $scope.Prefix })
+        $scope.AccountTypeList = $filter('filter')(JSON.parse($("#accounttypelist").val()), { AccountType: $scope.Prefix })
         $scope.First();
     }
 
@@ -45,6 +45,7 @@
     }
 
     $scope.CancelClick = function () {
+        $scope.SearchSubledger = "";
         angular.forEach($scope.AccountTypeList, function (value, key) {
             $("#" + value.SubledgerId).attr("checked", false);
         });

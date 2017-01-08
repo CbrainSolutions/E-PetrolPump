@@ -6,6 +6,104 @@
     $scope.Paging = 10;
     $scope.CurruntIndex = 0;
 
+    $scope.EditClick = function (model)
+    {
+        $("#spanbaltype_" + model.OpeningBalanceId).hide();
+        $("#spanopening_" + model.OpeningBalanceId).hide();
+        $("#ddlbaltype_" + model.OpeningBalanceId).show();
+        $("#txt_" + model.OpeningBalanceId).show();
+        if (model.BalType!="-") {
+            $("#ddlbaltype_" + model.OpeningBalanceId).val(model.BalType);
+        }
+        $("#txt_" + model.OpeningBalanceId).val(model.OpeningBal);
+    }
+
+    $scope.UpdateClick = function (model) {
+        $("#spanbaltype_" + model.OpeningBalanceId).hide();
+        $("#spanopening_" + model.OpeningBalanceId).hide();
+        $("#ddlbaltype_" + model.OpeningBalanceId).show();
+        $("#txt_" + model.OpeningBalanceId).show();
+        if ($("#ddlbaltype_" + model.OpeningBalanceId).val() == "0") {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: "Please select Opening balance type from drop down.",
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            return false;
+        }
+        if ($("#txt_" + model.OpeningBalanceId).val() == "")
+        {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: "Please fill amount for Opening balance",
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            return false;
+        }
+
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var model =
+            {
+                OpeningBalanceId: model.OpeningBalanceId,
+                OpeningBal: $("#txt_" + model.OpeningBalanceId).val(),
+                BalType:$("#ddlbaltype_" + model.OpeningBalanceId).val(),
+            };
+
+        var url = GetVirtualDirectory() + '/OpenignBalance/Save';
+        var req = {
+            method: 'POST',
+            url: url,
+            headers: {
+                'Content-Type': "application/json"
+            },
+            data: model,
+        }
+        $http(req).then(function (response) {
+            if (response.data.Status == true) {
+                angular.forEach($scope.OpeningBalanceList, function (value, key) {
+                    if (value.OpeningBalanceId == model.OpeningBalanceId) {
+                        $scope.OpeningBalanceList[key].OpeningBal = model.OpeningBal;
+                        $scope.OpeningBalanceList[key].BalType = model.BalType;
+                    }
+                });
+                setTimeout(function () {
+                    $scope.$apply(function () {
+                        $("#openingbalanceList").val(JSON.stringify($scope.OpeningBalanceList));
+                        $scope.SearchVendorList = $scope.OpeningBalanceList;
+                        $scope.First();
+                        $("#spanbaltype_" + model.OpeningBalanceId).show();
+                        $("#spanopening_" + model.OpeningBalanceId).show();
+                        $("#ddlbaltype_" + model.OpeningBalanceId).hide();
+                        $("#txt_" + model.OpeningBalanceId).hide();
+                        //$("#spanbaltype_" + model.OpeningBalanceId).html();
+                        //$("#spanopening_" + model.OpeningBalanceId).show();
+                    });
+                }, 1000);
+            }
+            else {
+                var objShowCustomAlert = new ShowCustomAlert({
+                    Title: "",
+                    Message: response.data.Message,
+                    Type: "alert",
+                });
+                objShowCustomAlert.ShowCustomAlertBox();
+            }
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+    }
+
     $scope.First = function () {
         $scope.CurruntIndex = 0;
         $scope.SearchOpeningBalanceList = $filter('limitTo')($scope.OpeningBalanceList, $scope.Paging, 0);

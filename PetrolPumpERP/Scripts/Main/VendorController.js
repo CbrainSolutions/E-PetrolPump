@@ -178,37 +178,47 @@
                 data: model,
             }
             $http(req).then(function (response) {
-                if (isEdit == false) {
-                    angular.forEach($scope.VendorList, function (value, key) {
-                        if (value.SupplierCode == model.SupplierCode) {
-                            $scope.VendorList[key].SupplierName = model.SupplierName;
-                            $scope.VendorList[key].VATCSTNo = model.VATCSTNo;
-                            $scope.VendorList[key].ExciseNo = model.ExciseNo;
-                            $scope.VendorList[key].Address = model.Address;
-                            $scope.VendorList[key].City = model.City;
-                            $scope.VendorList[key].Pin = model.Pin;
-                            $scope.VendorList[key].State = model.State;
-                            $scope.VendorList[key].Country = model.Country;
-                            $scope.VendorList[key].MobileNo = model.MobileNo;
-                            $scope.VendorList[key].Email = model.Email;
-                            $scope.VendorList[key].PhoneNo = model.PhoneNo;
-                            //$scope.VendorList[key].BalType = model.BalType;
-                            //$scope.VendorList[key].OpeningBalance = model.OpeningBalance;
-                        }
-                    });
+                if (response.data.Status==true) {
+                    if (isEdit == false) {
+                        angular.forEach($scope.VendorList, function (value, key) {
+                            if (value.SupplierCode == model.SupplierCode) {
+                                $scope.VendorList[key].SupplierName = model.SupplierName;
+                                $scope.VendorList[key].VATCSTNo = model.VATCSTNo;
+                                $scope.VendorList[key].ExciseNo = model.ExciseNo;
+                                $scope.VendorList[key].Address = model.Address;
+                                $scope.VendorList[key].City = model.City;
+                                $scope.VendorList[key].Pin = model.Pin;
+                                $scope.VendorList[key].State = model.State;
+                                $scope.VendorList[key].Country = model.Country;
+                                $scope.VendorList[key].MobileNo = model.MobileNo;
+                                $scope.VendorList[key].Email = model.Email;
+                                $scope.VendorList[key].PhoneNo = model.PhoneNo;
+                                //$scope.VendorList[key].BalType = model.BalType;
+                                //$scope.VendorList[key].OpeningBalance = model.OpeningBalance;
+                            }
+                        });
+                    }
+                    else {
+                        model.SupplierCode = response.data.Id;
+                        $scope.VendorList.push(model);
+                    }
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $("#vendorlist").val(JSON.stringify($scope.VendorList));
+                            $scope.SearchVendorList = $scope.VendorList;
+                            $scope.First();
+                            $scope.CancelClick();
+                        });
+                    }, 1000);
                 }
                 else {
-                    model.SupplierCode = response.data.Id;
-                    $scope.VendorList.push(model);
-                }
-                setTimeout(function () {
-                    $scope.$apply(function () {
-                        $("#vendorlist").val(JSON.stringify($scope.VendorList));
-                        $scope.SearchVendorList = $scope.VendorList;
-                        $scope.First();
-                        $scope.CancelClick();
+                    var objShowCustomAlert = new ShowCustomAlert({
+                        Title: "",
+                        Message: response.data.Message,
+                        Type: "alert",
                     });
-                }, 1000);
+                    objShowCustomAlert.ShowCustomAlertBox();
+                }
                 document.getElementById("mainbody").removeChild(spinner.el);
             },
             function (response) {

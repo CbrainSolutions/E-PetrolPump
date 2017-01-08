@@ -12,17 +12,11 @@ namespace PetrolPumpERP.Models.DataEntities
     using System;
     using System.Collections.Generic;
     
-    public partial class tblProductMaster
+    public partial class tblWareHouse
     {
-        public long ProductId { get; set; }
-        public string ProductName { get; set; }
-        public Nullable<decimal> Price { get; set; }
-        public Nullable<long> ProductTypeId { get; set; }
-        public Nullable<int> UOMId { get; set; }
-        public Nullable<int> SubUOMId { get; set; }
+        public long WareHouseNo { get; set; }
+        public string WareHouseName { get; set; }
+        public string Address { get; set; }
         public Nullable<bool> IsDelete { get; set; }
-        public string ProductDescription { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<long> WareHouseNo { get; set; }
     }
 }

@@ -14,9 +14,9 @@ namespace PetrolPumpERP.Models.DataEntities
     
     public partial class tbl_InvoiceDetail
     {
-        public int SRNO { get; set; }
-        public Nullable<int> InvoiceNo { get; set; }
-        public string ItemCode { get; set; }
+        public long SRNO { get; set; }
+        public Nullable<long> InvoiceNo { get; set; }
+        public Nullable<long> ItemCode { get; set; }
         public int Quantity { get; set; }
         public string BatchNo { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }
@@ -25,5 +25,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public Nullable<decimal> VAT { get; set; }
         public Nullable<decimal> VATAmount { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
+        public Nullable<bool> IsDelete { get; set; }
     }
 }
