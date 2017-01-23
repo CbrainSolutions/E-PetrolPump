@@ -1,0 +1,275 @@
+﻿@model PetrolPumpERP.Models.DataModels.SalesResponse
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@Scripts.Render("~/bundles/datepicker")
+@Scripts.Render("~/bundles/Sales")
+
+<script type="text/javascript">
+            // When the document is ready
+        $(document).ready(function () {
+            $('#InvoiceDate').datepicker({
+                format: "dd/mm/yyyy"
+            });
+            $('#InvoiceDate').datepicker()
+             .on('changeDate', function (ev) {
+                 $('#InvoiceDate').val(ev.date);
+                 $('#InvoiceDate').datepicker("hide");
+            });
+        });
+</script>
+<div data-ng-controller="SalesController" data-ng-app="PetroliumApp">
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.SalesList)" id="saleslist" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.BankList)" id="BankList" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Customers)" id="Customers" />
+    
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.TaxList)" id="TaxList" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ProductList)" id="ProductList" />
+    
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.OtherAccounts)" id="OtherAccounts" />
+    
+    <h2>Sales</h2>
+    <div class="table-responsive" data-ng-show="Details==true">
+        <div class="col-md-12">
+            <div class="col-md-8 divsearch">
+                <input type="text" placeholder="Search" class="form-control" data-ng-model="Prefix" data-ng-change="FilterList()" />
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" data-ng-click="FilterList()">Search</button>
+                <button class="btn btn-primary" data-ng-click="AddNewUI()">New</button>
+                <button class="btn btn-primary" data-ng-click="Reset()">Reset</button>
+            </div>
+            <hr />
+        </div>
+
+        <table class="table">
+            <tr>
+                <th>
+                    Invoice No
+                </th>
+                <th>
+                    Invoice Date
+                </th>
+                <th>
+                    Customer Name
+                </th>
+                <th>
+                    Cash/Credit
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Net Amount
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+            <tr data-ng-repeat="sales in SearchSalesList">
+                <td>
+                    {{sales.InvoiceNo}}
+                </td>
+                <td>
+                    {{sales.InvoiceDate}}
+                </td>
+                <td>
+                    {{sales.CustName}}
+                </td>
+                <td>
+                    {{sales.ISCASH}}
+                </td>
+                <td>
+                    {{sales.NetAmount}}
+                </td>
+                <td>
+                    {{sales.NetInvoiceAmount}}
+                </td>
+                <td>
+                    <span class="glyphicon glyphicon-pencil" data-ng-click="EditClick(sales)"></span>
+                </td>
+                <td>
+                    <span class="glyphicon glyphicon-trash"></span>
+                </td>
+            </tr>
+        </table>
+
+        <ul class="pagination">
+            <li data-ng-click="First()"><a href="#"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li data-ng-click="Prev()"><a href="#"><span class="glyphicon glyphicon-backward"></span></a></li>
+            <li data-ng-click="Next()"><a href="#"><span class="glyphicon glyphicon-forward"></span></a></li>
+            <li data-ng-click="Last()"><a href="#"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+        </ul>
+    </div>
+    <div data-ng-show="Add==true || Edit==true">
+        <ng-form role="form" name="frmReg" novalidate>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            Cash <input type="checkbox" id="InvoiceType" value="{{IsCashInvoice}}" data-ng-click="SetCashInvoice()"/>
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsInvoiceType==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="CustomerName" placeholder="Customer Name" maxlength="30" minlength="2" data-ng-show="IsCashInvoice==true"
+                                   class="form-control setMargin" />
+                            <select id="Customers" class="form-control" data-ng-show="IsCashInvoice==false" data-ng-change="CustomerSelection()" ng-model="selectedCustomerId">
+                                <option value="0">--Select Customer--</option>
+                                <option data-ng-repeat="customer in CustomerList" value="{{customer.LedgerId}}">{{customer.CustomerName}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsCustomerName==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="Address" class="form-control setMargin" placeholder="Address" value="{{CustomerInfo.Address}}" />
+                        </div>
+                    </div>
+                    
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="ContactNo" placeholder="Contact No" maxlength="30" minlength="2" value="{{CustomerInfo.MobileNo}}"
+                                   class="form-control setMargin" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <input type="text" id="InvoiceDate" class="form-control setMargin" placeholder="Invoice Date" />
+                        </div>
+                        <div class="col-md-12" data-ng-show="ErrorModel.IsInvoiceDate==true">
+                            <span>{{ErrorMessage}}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <select id="Customers" class="form-control">
+                                <option value="0">--Select Bank--</option>
+                                <option data-ng-repeat="bank in BankList" value="{{bank.LedgerId}}">{{bank.BankName + " " + bank.AccountNo }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Product Name
+                            </th>
+                            <th>
+                                Rate
+                            </th>
+                            <th>
+                                UOM
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="Products" class="form-control" data-ng-change="ProductSelection()" ng-model="selectedProductId">
+                                    <option value="0">--Select Product--</option>
+                                    <option data-ng-repeat="product in ProductList" value="{{product.ProductId}}">{{product.ProductName}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" placeholder="Rate" id="txtRate" value="{{ProductInfo.Price}}" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" placeholder="UOM" id="txtUOM" disabled="disabled" value="{{ProductInfo.UOM}}"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" placeholder="Quantity" id="txtQty" data-ng-blur="CalculateAmount()" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" placeholder="Amount" id="txtAmount" data-ng-blur="CalculateAmount()" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <table class="table">
+                        <tr data-ng-repeat="product in InvoiceProductList">
+                            <td>
+                                {{product.ProductName}}
+                            </td>
+                            <td>
+                                {{product.Rate}}
+                            </td>
+                            <td>
+                                {{product.UOM}}
+                            </td>
+                            <td>
+                                {{product.Quantity}}
+                            </td>
+                            <td>
+                                {{product.ProductAmount}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            <select id="Taxs" class="form-control" data-ng-change="TaxSelection()" ng-model="selectedTaxId">
+                                <option value="0">--Select Tax--</option>
+                                <option data-ng-repeat="tax in TaxList" value="{{tax.LedgerId}}">{{tax.AccountName}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Tax" id="TaxAmount"  />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" data-ng-click="Save(true)" data-ng-show="Add==true">Save</button>
+                <button class="btn btn-primary" data-ng-click="Save(false)" data-ng-show="Edit==true">Update</button>
+                <button class="btn btn-primary" data-ng-click="CancelClick()">Cancel</button>
+            </div>
+        </ng-form>
+    </div>
+</div>

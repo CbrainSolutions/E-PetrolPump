@@ -16,11 +16,11 @@ namespace PetrolPumpERP.Models.DataEntities
     {
         public int StockId { get; set; }
         public Nullable<long> ProductId { get; set; }
-        public Nullable<int> OpeningQty { get; set; }
+        public Nullable<decimal> OpeningQty { get; set; }
         public Nullable<System.DateTime> OpeningQtyDate { get; set; }
-        public Nullable<int> InwardQty { get; set; }
+        public Nullable<decimal> InwardQty { get; set; }
         public Nullable<decimal> InwardPrice { get; set; }
-        public Nullable<int> OutwardQty { get; set; }
+        public Nullable<decimal> OutwardQty { get; set; }
         public Nullable<decimal> OutwardPrice { get; set; }
         public Nullable<long> DocumentNo { get; set; }
         public string TransactionType { get; set; }

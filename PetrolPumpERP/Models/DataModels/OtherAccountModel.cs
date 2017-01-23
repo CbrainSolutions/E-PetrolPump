@@ -17,6 +17,9 @@ namespace PetrolPumpERP.Models.DataModels
         public string AccountType { get; set; }
         public long? SubledgerId { get; set; }
         public int? AccountTypeId { get; set; }
+        public Nullable<bool> IsPercent { get; set; }
+        public Nullable<decimal> PercentOrFixedAmount { get; set; }
+        public Nullable<bool> RoundOff { get; set; }
     }
 
     
@@ -55,6 +58,8 @@ namespace PetrolPumpERP.Models.DataModels
                                 on tbl.LedgerId equals tblledger.LedgerId
                                 join tblopening in _db.tblOpeningBalances
                                 on tblledger.LedgerId equals tblopening.LedgerId
+                                join tblacctype in _db.tblAccountTypes
+                                on tblledger.AcTypeId equals tblacctype.AccountTypeId
                                 where tbl.IsDelete == false
                                 select new OtherAccountModel
                                 {
@@ -63,6 +68,13 @@ namespace PetrolPumpERP.Models.DataModels
                                     IsDelete=false,
                                     LedgerId=tbl.LedgerId,
                                     OtherAccountId=tbl.OtherAccountId,
+                                    IsPercent=tbl.IsPercent,
+                                    PercentOrFixedAmount=tbl.PercentOrFixedAmount,
+                                    RoundOff=tbl.RoundOff,
+                                    CreatedDate=tbl.CreatedDate, 
+                                    SubledgerId=tblledger.SubLedgerId,
+                                    AccountType=tblacctype.AccountType,
+                                    AccountTypeId=tblacctype.AccountTypeId
                                 };
             return response;
         }
@@ -95,20 +107,27 @@ namespace PetrolPumpERP.Models.DataModels
                             CreatedDate=DateTime. Now.Date,
                             IsDelete=false,
                             LedgerId=ledger.LedgerId,
+                            IsPercent=model.IsPercent,
+                            PercentOrFixedAmount=model.PercentOrFixedAmount,
+                            RoundOff=model.RoundOff, 
                         };
                         _db.tblOtherAccounts.Add(tbl);
-
-                        tblOpeningBalance opening = new tblOpeningBalance()
+                        long?[] arrmainledgers = { 3,4};
+                        var result = _db.tblSubLedgers.Where(p => arrmainledgers.Contains(p.MainLedgerId));
+                        if (result.Count()==0)
                         {
-                            CreatedDate = DateTime.Now.Date,
-                            CreditBal = 0,//model.BalType=="CR"?model.OpeningBalance:0,
-                            DebitBal = 0,//model.BalType == "DR" ? model.OpeningBalance : 0,
-                            FinancialYearId = 1,
-                            IsDelete = false,
-                            LedgerId = ledger.LedgerId,
-                            OpeningBalnceEffectFrom = DateTime.Now.Date,
-                        };
-                        _db.tblOpeningBalances.Add(opening);
+                            tblOpeningBalance opening = new tblOpeningBalance()
+                            {
+                                CreatedDate = DateTime.Now.Date,
+                                CreditBal = 0,//model.BalType=="CR"?model.OpeningBalance:0,
+                                DebitBal = 0,//model.BalType == "DR" ? model.OpeningBalance : 0,
+                                FinancialYearId = 1,
+                                IsDelete = false,
+                                LedgerId = ledger.LedgerId,
+                                OpeningBalnceEffectFrom = DateTime.Now.Date,
+                            };
+                            _db.tblOpeningBalances.Add(opening);
+                        }
                         var state = _db.SaveChanges();
                         if (state > 0)
                         {
@@ -162,14 +181,11 @@ namespace PetrolPumpERP.Models.DataModels
                 }
                 try
                 {
-                    if (_db.SaveChanges() > 0)
-                    {
-                        response.Status = true;
-                    }
-                    else
-                    {
-                        response.Message = "Record not updated.";
-                    }
+                    tbl.IsPercent = model.IsPercent;
+                    tbl.RoundOff = model.RoundOff;
+                    tbl.PercentOrFixedAmount = model.PercentOrFixedAmount;
+                    _db.SaveChanges();
+                    response.Status = true;
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -195,20 +211,18 @@ namespace PetrolPumpERP.Models.DataModels
                     if (tbl != null)
                     {
                         tbl.AccountName = model.AccountName;
+                        tbl.IsPercent = model.IsPercent;
+                        tbl.RoundOff = model.RoundOff;
+                        tbl.PercentOrFixedAmount = model.PercentOrFixedAmount;
+                        
                         tblLedger ledger = _db.tblLedgers.Where(p => p.LedgerId == tbl.LedgerId).FirstOrDefault();
                         if (ledger != null)
                         {
                             ledger.AcTypeId = model.AccountTypeId;
                             ledger.SubLedgerId = model.SubledgerId;
                         }
-                        if (_db.SaveChanges() > 0)
-                        {
-                            response.Status = true;
-                        }
-                        else
-                        {
-                            response.Message = "Record not updated.";
-                        }
+                        _db.SaveChanges();
+                        response.Status = true;
                     }
                     else
                     {

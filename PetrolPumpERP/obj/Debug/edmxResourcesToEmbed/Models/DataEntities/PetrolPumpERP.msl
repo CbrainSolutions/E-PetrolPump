@@ -110,50 +110,12 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblDebitNoteDetails">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDebitNoteDetail">
-        <MappingFragment StoreEntitySet="tblDebitNoteDetails">
-          <ScalarProperty Name="DNNo" ColumnName="DNNo" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
-          <ScalarProperty Name="DNSrNo" ColumnName="DNSrNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblDesignationMasters">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDesignationMaster">
         <MappingFragment StoreEntitySet="tblDesignationMaster">
           <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
           <ScalarProperty Name="DesignationDesc" ColumnName="DesignationDesc" />
           <ScalarProperty Name="DesignationCode" ColumnName="DesignationCode" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblEmployees">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblEmployee">
-        <MappingFragment StoreEntitySet="tblEmployee">
-          <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
-          <ScalarProperty Name="PanNo" ColumnName="PanNo" />
-          <ScalarProperty Name="PFNo" ColumnName="PFNo" />
-          <ScalarProperty Name="BankACNo" ColumnName="BankACNo" />
-          <ScalarProperty Name="BankName" ColumnName="BankName" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
-          <ScalarProperty Name="UserType" ColumnName="UserType" />
-          <ScalarProperty Name="EmpDOJ" ColumnName="EmpDOJ" />
-          <ScalarProperty Name="EmpDOB" ColumnName="EmpDOB" />
-          <ScalarProperty Name="DeptId" ColumnName="DeptId" />
-          <ScalarProperty Name="Password" ColumnName="Password" />
-          <ScalarProperty Name="EmpAddress" ColumnName="EmpAddress" />
-          <ScalarProperty Name="EmpLastName" ColumnName="EmpLastName" />
-          <ScalarProperty Name="EmpMiddleName" ColumnName="EmpMiddleName" />
-          <ScalarProperty Name="EmpFirstName" ColumnName="EmpFirstName" />
-          <ScalarProperty Name="EmpCode" ColumnName="EmpCode" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -478,6 +440,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblPurchaseInvoices">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoice">
+        <MappingFragment StoreEntitySet="tblPurchaseInvoice">
+          <ScalarProperty Name="RefDocNo" ColumnName="RefDocNo" />
+          <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Tax2" ColumnName="Tax2" />
+          <ScalarProperty Name="Tax1" ColumnName="Tax1" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="SupplierLedgerId" ColumnName="SupplierLedgerId" />
+          <ScalarProperty Name="PONo" ColumnName="PONo" />
+          <ScalarProperty Name="PIDate" ColumnName="PIDate" />
+          <ScalarProperty Name="PINo" ColumnName="PINo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tbl_InvoiceDetail">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_InvoiceDetail">
         <MappingFragment StoreEntitySet="tbl_InvoiceDetail">
@@ -493,6 +475,36 @@
           <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
           <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
           <ScalarProperty Name="SRNO" ColumnName="SRNO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblDebitNoteDetails">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDebitNoteDetail">
+        <MappingFragment StoreEntitySet="tblDebitNoteDetails">
+          <ScalarProperty Name="DNNo" ColumnName="DNNo" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+          <ScalarProperty Name="DNSrNo" ColumnName="DNSrNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPurchaseInvoiceDetails">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoiceDetail">
+        <MappingFragment StoreEntitySet="tblPurchaseInvoiceDetails">
+          <ScalarProperty Name="PINo" ColumnName="PINo" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+          <ScalarProperty Name="InvoicePrice" ColumnName="InvoicePrice" />
+          <ScalarProperty Name="InvoiceQty" ColumnName="InvoiceQty" />
+          <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+          <ScalarProperty Name="PINoSrNo" ColumnName="PINoSrNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -521,6 +533,9 @@
     <EntitySetMapping Name="tblOtherAccounts">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tblOtherAccount">
         <MappingFragment StoreEntitySet="tblOtherAccounts">
+          <ScalarProperty Name="RoundOff" ColumnName="RoundOff" />
+          <ScalarProperty Name="PercentOrFixedAmount" ColumnName="PercentOrFixedAmount" />
+          <ScalarProperty Name="IsPercent" ColumnName="IsPercent" />
           <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
@@ -529,38 +544,47 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblPurchaseInvoices">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoice">
-        <MappingFragment StoreEntitySet="tblPurchaseInvoice">
-          <ScalarProperty Name="RefDocNo" ColumnName="RefDocNo" />
-          <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
-          <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="Tax2" ColumnName="Tax2" />
-          <ScalarProperty Name="Tax1" ColumnName="Tax1" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="SupplierLedgerId" ColumnName="SupplierLedgerId" />
-          <ScalarProperty Name="PONo" ColumnName="PONo" />
-          <ScalarProperty Name="PIDate" ColumnName="PIDate" />
-          <ScalarProperty Name="PINo" ColumnName="PINo" />
+    <EntitySetMapping Name="tblDepartments">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblDepartment">
+        <MappingFragment StoreEntitySet="tblDepartment">
+          <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+          <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblPurchaseInvoiceDetails">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoiceDetail">
-        <MappingFragment StoreEntitySet="tblPurchaseInvoiceDetails">
-          <ScalarProperty Name="PINo" ColumnName="PINo" />
+    <EntitySetMapping Name="tblSwipeMachines">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblSwipeMachine">
+        <MappingFragment StoreEntitySet="tblSwipeMachine">
+          <ScalarProperty Name="CardType" ColumnName="CardType" />
+          <ScalarProperty Name="BankId" ColumnName="BankId" />
           <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-          <ScalarProperty Name="InvoicePrice" ColumnName="InvoicePrice" />
-          <ScalarProperty Name="InvoiceQty" ColumnName="InvoiceQty" />
-          <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
-          <ScalarProperty Name="PINoSrNo" ColumnName="PINoSrNo" />
+          <ScalarProperty Name="MachineNo" ColumnName="MachineNo" />
+          <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblEmployees">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblEmployee">
+        <MappingFragment StoreEntitySet="tblEmployee">
+          <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+          <ScalarProperty Name="EmpEmail" ColumnName="EmpEmail" />
+          <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
+          <ScalarProperty Name="PanNo" ColumnName="PanNo" />
+          <ScalarProperty Name="PFNo" ColumnName="PFNo" />
+          <ScalarProperty Name="BankACNo" ColumnName="BankACNo" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="EmpDOJ" ColumnName="EmpDOJ" />
+          <ScalarProperty Name="EmpDOB" ColumnName="EmpDOB" />
+          <ScalarProperty Name="DeptId" ColumnName="DeptId" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="EmpAddress" ColumnName="EmpAddress" />
+          <ScalarProperty Name="EmpLastName" ColumnName="EmpLastName" />
+          <ScalarProperty Name="EmpMiddleName" ColumnName="EmpMiddleName" />
+          <ScalarProperty Name="EmpFirstName" ColumnName="EmpFirstName" />
+          <ScalarProperty Name="EmpCode" ColumnName="EmpCode" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

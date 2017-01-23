@@ -62,6 +62,18 @@ namespace PetrolPumpERP.Models.DataModels
                           select temp.LedgerId;
             var arrsup = from temp in _db.tblSupplierMasters
                          select temp.LedgerId;
+            var arrbank = from temp in _db.tblBankMasters
+                         select temp.LedgerId;
+
+            var arrother = from temp in _db.tblOtherAccounts
+                          select temp.LedgerId;
+
+            long?[] longarr = { 1,2 };
+
+            var arrsubledger = from temp in _db.tblSubLedgers
+                               where longarr.Contains(temp.MainLedgerId)
+                               select temp.SubLedgerId;
+
             var result = (from tbl in _db.tblOpeningBalances
                           join tblledger in _db.tblLedgers
                           on tbl.LedgerId equals tblledger.LedgerId
@@ -101,6 +113,25 @@ namespace PetrolPumpERP.Models.DataModels
                                        BalType = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? "-" : (tbl.CreditBal > 0 ? "CR" : "DR"),
                                        OpeningBal = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? 0 : (tbl.CreditBal > 0 ? tbl.CreditBal : tbl.DebitBal),
                                    }).Union(from tbl in _db.tblOpeningBalances
+                                            join tblledger in _db.tblLedgers
+                                            on tbl.LedgerId equals tblledger.LedgerId
+                                            join tblc in _db.tblOtherAccounts
+                                            on tbl.LedgerId equals tblc.LedgerId
+                                            select new OpeningBalanceModel
+                                            {
+                                                AccOpenDate = tblledger.AccOpenDate,
+                                                CreatedDate = tbl.CreatedDate,
+                                                CreditBal = tbl.CreditBal,
+                                                DebitBal = tbl.DebitBal,
+                                                FinancialYearId = tbl.FinancialYearId,
+                                                IsDelete = tbl.IsDelete,
+                                                Name = tblc.AccountName,
+                                                LedgerId = tbl.LedgerId,
+                                                OpeningBalanceId = tbl.OpeningBalanceId,
+                                                OpeningBalnceEffectFrom = tbl.OpeningBalnceEffectFrom,
+                                                BalType = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? "-" : (tbl.CreditBal > 0 ? "CR" : "DR"),
+                                                OpeningBal = tbl.CreditBal == 0 && tbl.DebitBal == 0 ? 0 : (tbl.CreditBal > 0 ? tbl.CreditBal : tbl.DebitBal),
+                                            }).Union(from tbl in _db.tblOpeningBalances
                                    join tblledger in _db.tblLedgers
                                    on tbl.LedgerId equals tblledger.LedgerId
                                    join tblc in _db.tblSupplierMasters
@@ -124,6 +155,9 @@ namespace PetrolPumpERP.Models.DataModels
                                             on tbl.LedgerId equals tblledger.LedgerId
                                             where !(arrcust).Contains(tbl.LedgerId)
                                                     && !(arrsup).Contains(tbl.LedgerId)
+                                                    && !(arrbank).Contains(tbl.LedgerId)
+                                                    && !(arrother).Contains(tbl.LedgerId)
+                                                    //&& (arrsubledger).Contains(tblledger.SubLedgerId.Value)
                                             select new OpeningBalanceModel
                                             {
                                                 AccOpenDate = tblledger.AccOpenDate,

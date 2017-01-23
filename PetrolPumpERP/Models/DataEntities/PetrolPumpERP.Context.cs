@@ -20,7 +20,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public PetrolPumpERPEntities()
             : base("name=PetrolPumpERPEntities")
         {
-            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -35,9 +34,7 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblAllowanceDeduction> tblAllowanceDeductions { get; set; }
         public virtual DbSet<tblCustomeType> tblCustomeTypes { get; set; }
         public virtual DbSet<tblDebitNote> tblDebitNotes { get; set; }
-        public virtual DbSet<tblDebitNoteDetail> tblDebitNoteDetails { get; set; }
         public virtual DbSet<tblDesignationMaster> tblDesignationMasters { get; set; }
-        public virtual DbSet<tblEmployee> tblEmployees { get; set; }
         public virtual DbSet<tblFinancialMaster> tblFinancialMasters { get; set; }
         public virtual DbSet<tblLedger> tblLedgers { get; set; }
         public virtual DbSet<tblMainLedger> tblMainLedgers { get; set; }
@@ -58,11 +55,15 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblWareHouse> tblWareHouses { get; set; }
         public virtual DbSet<tblBankMaster> tblBankMasters { get; set; }
         public virtual DbSet<tbl_Invoice> tbl_Invoice { get; set; }
+        public virtual DbSet<tblPurchaseInvoice> tblPurchaseInvoices { get; set; }
         public virtual DbSet<tbl_InvoiceDetail> tbl_InvoiceDetail { get; set; }
+        public virtual DbSet<tblDebitNoteDetail> tblDebitNoteDetails { get; set; }
+        public virtual DbSet<tblPurchaseInvoiceDetail> tblPurchaseInvoiceDetails { get; set; }
         public virtual DbSet<tblStockDetail> tblStockDetails { get; set; }
         public virtual DbSet<tblOtherAccount> tblOtherAccounts { get; set; }
-        public virtual DbSet<tblPurchaseInvoice> tblPurchaseInvoices { get; set; }
-        public virtual DbSet<tblPurchaseInvoiceDetail> tblPurchaseInvoiceDetails { get; set; }
+        public virtual DbSet<tblDepartment> tblDepartments { get; set; }
+        public virtual DbSet<tblSwipeMachine> tblSwipeMachines { get; set; }
+        public virtual DbSet<tblEmployee> tblEmployees { get; set; }
     
         public virtual ObjectResult<STP_GetAllOpeningBalLedgers_Result> STP_GetAllOpeningBalLedgers()
         {

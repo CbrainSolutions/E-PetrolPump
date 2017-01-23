@@ -16,7 +16,7 @@ namespace PetrolPumpERP.Models.DataEntities
     {
         public int DNSrNo { get; set; }
         public Nullable<int> ProductCode { get; set; }
-        public Nullable<int> Quantity { get; set; }
+        public Nullable<decimal> Quantity { get; set; }
         public Nullable<decimal> Price { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }
         public string BatchNo { get; set; }

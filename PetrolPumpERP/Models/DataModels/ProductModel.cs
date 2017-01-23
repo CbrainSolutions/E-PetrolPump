@@ -19,7 +19,7 @@ namespace PetrolPumpERP.Models.DataModels
         public string ProductDescription { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
 
-        public int? OpeningQty { get; set; }
+        public decimal? OpeningQty { get; set; }
 
         public string ProductType { get; set; }
 

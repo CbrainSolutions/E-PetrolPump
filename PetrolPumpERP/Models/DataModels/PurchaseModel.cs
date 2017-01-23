@@ -34,7 +34,7 @@ namespace PetrolPumpERP.Models.DataModels
         public long SRNO { get; set; }
         public Nullable<long> PINo { get; set; }
         public Nullable<long> ItemCode { get; set; }
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
         public string BatchNo { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }
         public decimal? Rate { get; set; }

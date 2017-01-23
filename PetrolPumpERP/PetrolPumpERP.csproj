@@ -201,6 +201,9 @@
     <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\DepartmentController.cs" />
+    <Compile Include="Controllers\DesignationController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OpenignBalanceController.cs" />
@@ -210,6 +213,7 @@
     <Compile Include="Controllers\PurchaseController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\SubledgerController.cs" />
+    <Compile Include="Controllers\SwipeController.cs" />
     <Compile Include="Controllers\UOMController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Controllers\WareHouseController.cs" />
@@ -217,6 +221,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AppSettingManager.cs" />
     <Compile Include="Models\DataEntities\PetrolPumpERP.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -254,6 +259,9 @@
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntities\tblDebitNoteDetail.cs">
+      <DependentUpon>PetrolPumpERP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataEntities\tblDepartment.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntities\tblDesignationMaster.cs">
@@ -310,6 +318,9 @@
     <Compile Include="Models\DataEntities\tblSupplierMaster.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataEntities\tblSwipeMachine.cs">
+      <DependentUpon>PetrolPumpERP.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataEntities\tblTransaction.cs">
       <DependentUpon>PetrolPumpERP.tt</DependentUpon>
     </Compile>
@@ -343,6 +354,9 @@
     <Compile Include="Models\DataModels\AccountTypeModel.cs" />
     <Compile Include="Models\DataModels\BankModel.cs" />
     <Compile Include="Models\DataModels\CustomerModel.cs" />
+    <Compile Include="Models\DataModels\DepartmentModel.cs" />
+    <Compile Include="Models\DataModels\DesignationModel.cs" />
+    <Compile Include="Models\DataModels\EmployeeModel.cs" />
     <Compile Include="Models\DataModels\OpeningBalanceModel.cs" />
     <Compile Include="Models\DataModels\OtherAccountModel.cs" />
     <Compile Include="Models\DataModels\ProductModel.cs" />
@@ -350,6 +364,7 @@
     <Compile Include="Models\DataModels\PurchaseModel.cs" />
     <Compile Include="Models\DataModels\SalesInvoiceModels.cs" />
     <Compile Include="Models\DataModels\SubledgerModel.cs" />
+    <Compile Include="Models\DataModels\SwipeMachineModel.cs" />
     <Compile Include="Models\DataModels\UOMModel.cs" />
     <Compile Include="Models\DataModels\UserBL.cs" />
     <Compile Include="Models\DataModels\VendorModel.cs" />
@@ -432,9 +447,12 @@
     <Content Include="Scripts\Main\angular.min.js" />
     <Content Include="Scripts\Main\App.js" />
     <Content Include="Scripts\Main\BanksController.js" />
+    <Content Include="Scripts\Main\bootstrap-datepicker.js" />
     <Content Include="Scripts\Main\bootstrap.min.js" />
     <Content Include="Scripts\Main\common.js" />
     <Content Include="Scripts\Main\CustomerController.js" />
+    <Content Include="Scripts\Main\DeptController.js" />
+    <Content Include="Scripts\Main\DesignationController.js" />
     <Content Include="Scripts\Main\jquery.min.js" />
     <Content Include="Scripts\Main\LoginController.js" />
     <Content Include="Scripts\Main\OpeningController.js" />
@@ -446,6 +464,7 @@
     <Content Include="Scripts\Main\ShowCustomAlert.js" />
     <Content Include="Scripts\Main\spin.js" />
     <Content Include="Scripts\Main\SubledgerController.js" />
+    <Content Include="Scripts\Main\SwipeController.js" />
     <Content Include="Scripts\Main\UOMController.js" />
     <Content Include="Scripts\Main\VendorController.js" />
     <Content Include="Scripts\Main\WareHouseController.js" />
@@ -501,11 +520,15 @@
     <Content Include="Views\WareHouse\Index.cshtml" />
     <Content Include="Views\Bank\Index.cshtml" />
     <Content Include="Views\OtherAccount\Index.cshtml" />
+    <Content Include="Views\Sales\Index.cshtml" />
+    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Designation\Index.cshtml" />
+    <Content Include="Views\Swipe\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Employee\" />
     <Folder Include="Views\Purchase\" />
-    <Folder Include="Views\Sales\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

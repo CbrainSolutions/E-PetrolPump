@@ -20,7 +20,10 @@ namespace PetrolPumpERP.Models.DataModels
 
     public class MainledgerResponse : Error
     {
+
         public IQueryable<tblMainLedger> MainledgerList { get; set; }
+
+        
     }
 
     public class SubledgerResponse : Error

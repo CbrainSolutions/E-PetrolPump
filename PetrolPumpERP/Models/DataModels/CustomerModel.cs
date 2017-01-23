@@ -11,6 +11,8 @@ namespace PetrolPumpERP.Models.DataModels
     public class CustomerModel
     {
         public int CustomerId { get; set; }
+
+        public string CustomerName { get; set; }
         public string CustomerFirstName { get; set; }
         public string CustomerMName { get; set; }
         public string CustomeLName { get; set; }
@@ -100,6 +102,7 @@ namespace PetrolPumpERP.Models.DataModels
                                     CustomerFirstName = tbl.CustomerFirstName,
                                     CustomerMName = tbl.CustomerMName,
                                     CustomeLName = tbl.CustomeLName,
+                                    CustomerName=tbl.CustomerFirstName +" " + tbl.CustomerMName + " " + tbl.CustomeLName,
                                     Address = tbl.Address,
                                     City = tbl.City,
                                     Pin = tbl.Pin,

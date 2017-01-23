@@ -13,6 +13,8 @@
         IsSubledger: false,
     };
     $scope.ErrorMessage = ""
+    $scope.IsRoundOff = false;
+    $scope.IsPercentWise = false;
     $scope.Add = false;
     $scope.Edit = false;
     $scope.SubLedgerId = 0;
@@ -81,7 +83,9 @@
         $("#AccountType").val(0);
         $scope.AcTypeChanged();
         $("#ddlsubledger").val("0");
-        
+        $("#PercentOrFixedAmount").val("")
+        $scope.IsPercent = false;
+        $scope.IsRoundOff = false;
         $scope.Details = true;
         $scope.Add = false;
         $scope.Edit = false;
@@ -93,6 +97,23 @@
         $scope.AcTypeChanged();
         $("#AccountName").val(OtherAccountModel.AccountName);
         $("#ddlsubledger").val(OtherAccountModel.SubledgerId);
+        if (OtherAccountModel.RoundOff == null) {
+            $scope.IsRoundOff = false;
+        }
+        else {
+            $scope.IsRoundOff = OtherAccountModel.RoundOff;
+        }
+        //$scope.SetRoundOff();
+        if (OtherAccountModel.IsPercent==null) {
+            $scope.IsPercentWise = false;
+        }
+        else {
+            $scope.IsPercentWise = OtherAccountModel.IsPercent;
+            if ($scope.IsPercentWise) {
+                $("#PercentOrFixedAmount").val(OtherAccountModel.PercentOrFixedAmount);
+            }
+        }
+        
         $scope.Details = false;
         $scope.Add = false;
         $scope.Edit = true;
@@ -110,6 +131,9 @@
                     AccountName: $("#AccountName").val(),
                     SubledgerId: $("#ddlsubledger").val(),
                     AccountTypeId: $("#AccountType").val(),
+                    RoundOff: $scope.IsRoundOff,
+                    IsPercent: $scope.IsPercent,
+                    PercentOrFixedAmount: $("#PercentOrFixedAmount").val()==""?"0":$("#PercentOrFixedAmount").val(),
                 };
 
             var url = GetVirtualDirectory() + '/OtherAccount/Save';
@@ -130,6 +154,9 @@
                         angular.forEach($scope.OtherAccountList, function (value, key) {
                             if (value.OtherAccountId == model.OtherAccountId) {
                                 $scope.OtherAccountList[key].AccountName = model.AccountName;
+                                $scope.OtherAccountList[key].RoundOff = model.IsRoundOff;
+                                $scope.OtherAccountList[key].IsPercent = model.IsPercent;
+                                $scope.OtherAccountList[key].PercentOrFixedAmount = model.PercentOrFixedAmount;
                             }
                         });
                     }

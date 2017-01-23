@@ -12,15 +12,9 @@ namespace PetrolPumpERP.Models.DataEntities
     using System;
     using System.Collections.Generic;
     
-    public partial class tblOtherAccount
+    public partial class tblDepartment
     {
-        public long OtherAccountId { get; set; }
-        public string AccountName { get; set; }
-        public Nullable<long> LedgerId { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<bool> IsDelete { get; set; }
-        public Nullable<bool> IsPercent { get; set; }
-        public Nullable<decimal> PercentOrFixedAmount { get; set; }
-        public Nullable<bool> RoundOff { get; set; }
+        public int DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

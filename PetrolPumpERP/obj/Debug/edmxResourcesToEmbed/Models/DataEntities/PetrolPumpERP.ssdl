@@ -55,7 +55,7 @@
     <Property Name="SRNO" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="InvoiceNo" Type="bigint" />
     <Property Name="ItemCode" Type="bigint" />
-    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" Nullable="false" />
     <Property Name="BatchNo" Type="nvarchar" MaxLength="100" />
     <Property Name="ExpiryDate" Type="datetime" />
     <Property Name="Rate" Type="decimal" Precision="10" Scale="2" Nullable="false" />
@@ -161,13 +161,20 @@
     </Key>
     <Property Name="DNSrNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ProductCode" Type="int" />
-    <Property Name="Quantity" Type="int" />
+    <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
     <Property Name="ExpiryDate" Type="datetime" />
     <Property Name="BatchNo" Type="nvarchar" MaxLength="50" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="IsDelete" Type="bit" />
     <Property Name="DNNo" Type="int" />
+  </EntityType>
+  <EntityType Name="tblDepartment">
+    <Key>
+      <PropertyRef Name="DepartmentId" />
+    </Key>
+    <Property Name="DepartmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DepartmentName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="tblDesignationMaster">
     <Key>
@@ -198,6 +205,8 @@
     <Property Name="PFNo" Type="nvarchar" MaxLength="50" />
     <Property Name="PanNo" Type="nvarchar" MaxLength="50" />
     <Property Name="BasicSalary" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="EmpEmail" Type="nvarchar" MaxLength="150" />
+    <Property Name="LedgerId" Type="bigint" />
   </EntityType>
   <EntityType Name="tblFinancialMaster">
     <Key>
@@ -266,6 +275,9 @@
     <Property Name="LedgerId" Type="bigint" />
     <Property Name="CreatedDate" Type="date" />
     <Property Name="IsDelete" Type="bit" />
+    <Property Name="IsPercent" Type="bit" />
+    <Property Name="PercentOrFixedAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RoundOff" Type="bit" />
   </EntityType>
   <EntityType Name="tblProductMaster">
     <Key>
@@ -315,7 +327,7 @@
     </Key>
     <Property Name="PINoSrNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ProductCode" Type="bigint" />
-    <Property Name="InvoiceQty" Type="int" />
+    <Property Name="InvoiceQty" Type="decimal" Precision="18" Scale="2" />
     <Property Name="InvoicePrice" Type="decimal" Precision="18" Scale="2" />
     <Property Name="ExpiryDate" Type="datetime" />
     <Property Name="BatchNo" Type="nvarchar" MaxLength="50" />
@@ -382,11 +394,11 @@
     </Key>
     <Property Name="StockId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ProductId" Type="bigint" />
-    <Property Name="OpeningQty" Type="int" />
+    <Property Name="OpeningQty" Type="decimal" Precision="18" Scale="2" />
     <Property Name="OpeningQtyDate" Type="datetime" />
-    <Property Name="InwardQty" Type="int" />
+    <Property Name="InwardQty" Type="decimal" Precision="18" Scale="2" />
     <Property Name="InwardPrice" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="OutwardQty" Type="int" />
+    <Property Name="OutwardQty" Type="decimal" Precision="18" Scale="2" />
     <Property Name="OutwardPrice" Type="decimal" Precision="18" Scale="2" />
     <Property Name="DocumentNo" Type="bigint" />
     <Property Name="TransactionType" Type="varchar" MaxLength="10" />
@@ -433,6 +445,16 @@
     <Property Name="State" Type="varchar" MaxLength="50" />
     <Property Name="Country" Type="varchar" MaxLength="50" />
     <Property Name="Pin" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblSwipeMachine">
+    <Key>
+      <PropertyRef Name="MachineId" />
+    </Key>
+    <Property Name="MachineId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MachineNo" Type="varchar" MaxLength="50" />
+    <Property Name="IsDelete" Type="bit" />
+    <Property Name="BankId" Type="bigint" />
+    <Property Name="CardType" Type="varchar" MaxLength="2" />
   </EntityType>
   <EntityType Name="tblTransaction">
     <Key>
@@ -525,6 +547,7 @@
     <EntitySet Name="tblCustomeType" EntityType="Self.tblCustomeType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDebitNote" EntityType="Self.tblDebitNote" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDebitNoteDetails" EntityType="Self.tblDebitNoteDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDepartment" EntityType="Self.tblDepartment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDesignationMaster" EntityType="Self.tblDesignationMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblEmployee" EntityType="Self.tblEmployee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblFinancialMaster" EntityType="Self.tblFinancialMaster" Schema="dbo" store:Type="Tables" />
@@ -543,6 +566,7 @@
     <EntitySet Name="tblStockDetails" EntityType="Self.tblStockDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblSubLedger" EntityType="Self.tblSubLedger" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblSupplierMaster" EntityType="Self.tblSupplierMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblSwipeMachine" EntityType="Self.tblSwipeMachine" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTransaction" EntityType="Self.tblTransaction" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTransactionType" EntityType="Self.tblTransactionType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblUnitMaster" EntityType="Self.tblUnitMaster" Schema="dbo" store:Type="Tables" />

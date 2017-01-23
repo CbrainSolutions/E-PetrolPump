@@ -20,6 +20,9 @@
                             <div class="collapse" id="toggleDemo" style="height: 0px;">
                                 <ul class="nav nav-list">
                                     <li>
+                                        <a href="@Url.Action("Index","Department")">Department</a>
+                                    </li>
+                                    <li>
                                         <a href="@Url.Action("Index","Subledger")">Subledger</a>
                                     </li>
                                     <li>
@@ -50,6 +53,9 @@
                                         <a href="@Url.Action("Index","Bank")">Bank Master</a>
                                     </li>
                                     <li>
+                                        <a href="@Url.Action("Index","Swipe")">Swipe Machine</a>
+                                    </li>
+                                    <li>
                                         <a href="@Url.Action("Index","OtherAccount")">Other Accounts</a>
                                     </li>
                                 </ul>
@@ -57,9 +63,9 @@
                         </a>
                     </li>
                     <li id="lnkactype">
-                        <a data-toggle="collapse" data-target="#toggleDemo" data-parent="#sidenav01" class="collapsed" href="#">
+                        <a data-toggle="collapse" data-target="#saleandpurchase" data-parent="#sidenav01" class="collapsed" href="#">
                             Sales and Purchase
-                            <div class="collapse" id="toggleDemo" style="height: 0px;">
+                            <div class="collapse" id="saleandpurchase" style="height: 0px;">
                                 <ul class="nav nav-list">
                                     <li>
                                         <a href="@Url.Action("Index","Sales")">Sale</a>

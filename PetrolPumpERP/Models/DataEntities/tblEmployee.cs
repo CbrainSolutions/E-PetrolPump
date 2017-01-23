@@ -31,5 +31,7 @@ namespace PetrolPumpERP.Models.DataEntities
         public string PFNo { get; set; }
         public string PanNo { get; set; }
         public Nullable<decimal> BasicSalary { get; set; }
+        public string EmpEmail { get; set; }
+        public Nullable<long> LedgerId { get; set; }
     }
 }
