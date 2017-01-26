@@ -1,5 +1,5 @@
 ﻿PetroliumApp.controller("DeptController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
-
+    $scope.MainDepartmentList = [];
     $scope.DepartmentList = [];
     $scope.SearchDepartmentList = [];
     $scope.Details = true;
@@ -13,6 +13,28 @@
     $scope.SubledgerModel = { DepartmentName: "", DepartmentId: 0 };
 
     $scope.Prefix = "";
+    function GetDepartments()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/Department/GetDepartments";
+        $http.get(url)
+        .then(function (response) {
+            $scope.MainDepartmentList = response.data.DepartmentList;
+            $scope.DepartmentList = response.data.DepartmentList;//").val());
+            $scope.SearchDepartmentList = $filter('limitTo')($scope.DepartmentList, $scope.Paging, $scope.CurruntIndex);
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+    }
 
     $scope.AddNewUI = function (isedit) {
         $scope.Details = false;
@@ -21,12 +43,16 @@
     }
 
     $scope.FilterList = function () {
-        $scope.DepartmentList = $filter('filter')(JSON.parse($("#DepartmentList").val()), { DepartmentName: $scope.Prefix })
+        //$scope.DepartmentList = $filter('filter')(JSON.parse($("#DepartmentList").val()), { DepartmentName: $scope.Prefix });
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.DepartmentList = $scope.MainDepartmentList.filter(function (dept) {
+            return (reg.test(dept.DepartmentName.toLowerCase()));
+        });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.DepartmentList = JSON.parse($("#DepartmentList").val());
+        $scope.DepartmentList = $scope.MainDepartmentList;
         $scope.SearchDepartmentList = $scope.DepartmentList;
         $scope.First();
     }
@@ -91,7 +117,7 @@
                 }
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#DepartmentList").val(JSON.stringify($scope.DepartmentList));
+                        $scope.MainDepartmentList=$scope.DepartmentList;
                         $scope.SearchDepartmentList = $scope.DepartmentList;
                         $scope.First();
                         $scope.CancelClick();
@@ -156,8 +182,8 @@
     }
 
     $scope.init = function () {
-        $scope.DepartmentList = JSON.parse($("#DepartmentList").val());
-        $scope.SearchDepartmentList = $filter('limitTo')($scope.DepartmentList, $scope.Paging, $scope.CurruntIndex);
+        GetDepartments();
+        
         
     }
 

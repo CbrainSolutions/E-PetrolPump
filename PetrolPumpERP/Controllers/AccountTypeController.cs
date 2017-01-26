@@ -12,13 +12,19 @@ namespace PetrolPumpERP.Controllers
     {
         // GET: AccountType
         AccountTypeBL objAccounttype = AccountTypeBL.Instance;
-        SubledgerBL objSubledger = SubledgerBL.Instance;
+        
 
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            ViewBag.SubledgerList = objSubledger.GetAllSubledgers();
-            return View(objAccounttype.GetAccountTypes());
+            //ViewBag.SubledgerList = 
+            return View();
+        }
+
+        [MyAuthorizeAttribute]
+        public ActionResult GetAccountTypes()
+        {
+            return Json(objAccounttype.GetAccountTypes());
         }
 
         [MyAuthorizeAttribute]

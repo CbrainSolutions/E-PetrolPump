@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 @Scripts.Render("~/bundles/Designation")
-<div data-ng-controller="DeptController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.DesignationList)" id="DesignationList" />
+<div data-ng-controller="DesignationController" data-ng-app="PetroliumApp">
+    @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.DesignationList)" id="DesignationList" />*@
     <h2>Designation</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">

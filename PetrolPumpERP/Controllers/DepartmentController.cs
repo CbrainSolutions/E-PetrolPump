@@ -15,8 +15,16 @@ namespace PetrolPumpERP.Controllers
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            return View(objSubledger.GetAllDepartments());
+            return View();
         }
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetDepartments()
+        {
+            return Json(objSubledger.GetAllDepartments(),JsonRequestBehavior.AllowGet);
+        }
+
 
         [MyAuthorizeAttribute]
         [HttpPost]

@@ -12,16 +12,18 @@ namespace PetrolPumpERP.Controllers
     {
         // GET: Customer
         CustomerModelBL objCustomer = CustomerModelBL.Instance;
-        AccountTypeBL objAcType = AccountTypeBL.Instance;
-
 
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            ViewBag.CustomerTypeList = objCustomer.GetCustomerTypes().CustomerTypeList;
-            ViewBag.AccontTypeList = objAcType.GetAccountTypes();
-            ViewBag.SubledgerList = objAcType.GetAccountTypesDetails(null);
-            return View(objCustomer.GetAllCustomers());
+            return View();
+        }
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetCustomer()
+        {
+            return Json(objCustomer.GetAllCustomers(),JsonRequestBehavior.AllowGet);
         }
 
         [MyAuthorizeAttribute]

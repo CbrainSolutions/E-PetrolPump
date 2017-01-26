@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("BankController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainBankList = [];
     $scope.BankList = [];
     $scope.SearchBankList = [];
     $scope.AccountTypes = [];
@@ -25,6 +26,32 @@
     $scope.BankId = 0;
 
     $scope.Prefix = "";
+
+    function GetBankDetails()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/bank/GetBankDetails";
+        $http.get(url)
+        .then(function (response) {
+            $scope.BankList = response.data.BankList;
+            $scope.MainBankList = response.data.BankList;
+            $scope.SearchBankList = $filter('limitTo')($scope.BankList, $scope.Paging, $scope.CurruntIndex);
+            $scope.AccountTypes = response.data.AccountTypes.AccountTypeList;
+            //console.log($scope.AccountTypes);
+            $scope.SubledgerList = response.data.SubledgerList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+    }
 
     $scope.AcTypeChanged = function () {
         var id = $("#AccountType").val();
@@ -75,14 +102,14 @@
 
     $scope.FilterList = function () {
         var reg = new RegExp($scope.Prefix.toLowerCase());
-        $scope.BankList = JSON.parse($("#banklist").val()).filter(function (bank) {
+        $scope.BankList = $scope.MainBankList.filter(function (bank) {
             return (reg.test(bank.BankName.toLowerCase()) || reg.test(bank.Address.toLowerCase()) || reg.test(bank.IFSC.toLowerCase()));
         });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.BankList = JSON.parse($("#banklist").val());
+        $scope.BankList = $scope.MainBankList;
         $scope.SearchBankList = $scope.BankList;
         $scope.First();
     }
@@ -184,7 +211,8 @@
                     }
                     setTimeout(function () {
                         $scope.$apply(function () {
-                            $("#banklist").val(JSON.stringify($scope.BankList));
+                            $scope.MainBankList = $scope.BankList;
+                            //$("#banklist").val(JSON.stringify($scope.BankList));
                             $scope.SearchBankList = $scope.BankList;
                             $scope.First();
                             $scope.CancelClick();
@@ -251,11 +279,12 @@
     }
 
     $scope.init = function () {
-        $scope.BankList = JSON.parse($("#banklist").val());
-        $scope.SearchBankList = $filter('limitTo')($scope.BankList, $scope.Paging, $scope.CurruntIndex);
-        $scope.AccountTypes = JSON.parse($("#AccontTypeList").val()).AccountTypeList;
-        //console.log($scope.AccountTypes);
-        $scope.SubledgerList = JSON.parse($("#SubledgerList").val());
+        GetBankDetails();
+        //$scope.BankList = JSON.parse($("#banklist").val());
+        //$scope.SearchBankList = $filter('limitTo')($scope.BankList, $scope.Paging, $scope.CurruntIndex);
+        //$scope.AccountTypes = JSON.parse($("#AccontTypeList").val()).AccountTypeList;
+        ////console.log($scope.AccountTypes);
+        //$scope.SubledgerList = JSON.parse($("#SubledgerList").val());
     }
 
     $scope.init();

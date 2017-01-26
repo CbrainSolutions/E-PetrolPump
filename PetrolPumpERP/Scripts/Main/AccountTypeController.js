@@ -1,5 +1,7 @@
 ﻿PetroliumApp.controller("AccountTypeController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainAccountTypeList = [];
+
     $scope.AccountTypeList = [];
     $scope.SearchAccountTypeList = [];
     $scope.SubLedgers = [];
@@ -15,6 +17,30 @@
     $scope.AccountTypeModel = { AccountTypeId: 0, AccountType: "", SubledgerId: 0 };
 
     $scope.Prefix = "";
+
+    function GetAccountTypeDetails()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/AccountType/GetAccountTypes";
+        $http.get(url)
+        .then(function (response) {
+            $scope.AccountTypeList = response.data.AccountTypeList;
+            $scope.MainAccountTypeList = response.data.AccountTypeList;
+            $scope.SearchAccountTypeList = $filter('limitTo')($scope.AccountTypeList, $scope.Paging, $scope.CurruntIndex);
+            $scope.SubLedgers = response.data.Subledgers.SubledgerList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+    }
 
     $scope.AddNewUI = function (isedit) {
         $scope.Details = false;
@@ -34,12 +60,16 @@
     }
 
     $scope.FilterList = function () {
-        $scope.AccountTypeList = $filter('filter')(JSON.parse($("#accounttypelist").val()), { AccountType: $scope.Prefix })
+        //$scope.AccountTypeList = $filter('filter')(JSON.parse($("#accounttypelist").val()), { AccountType: $scope.Prefix })
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.AccountTypeList = $scope.MainAccountTypeList.filter(function (actype) {
+            return (reg.test(actype.AccountType.toLowerCase()));
+        });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.AccountTypeList = JSON.parse($("#accounttypelist").val());
+        $scope.AccountTypeList = $scope.MainAccountTypeList;
         $scope.SearchAccountTypeList = $scope.AccountTypeList;
         $scope.First();
     }
@@ -143,7 +173,8 @@
                 
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#accounttypelist").val(JSON.stringify($scope.AccountTypeList));
+                        $scope.MainAccountTypeList = $scope.AccountTypeList;
+                        //$("#accounttypelist").val(JSON.stringify($scope.AccountTypeList));
                         $scope.SearchAccountTypeList = $scope.AccountTypeList;
                         $scope.First();
                         $scope.CancelClick();
@@ -208,9 +239,8 @@
     }
 
     $scope.init = function () {
-        $scope.AccountTypeList = JSON.parse($("#accounttypelist").val());
-        $scope.SearchAccountTypeList = $filter('limitTo')($scope.AccountTypeList, $scope.Paging, $scope.CurruntIndex);
-        $scope.SubLedgers = JSON.parse($("#SubledgerList").val()).SubledgerList;
+        GetAccountTypeDetails();
+        
     }
 
     $scope.init();

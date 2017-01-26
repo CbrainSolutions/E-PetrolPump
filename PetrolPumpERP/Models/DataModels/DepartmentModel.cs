@@ -92,15 +92,8 @@ namespace PetrolPumpERP.Models.DataModels
             if (tbl != null)
             {
                 tbl.DepartmentName = model.DepartmentName;
-                tbl.DepartmentId = model.DepartmentId;
-                if (_db.SaveChanges() > 0)
-                {
-                    response.Status = true;
-                }
-                else
-                {
-                    response.Message = "Record not updated.";
-                }
+                _db.SaveChanges();
+                response.Status = true;
             }
             else
             {
@@ -111,15 +104,8 @@ namespace PetrolPumpERP.Models.DataModels
                     if (tbl != null)
                     {
                         tbl.DepartmentName = model.DepartmentName;
-                        tbl.DepartmentId = model.DepartmentId;
-                        if (_db.SaveChanges() > 0)
-                        {
-                            response.Status = true;
-                        }
-                        else
-                        {
-                            response.Message = "Record not updated.";
-                        }
+                        _db.SaveChanges();
+                        response.Status = true;
                     }
                     else
                     {

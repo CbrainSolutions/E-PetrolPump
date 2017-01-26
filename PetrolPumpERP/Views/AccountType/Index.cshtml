@@ -6,7 +6,7 @@
 
 @Scripts.Render("~/bundles/AccountType")
 <div data-ng-controller="AccountTypeController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.AccountTypeList)" id="accounttypelist" />
+    @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.AccountTypeList)" id="accounttypelist" />*@
     <h2>Account Type</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">
@@ -77,7 +77,7 @@
             <div class="form-group" >
                 <div class="col-md-12">
                     <div class="col-md-6" style="height:200px;overflow:auto">
-                        <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
+                        @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />*@
                         <input type="text" data-ng-model="SearchSubledger" class="form-control"/>
                         <table class="table">
                             <thead>

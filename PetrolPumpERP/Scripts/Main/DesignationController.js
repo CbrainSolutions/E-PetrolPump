@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("DesignationController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainDesignationList = [];
     $scope.DesignationList = [];
     $scope.SearchDesignationList = [];
     $scope.Details = true;
@@ -7,12 +8,35 @@
     $scope.ErrorMessage = ""
     $scope.Add = false;
     $scope.Edit = false;
-    $scope.SubLedgerId = 0;
+    $scope.DesignationCode = 0;
     $scope.Paging = 10;
     $scope.CurruntIndex = 0;
     $scope.SubledgerModel = { DesignationDesc: "", DesignationCode: 0 };
 
     $scope.Prefix = "";
+    function GetDesignations() {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/Designation/GetAllDesignations";
+        $http.get(url)
+        .then(function (response) {
+            $scope.MainDesignationList = response.data.DesignationList;
+            $scope.DesignationList = response.data.DesignationList;
+            $scope.SearchDepartmentList = $filter('limitTo')($scope.DesignationList, $scope.Paging, $scope.CurruntIndex);
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
+    }
+    
 
     $scope.AddNewUI = function (isedit) {
         $scope.Details = false;
@@ -21,12 +45,16 @@
     }
 
     $scope.FilterList = function () {
-        $scope.DesignationList = $filter('filter')(JSON.parse($("#DesignationList").val()), { DesignationDesc: $scope.Prefix })
+        //$scope.DesignationList = $filter('filter')(JSON.parse($("#DesignationList").val()), { DesignationDesc: $scope.Prefix })
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.DesignationList = $scope.MainDesignationList.filter(function (dept) {
+            return (reg.test(dept.DesignationDesc.toLowerCase()));
+        });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.DesignationList = JSON.parse($("#DesignationList").val());
+        $scope.DesignationList = $scope.MainDesignationList;
         $scope.SearchDesignationList = $scope.DesignationList;
         $scope.First();
     }
@@ -39,8 +67,8 @@
     }
 
     $scope.EditClick = function (SubledgerModel) {
-        $("#DesignationDesc").val(SubledgerModel.SubLedgerName);
-        $scope.SubLedgerId = SubledgerModel.SubLedgerId;
+        $("#DesignationDesc").val(SubledgerModel.DesignationDesc);
+        $scope.DesignationCode = SubledgerModel.DesignationCode;
         $scope.Details = false;
         $scope.Add = false;
         $scope.Edit = true;
@@ -49,12 +77,12 @@
     $scope.Save = function (isEdit) {
 
         if ($("#DesignationDesc").val() == "") {
-            $scope.ErrorModel.IsDeptName = true;
-            $scope.ErrorMessage = "Department name should be filled.";
+            $scope.ErrorModel.IsDesigName = true;
+            $scope.ErrorMessage = "Designation name should be filled.";
             return false;
         }
         else {
-            $scope.ErrorModel.IsSelectsubledgerName = false;
+            $scope.ErrorModel.IsDesigName = false;
         }
         var spinner = new Spinner().spin();
         document.getElementById("mainbody").appendChild(spinner.el);
@@ -63,9 +91,9 @@
             model = { DesignationDesc: $("#DesignationDesc").val(), DesignationCode: $scope.DesignationCode };
         }
 
-        var url = GetVirtualDirectory() + '/Department/Save';
+        var url = GetVirtualDirectory() + '/Designation/Save';
         if (isEdit == false) {
-            url = GetVirtualDirectory() + '/Department/Update';
+            url = GetVirtualDirectory() + '/Designation/Update';
         }
         var req = {
             method: 'POST',
@@ -91,7 +119,7 @@
                 }
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#DesignationList").val(JSON.stringify($scope.DesignationList));
+                        $scope.MainDesignationList=$scope.DesignationList;
                         $scope.SearchDesignationList = $scope.DesignationList;
                         $scope.First();
                         $scope.CancelClick();
@@ -156,9 +184,7 @@
     }
 
     $scope.init = function () {
-        $scope.DesignationList = JSON.parse($("#DesignationList").val());
-        $scope.SearchDesignationList = $filter('limitTo')($scope.DesignationList, $scope.Paging, $scope.CurruntIndex);
-
+        GetDesignations();
     }
 
     $scope.init();

@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("CustomerController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainCustomerList = [];
     $scope.CustomerList = [];
     $scope.SearchCustomerList = [];
     $scope.MainLedgers = [];
@@ -32,6 +33,31 @@
     $scope.CustomerId = 0;
 
     $scope.Prefix = "";
+
+    function GetCustomerDetails() {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/Customer/GetCustomer";
+        $http.get(url)
+        .then(function (response) {
+            $scope.CustomerList = response.data.CustomerList;
+            $scope.MainCustomerList = response.data.CustomerList;
+            $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, $scope.CurruntIndex);
+            $scope.AccountTypes = response.data.AccountTypes.AccountTypeList;
+            $scope.SubledgerList = response.data.SubledgerList;
+            $scope.CustomerTypes = response.data.CustomerTypeList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+    }
 
     $scope.AcTypeChanged=function()
     {
@@ -103,15 +129,15 @@
     }
 
     $scope.FilterList = function () {
-        var reg = new RegExp($scope.Prefix);
-        $scope.CustomerList = JSON.parse($("#customerlist").val()).filter(function (customer) {
-            return (reg.test(customer.CustomerFirstName) || reg.test(customer.Address) || reg.test(customer.City));
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.CustomerList = $scope.MainCustomerList.filter(function (customer) {
+            return (reg.test(customer.CustomerFirstName.toLowerCase()) || reg.test(customer.Address.toLowerCase()) || reg.test(customer.City.toLowerCase()));
         });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.CustomerList =JSON.parse($("#customerlist").val());
+        $scope.CustomerList =$scope.MainCustomerList;
         $scope.SearchCustomerList = $scope.CustomerList;
         $scope.First();
     }
@@ -270,7 +296,8 @@
                 }
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#customerlist").val(JSON.stringify($scope.CustomerList));
+                        $scope.MainCustomerList = $scope.CustomerList;
+                        //$("#customerlist").val(JSON.stringify($scope.CustomerList));
                         $scope.SearchCustomerList = $scope.CustomerList;
                         $scope.First();
                         $scope.CancelClick();
@@ -326,14 +353,11 @@
         $scope.CurruntIndex = position;
         $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, position);
     }
+    
 
     $scope.init = function () {
-        $scope.CustomerList = JSON.parse($("#customerlist").val());
-        $scope.SearchCustomerList = $filter('limitTo')($scope.CustomerList, $scope.Paging, $scope.CurruntIndex);
-        $scope.CustomerTypes = JSON.parse($("#CustomerTypeList").val());
-        $scope.AccountTypes = JSON.parse($("#AccontTypeList").val()).AccountTypeList;
-        //console.log($scope.AccountTypes);
-        $scope.SubledgerList = JSON.parse($("#SubledgerList").val());
+        GetCustomerDetails();
+        
     }
 
     $scope.init();

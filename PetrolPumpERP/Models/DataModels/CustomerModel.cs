@@ -47,14 +47,25 @@ namespace PetrolPumpERP.Models.DataModels
         //public string BalType { get; set; }
     }
 
-    public class CustomerTypeResponse : Error
-    {
-        public IQueryable<tblCustomeType> CustomerTypeList { get; set; }
-    }
+    //public class CustomerTypeResponse : Error
+    //{
+        
+    //}
 
     public class CustomerResponse : Error
     {
+        public CustomerResponse()
+        {
+            AccountTypes = new AccountTypeResponse();
+        }
+
+        public IQueryable<AccountTypeModel> SubledgerList { get; set; }
+
+        public AccountTypeResponse AccountTypes { get; set; }
+
         public IQueryable<CustomerModel> CustomerList { get; set; }
+
+        public IQueryable<tblCustomeType> CustomerTypeList { get; set; }
     }
 
     public class CustomerModelBL
@@ -78,12 +89,12 @@ namespace PetrolPumpERP.Models.DataModels
             }
         }
 
-        public CustomerTypeResponse GetCustomerTypes()
-        {
-            CustomerTypeResponse response = new CustomerTypeResponse();
-            response.CustomerTypeList = _db.tblCustomeTypes;
-            return response;
-        }
+        //public CustomerTypeResponse GetCustomerTypes()
+        //{
+        //    CustomerTypeResponse response = new CustomerTypeResponse();
+            
+        //    return response;
+        //}
 
         public CustomerResponse GetAllCustomers()
         {
@@ -132,6 +143,10 @@ namespace PetrolPumpERP.Models.DataModels
                                     //OpeningBalance = tblopening.CreditBal > 0 ? tblopening.CreditBal : (tblopening.DebitBal > 0 ? tblopening.DebitBal : 0)
 
                                 };
+            AccountTypeBL objAcType = AccountTypeBL.Instance;
+            response.CustomerTypeList = _db.tblCustomeTypes;
+            response.AccountTypes = objAcType.GetAccountTypes();
+            response.SubledgerList = objAcType.GetAccountTypesDetails(null);
             if (response.CustomerList.Count() > 0)
             {
                 response.Status = true;

@@ -11,15 +11,20 @@ namespace PetrolPumpERP.Controllers
     public class BankController : Controller
     {
         BankModelBL objbank = BankModelBL.Instance;
-        AccountTypeBL objAccounttype = AccountTypeBL.Instance;
-        SubledgerBL objsubledger = SubledgerBL.Instance;
+        
+        //SubledgerBL objsubledger = SubledgerBL.Instance;
         // GET: Bank
         [MyAuthorize]
         public ActionResult Index()
         {
-            ViewBag.AccontTypeList = objAccounttype.GetAccountTypes();
-            ViewBag.SubledgerList = objAccounttype.GetAccountTypesDetails(null);
-            return View(objbank.GetBankDetails());
+            //ViewBag.AccontTypeList = objAccounttype.GetAccountTypes();
+            //ViewBag.SubledgerList = objAccounttype.GetAccountTypesDetails(null);
+            return View();
+        }
+
+        public ActionResult GetBankDetails()
+        {
+            return Json(objbank.GetBankDetails());
         }
 
         [HttpPost]

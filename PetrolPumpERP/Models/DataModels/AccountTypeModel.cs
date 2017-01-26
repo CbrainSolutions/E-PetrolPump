@@ -21,18 +21,15 @@ namespace PetrolPumpERP.Models.DataModels
     }
 
 
-    //public class AccountTypeDetails
-    //{
-    //    public int SRNo { get; set; }
-    //    public Nullable<long> AccountTypeId { get; set; }
-    //    public Nullable<bool> IsDelete { get; set; }
-    //    public Nullable<long> SubledgerId { get; set; }
-
-    //    public string SubLedgerName { get; set; }
-    //}
-
     public class AccountTypeResponse : Error
     {
+        public AccountTypeResponse()
+        {
+            Subledgers = new SubledgerResponse();
+        }
+
+        public SubledgerResponse Subledgers { get; set; }
+
         public IQueryable<AccountTypeModel> AccountTypeList { get; set; }
     }
 
@@ -61,7 +58,7 @@ namespace PetrolPumpERP.Models.DataModels
         public AccountTypeResponse GetAccountTypes()
         {
             AccountTypeResponse response = new AccountTypeResponse() { Status = false };
-
+            SubledgerBL objSubledger = SubledgerBL.Instance;
             response.AccountTypeList = from tbl in _db.tblAccountTypes
                                        where tbl.IsDelete == false
                                        select new AccountTypeModel
@@ -71,7 +68,7 @@ namespace PetrolPumpERP.Models.DataModels
                                            IsDelete=tbl.IsDelete,
                                        };
 
-
+            response.Subledgers= objSubledger.GetAllSubledgers();
             if (response.AccountTypeList.Count() > 0)
             {
                 response.Status = true;

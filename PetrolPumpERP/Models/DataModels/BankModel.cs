@@ -30,7 +30,18 @@ namespace PetrolPumpERP.Models.DataModels
 
     public class BankModelResponse : Error
     {
+        public BankModelResponse()
+        {
+            AccountTypes = new AccountTypeResponse();
+        }
+
+        public int MyProperty { get; set; }
+
         public IQueryable<BankModel> BankList { get; set; }
+
+        public AccountTypeResponse AccountTypes { get; set; }
+
+        public IQueryable<AccountTypeModel> SubledgerList { get; set; }
     }
 
     public class BankModelBL
@@ -56,6 +67,7 @@ namespace PetrolPumpERP.Models.DataModels
 
         public BankModelResponse GetBankDetails()
         {
+            AccountTypeBL objAccounttype = AccountTypeBL.Instance;
             BankModelResponse response = new BankModelResponse();
             response.BankList = from tbl in _db.tblBankMasters
                                   join tblledger in _db.tblLedgers
@@ -83,6 +95,8 @@ namespace PetrolPumpERP.Models.DataModels
                                       //BalType=tblopening.CreditBal>0?"CR": (tblopening.DebitBal > 0?"DR":""),
                                       //OpeningBalance= tblopening.CreditBal > 0 ? tblopening.CreditBal : (tblopening.DebitBal > 0 ?tblopening.DebitBal : 0)
                                   };
+            response.AccountTypes= objAccounttype.GetAccountTypes();
+            response.SubledgerList= objAccounttype.GetAccountTypesDetails(null);
             return response;
         }
 
