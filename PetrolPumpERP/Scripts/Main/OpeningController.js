@@ -1,10 +1,35 @@
 ﻿PetroliumApp.controller("OpeningController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
     $scope.DisplayBalType = false;
+    $scope.MainOpeningBalanceList = [];
     $scope.OpeningBalanceList = [];
     $scope.SearchOpeningBalanceList = [];
     $scope.Paging = 10;
     $scope.CurruntIndex = 0;
+
+    function GetAllOpeningBalLedgers()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/OpenignBalance/GetAllOpeningBalLedgers";
+        $http.get(url)
+        .then(function (response) {
+            $scope.MainOpeningBalanceList = response.data.OpeningBalanceList;
+            $scope.OpeningBalanceList = response.data.OpeningBalanceList;
+            $scope.SearchOpeningBalanceList = $filter('limitTo')($scope.OpeningBalanceList, $scope.Paging, $scope.CurruntIndex);
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+
+    }
 
     $scope.EditClick = function (model)
     {
@@ -71,8 +96,8 @@
                 });
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#openingbalanceList").val(JSON.stringify($scope.OpeningBalanceList));
-                        $scope.SearchVendorList = $scope.OpeningBalanceList;
+                        $scope.MainOpeningBalanceList= $scope.OpeningBalanceList;
+                        $scope.SearchOpeningBalanceList = $scope.OpeningBalanceList;
                         $scope.First();
                         $("#spanbaltype_" + model.OpeningBalanceId).show();
                         $("#spanopening_" + model.OpeningBalanceId).show();
@@ -141,8 +166,9 @@
     }
 
     $scope.init = function () {
-        $scope.OpeningBalanceList = JSON.parse($("#openingbalanceList").val());
-        $scope.SearchOpeningBalanceList = $filter('limitTo')($scope.OpeningBalanceList, $scope.Paging, $scope.CurruntIndex);
+        GetAllOpeningBalLedgers();
+        //$scope.OpeningBalanceList = JSON.parse($("#openingbalanceList").val());
+        //$scope.SearchOpeningBalanceList = $filter('limitTo')($scope.OpeningBalanceList, $scope.Paging, $scope.CurruntIndex);
     }
 
     $scope.init();

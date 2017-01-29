@@ -35,11 +35,27 @@ namespace PetrolPumpERP.Models.DataModels
 
     public class ProductResponse : Error
     {
+        public ProductResponse()
+        {
+            ProductTypeList = new ProductTypeResponse();
+            WareHouseList = new WareHouseResponse();
+            UOMList = new UOMResponse();
+        }
+
+        public ProductTypeResponse ProductTypeList { get; set; }
+
+        public WareHouseResponse WareHouseList { get; set; }
+
+        public UOMResponse UOMList { get; set; }
+
         public IQueryable<ProductModel> ProductList { get; set; }
     }
 
     public class ProductModelBL
     {
+        ProductTypeBL objproduttype = ProductTypeBL.Instance;
+        UOMBL objuombl = UOMBL.Instance;
+        WareHouseBL objWh = WareHouseBL.Instance;
         public static ProductModelBL _userBl = null;
         PetrolPumpERPEntities _db = new PetrolPumpERPEntities();
         private ProductModelBL()
@@ -90,6 +106,10 @@ namespace PetrolPumpERP.Models.DataModels
                                        OpeningQty=tblstock.OpeningQty,
                                        WareHouseNo=tbl.WareHouseNo,
                                    };
+
+            response. ProductTypeList = objproduttype.GetProductTypeList();
+            response.UOMList = objuombl.GetUOMList();
+            response.WareHouseList = objWh.GetWareHouseList();
             return response;
         }
 

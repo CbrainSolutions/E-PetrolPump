@@ -15,7 +15,14 @@ namespace PetrolPumpERP.Controllers
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            return View(objOpeningBal.GetAllOpeningBalLedgers());
+            return View();
+        }
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetAllOpeningBalLedgers()
+        {
+            return Json(objOpeningBal.GetAllOpeningBalLedgers(),JsonRequestBehavior.AllowGet);
         }
 
         [MyAuthorizeAttribute]

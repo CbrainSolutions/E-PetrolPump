@@ -18,17 +18,13 @@ namespace PetrolPumpERP.Models.DataModels
         public string MainLedgerName { get; set; }
     }
 
-    public class MainledgerResponse : Error
-    {
-
-        public IQueryable<tblMainLedger> MainledgerList { get; set; }
-
-        
-    }
+    
 
     public class SubledgerResponse : Error
     {
         public IQueryable<SubledgerModel> SubledgerList { get; set; }
+
+        public IQueryable<tblMainLedger> MainledgerList { get; set; }
     }
 
     public class SubledgerBL
@@ -52,12 +48,12 @@ namespace PetrolPumpERP.Models.DataModels
             }
         }
 
-        public MainledgerResponse GetMainledgers()
-        {
-            MainledgerResponse response = new MainledgerResponse();
-            response.MainledgerList = _db.tblMainLedgers;
-            return response;
-        }
+        //public MainledgerResponse GetMainledgers()
+        //{
+        //    MainledgerResponse response = new MainledgerResponse();
+            
+        //    return response;
+        //}
 
         public SubledgerResponse GetAllSubledgers()
         {
@@ -75,6 +71,8 @@ namespace PetrolPumpERP.Models.DataModels
                                     MainLedgerName = p.entitymainledger.MainLedgerName,
                                     SubLedgerName = p.entitysubledger.SubLedgerName,
                                 });
+
+            response.MainledgerList = _db.tblMainLedgers;
             if (response.SubledgerList.Count() > 0)
             {
                 response.Status = true;

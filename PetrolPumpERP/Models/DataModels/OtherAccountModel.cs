@@ -27,10 +27,20 @@ namespace PetrolPumpERP.Models.DataModels
     public class OtherAccountModelResponse : Error
     {
         public IQueryable<OtherAccountModel> OtherAccountList { get; set; }
+
+        public OtherAccountModelResponse()
+        {
+            AccountTypes = new AccountTypeResponse();
+        }
+
+        public IQueryable<AccountTypeModel> SubledgerList { get; set; }
+
+        public AccountTypeResponse AccountTypes { get; set; }
     }
 
     public class OtherAccountModelBL
     {
+        AccountTypeBL objAccounttype = AccountTypeBL.Instance;
         public static OtherAccountModelBL _userBl = null;
         PetrolPumpERPEntities _db = new PetrolPumpERPEntities();
         private OtherAccountModelBL()
@@ -76,6 +86,8 @@ namespace PetrolPumpERP.Models.DataModels
                                     AccountType=tblacctype.AccountType,
                                     AccountTypeId=tblacctype.AccountTypeId
                                 };
+            response.AccountTypes = objAccounttype.GetAccountTypes();
+            response.SubledgerList = objAccounttype.GetAccountTypesDetails(null);
             return response;
         }
 

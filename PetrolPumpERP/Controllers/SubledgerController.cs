@@ -16,8 +16,16 @@ namespace PetrolPumpERP.Controllers
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            ViewBag.MainledgerList = objSubledger.GetMainledgers().MainledgerList;
-            return View(objSubledger.GetAllSubledgers());
+            //ViewBag.MainledgerList = objSubledger.GetMainledgers().MainledgerList;
+            return View();
+        }
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetAllSubledgers()
+        {
+            //ViewBag.MainledgerList = objSubledger.GetMainledgers().MainledgerList;
+            return Json(objSubledger.GetAllSubledgers(),JsonRequestBehavior.AllowGet);
         }
 
         [MyAuthorizeAttribute]

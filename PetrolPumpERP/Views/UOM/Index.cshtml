@@ -6,7 +6,7 @@
 
 @Scripts.Render("~/bundles/UOM")
 <div data-ng-controller="UOMController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.UOMList)" id="uomlist" />
+    @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.UOMList)" id="uomlist" />*@
     <h2>Unit of Measurment</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">

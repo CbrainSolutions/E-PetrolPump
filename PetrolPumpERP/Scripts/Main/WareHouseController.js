@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("WareHouseController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainWareHouseList = [];
     $scope.WareHouseList = [];
     $scope.SearchWareHouseList = [];
     //$scope.SubLedgers = [];
@@ -16,6 +17,31 @@
 
     $scope.Prefix = "";
 
+    function GetWareHouseList()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/Vendor/GetVendors";
+        $http.get(url)
+        .then(function (response) {
+            $scope.WareHouseList = response.data.WareHouseList;
+            $scope.MainWareHouseList = response.data.WareHouseList;
+            $scope.SearchWareHouseList = $filter('limitTo')($scope.WareHouseList, $scope.Paging, $scope.CurruntIndex);
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
+    }
+    
+
     $scope.AddNewUI = function (isedit) {
         $scope.Details = false;
         $scope.Add = true;
@@ -23,7 +49,11 @@
     }
 
     $scope.FilterList = function () {
-        $scope.WareHouseList = $filter('filter')(JSON.parse($("#warehouselist").val()), { WareHouseName: $scope.Prefix })
+        //$scope.WareHouseList = $filter('filter')(JSON.parse($("#warehouselist").val()), { WareHouseName: $scope.Prefix })
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.WareHouseList = $scope.MainWareHouseList.filter(function (customer) {
+            return (reg.test(customer.WareHouseName.toLowerCase()));
+        });
         $scope.First();
     }
 
@@ -163,8 +193,9 @@
     }
 
     $scope.init = function () {
-        $scope.WareHouseList = JSON.parse($("#warehouselist").val());
-        $scope.SearchWareHouseList = $filter('limitTo')($scope.WareHouseList, $scope.Paging, $scope.CurruntIndex);
+        GetWareHouseList();
+        //$scope.WareHouseList = JSON.parse($("#warehouselist").val());
+        //$scope.SearchWareHouseList = $filter('limitTo')($scope.WareHouseList, $scope.Paging, $scope.CurruntIndex);
     }
 
     $scope.init();

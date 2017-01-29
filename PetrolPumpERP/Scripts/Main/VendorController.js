@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("VendorController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainVendorList = [];
     $scope.VendorList = [];
     $scope.SearchVendorList = [];
     $scope.AccountTypes = [];
@@ -26,6 +27,33 @@
     $scope.VendorId = 0;
 
     $scope.Prefix = "";
+
+    function GetVendors()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/Vendor/GetVendors";
+        $http.get(url)
+        .then(function (response) {
+            $scope.VendorList = response.data.VendorList;
+            $scope.MainVendorList = response.data.VendorList;
+            $scope.SearchVendorList = $filter('limitTo')($scope.VendorList, $scope.Paging, $scope.CurruntIndex);
+            $scope.AccountTypes = response.data.AccontTypeList.AccountTypeList;
+            $scope.SubledgerList = response.data.SubledgerList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
+    }
+        
 
     $scope.AcTypeChanged = function () {
         var id = $("#AccountType").val();
@@ -82,14 +110,14 @@
 
     $scope.FilterList = function () {
         var reg = new RegExp($scope.Prefix.toLowerCase());
-        $scope.VendorList = JSON.parse($("#vendorlist").val()).filter(function (customer) {
+        $scope.VendorList = $scope.MainVendorList.filter(function (customer) {
             return (reg.test(customer.SupplierName.toLowerCase()) || reg.test(customer.Address.toLowerCase()) || reg.test(customer.City.toLowerCase()));
         });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.VendorList = JSON.parse($("#vendorlist").val());
+        $scope.VendorList = $scope.MainVendorList;
         $scope.SearchVendorList = $scope.VendorList;
         $scope.First();
     }
@@ -204,7 +232,7 @@
                     }
                     setTimeout(function () {
                         $scope.$apply(function () {
-                            $("#vendorlist").val(JSON.stringify($scope.VendorList));
+                            $scope.MainVendorList = $scope.VendorList;
                             $scope.SearchVendorList = $scope.VendorList;
                             $scope.First();
                             $scope.CancelClick();
@@ -231,7 +259,6 @@
                 document.getElementById("mainbody").removeChild(spinner.el);
             });
         }
-        //document.getElementById("mainbody").removeChild(spinner.el);
     }
 
     $scope.First = function () {
@@ -271,11 +298,7 @@
     }
 
     $scope.init = function () {
-        $scope.VendorList = JSON.parse($("#vendorlist").val());
-        $scope.SearchVendorList = $filter('limitTo')($scope.VendorList, $scope.Paging, $scope.CurruntIndex);
-        $scope.AccountTypes = JSON.parse($("#AccontTypeList").val()).AccountTypeList;
-        //console.log($scope.AccountTypes);
-        $scope.SubledgerList = JSON.parse($("#SubledgerList").val());
+        GetVendors();
     }
 
     $scope.init();

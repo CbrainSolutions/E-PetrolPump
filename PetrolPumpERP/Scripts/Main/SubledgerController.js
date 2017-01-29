@@ -1,5 +1,5 @@
 ﻿PetroliumApp.controller("SubledgerController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
-
+    $scope.MainSubledgerList = [];
     $scope.SubledgerList = [];
     $scope.SearchSubledgerList = [];
     $scope.MainLedgers = [];
@@ -15,6 +15,32 @@
 
     $scope.Prefix = "";
 
+    function GetAllSubledgers()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/Subledger/GetAllSubledgers";
+        $http.get(url)
+        .then(function (response) {
+            $scope.SubledgerList = response.data.SubledgerList;
+            $scope.MainSubledgerList = response.data.SubledgerList;
+            $scope.SearchSubledgerList = $filter('limitTo')($scope.SubledgerList, $scope.Paging, $scope.CurruntIndex);
+            $scope.MainLedgers = response.data.MainledgerList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
+    }
+        
+
     $scope.AddNewUI = function (isedit) {
         $scope.Details = false;
         $scope.Add = true;
@@ -23,13 +49,17 @@
 
     $scope.FilterList = function ()
     {
-        $scope.SubledgerList = $filter('filter')(JSON.parse($("#subledgerlist").val()), { SubLedgerName: $scope.Prefix })
+        //$scope.SubledgerList = $filter('filter')(JSON.parse($("#subledgerlist").val()), { SubLedgerName: $scope.Prefix });
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.SubledgerList = $scope.MainSubledgerList.filter(function (customer) {
+            return (reg.test(customer.SubLedgerName.toLowerCase()));
+        });
         $scope.First();
     }
 
     $scope.Reset = function ()
     {
-        $scope.SubledgerList = JSON.parse($("#subledgerlist").val());
+        $scope.SubledgerList = $scope.MainSubledgerList;// JSON.parse($("#subledgerlist").val());
         $scope.SearchSubledgerList = $scope.SubledgerList;
         $scope.First();
     }
@@ -104,7 +134,8 @@
                 }
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#subledgerlist").val(JSON.stringify($scope.SubledgerList));
+                        //$("#subledgerlist").val(JSON.stringify($scope.SubledgerList));
+                        $scope.MainSubledgerList = $scope.SubledgerList;
                         $scope.SearchSubledgerList = $scope.SubledgerList;
                         $scope.First();
                         $scope.CancelClick();
@@ -169,9 +200,10 @@
     }
 
     $scope.init = function () {
-        $scope.SubledgerList = JSON.parse($("#subledgerlist").val());
-        $scope.SearchSubledgerList = $filter('limitTo')($scope.SubledgerList, $scope.Paging, $scope.CurruntIndex);
-        $scope.MainLedgers = JSON.parse($("#MainLedgerlist").val());
+        GetAllSubledgers();
+        //$scope.SubledgerList = JSON.parse($("#subledgerlist").val());
+        //$scope.SearchSubledgerList = $filter('limitTo')($scope.SubledgerList, $scope.Paging, $scope.CurruntIndex);
+        //$scope.MainLedgers = JSON.parse($("#MainLedgerlist").val());
     }
 
     $scope.init();

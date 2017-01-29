@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("ProductController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainProductList = [];
     $scope.ProductList = [];
     $scope.SearchProductList = [];
     $scope.ProductTypeList = [];
@@ -22,12 +23,39 @@
 
     $scope.Prefix = "";
 
+    function GetProducts()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/Product/GetProducts";
+        $http.get(url)
+        .then(function (response) {
+            $scope.ProductList = response.data.ProductList;
+            $scope.MainProductList = response.data.ProductList;
+            $scope.SearchProductList = $filter('limitTo')($scope.ProductList, $scope.Paging, $scope.CurruntIndex);
+            $scope.ProductTypeList = response.data.ProductTypeList.ProductTypeList;
+            //console.log($scope.AccountTypes);
+            $scope.UOMList = response.data.UOMList.UOMList;
+            $scope.WareHouseList = response.data.WareHouseList.WareHouseList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
+    }
     
 
     $scope.ValidateForm = function () {
         var valid = false;
         if ($("#ProductType").val() == "0") {
-            $scope.ErrorMessage = "Account type should be selected.";
+            $scope.ErrorMessage = "Product type should be selected.";
             $scope.ErrorModel.IsAccountType = true;
             return valid;
         }
@@ -54,14 +82,14 @@
 
     $scope.FilterList = function () {
         var reg = new RegExp($scope.Prefix.toLowerCase());
-        $scope.ProductList = JSON.parse($("#productlist").val()).filter(function (customer) {
+        $scope.ProductList = $scope.MainProductList.filter(function (customer) {
             return (reg.test(customer.ProductName.toLowerCase()) || reg.test(customer.ProductType.toLowerCase()));
         });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.ProductList = JSON.parse($("#productlist").val());
+        $scope.ProductList = $scope.MainProductList;
         $scope.SearchProductList = $scope.ProductList;
         $scope.First();
     }
@@ -156,7 +184,8 @@
                     }
                     setTimeout(function () {
                         $scope.$apply(function () {
-                            $("#productlist").val(JSON.stringify($scope.ProductList));
+                            //$("#productlist").val(JSON.stringify($scope.ProductList));
+                            $scope.MainProductList = $scope.ProductList;
                             $scope.SearchProductList = $scope.ProductList;
                             $scope.First();
                             $scope.CancelClick();
@@ -223,12 +252,13 @@
     }
 
     $scope.init = function () {
-        $scope.ProductList = JSON.parse($("#productlist").val());
-        $scope.SearchProductList = $filter('limitTo')($scope.ProductList, $scope.Paging, $scope.CurruntIndex);
-        $scope.ProductTypeList = JSON.parse($("#ProductTypeList").val()).ProductTypeList;
-        //console.log($scope.AccountTypes);
-        $scope.UOMList = JSON.parse($("#UOMList").val()).UOMList;
-        $scope.WareHouseList = JSON.parse($("#WareHouseList").val()).WareHouseList;
+        GetProducts();
+        //$scope.ProductList = JSON.parse($("#productlist").val());
+        //$scope.SearchProductList = $filter('limitTo')($scope.ProductList, $scope.Paging, $scope.CurruntIndex);
+        //$scope.ProductTypeList = JSON.parse($("#ProductTypeList").val()).ProductTypeList;
+        ////console.log($scope.AccountTypes);
+        //$scope.UOMList = JSON.parse($("#UOMList").val()).UOMList;
+        //$scope.WareHouseList = JSON.parse($("#WareHouseList").val()).WareHouseList;
     }
 
     $scope.init();

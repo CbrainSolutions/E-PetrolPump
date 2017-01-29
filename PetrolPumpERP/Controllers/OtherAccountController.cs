@@ -12,24 +12,30 @@ namespace PetrolPumpERP.Controllers
     public class OtherAccountController : Controller
     {
         OtherAccountModelBL objbank = OtherAccountModelBL.Instance;
-        AccountTypeBL objAccounttype = AccountTypeBL.Instance;
-        SubledgerBL objsubledger = SubledgerBL.Instance;
         
         // GET: OtherAccount
-        [MyAuthorize]
+        [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            ViewBag.AccontTypeList = objAccounttype.GetAccountTypes();
-            ViewBag.SubledgerList = objAccounttype.GetAccountTypesDetails(null);
-            return View(objbank.GetOtherAccountDetails());
+            return View();
         }
 
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetOtherAccountDetails()
+        {
+            return Json(objbank.GetOtherAccountDetails(),JsonRequestBehavior.AllowGet);
+        }
+
+        [MyAuthorizeAttribute]
         [HttpPost]
         public ActionResult Save(OtherAccountModel model)
         {
             return Json(objbank.Save(model));
         }
 
+        [MyAuthorizeAttribute]
         [HttpPost]
         public ActionResult Update(OtherAccountModel model)
         {

@@ -5,7 +5,7 @@
 }
 @Scripts.Render("~/bundles/Subledger")
 <div data-ng-controller="SubledgerController" data-ng-app="PetroliumApp" >
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.SubledgerList)" id="subledgerlist"/>
+    @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.SubledgerList)" id="subledgerlist"/>*@
     <h2>Subledger</h2>
     <div class="table-responsive" data-ng-show="Details==true" >
         <div class="col-md-12">
@@ -71,7 +71,7 @@
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <input type="hidden" id="MLedgerid" />
-                        <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MainledgerList)" id="MainLedgerlist" />
+                        @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MainledgerList)" id="MainLedgerlist" />*@
                         <select id="MainLedgerId" class = "form-control">
                             <option value="0">---Select---</option>
                             <option data-ng-repeat="mainledger in MainLedgers" value="{{mainledger.MainLedgerId}}">{{mainledger.MainLedgerName}}</option>

@@ -17,7 +17,14 @@ namespace PetrolPumpERP.Controllers
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            return View(objOpeningBal.GetWareHouseList());
+            return View();
+        }
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetWareHouseList()
+        {
+            return Json(objOpeningBal.GetWareHouseList(),JsonRequestBehavior.AllowGet);
         }
 
         [MyAuthorizeAttribute]

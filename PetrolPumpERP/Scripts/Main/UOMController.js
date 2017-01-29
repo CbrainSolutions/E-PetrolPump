@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("UOMController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainUOMList = [];
     $scope.UOMList = [];
     $scope.SearchUOMList = [];
     //$scope.SubLedgers = [];
@@ -16,6 +17,31 @@
 
     $scope.Prefix = "";
 
+    function GetUOMList() {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/UOM/GetUOMList";
+        $http.get(url)
+        .then(function (response) {
+            $scope.MainUOMList = response.data.UOMList;
+            $scope.UOMList = response.data.UOMList;
+            $scope.MainSubledgerList = response.data.SubledgerList;
+            $scope.SearchSubledgerList = $filter('limitTo')($scope.SubledgerList, $scope.Paging, $scope.CurruntIndex);
+            $scope.MainLedgers = response.data.MainledgerList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+
+    }
+
     $scope.AddNewUI = function (isedit) {
         $scope.Details = false;
         $scope.Add = true;
@@ -23,12 +49,16 @@
     }
 
     $scope.FilterList = function () {
-        $scope.UOMList = $filter('filter')(JSON.parse($("#uomlist").val()), { UnitDesc: $scope.Prefix })
+        //$scope.UOMList = $filter('filter')(JSON.parse($("#uomlist").val()), { UnitDesc: $scope.Prefix })
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.UOMList = $scope.MainUOMList.filter(function (customer) {
+            return (reg.test(customer.UnitDesc.toLowerCase()));
+        });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.UOMList = JSON.parse($("#uomlist").val());
+        $scope.UOMList = $scope.MainUOMList; //JSON.parse($("#uomlist").val());
         $scope.SearchUOMList = $scope.UOMList;
         $scope.First();
     }
@@ -95,7 +125,8 @@
                 }
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#uomlist").val(JSON.stringify($scope.UOMList));
+                        //$("#uomlist").val(JSON.stringify($scope.UOMList));
+                        $scope.MainUOMList = $scope.UOMList;
                         $scope.SearchUOMList = $scope.UOMList;
                         $scope.First();
                         $scope.CancelClick();
@@ -160,8 +191,9 @@
     }
 
     $scope.init = function () {
-        $scope.UOMList = JSON.parse($("#uomlist").val());
-        $scope.SearchUOMList = $filter('limitTo')($scope.UOMList, $scope.Paging, $scope.CurruntIndex);
+        GetUOMList();
+        //$scope.UOMList = JSON.parse($("#uomlist").val());
+        //$scope.SearchUOMList = $filter('limitTo')($scope.UOMList, $scope.Paging, $scope.CurruntIndex);
     }
 
     $scope.init();

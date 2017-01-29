@@ -5,7 +5,7 @@
 }
 @Scripts.Render("~/bundles/ProductType")
 <div data-ng-controller="ProductTypeController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.ProductTypeList)" id="producttypelist" />
+    @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.ProductTypeList)" id="producttypelist" />*@
     <h2>Product Type</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">

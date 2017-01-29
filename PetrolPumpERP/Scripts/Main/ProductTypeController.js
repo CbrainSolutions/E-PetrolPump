@@ -1,5 +1,5 @@
 ﻿PetroliumApp.controller("ProductTypeController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
-
+    $scope.MainProductTypeList = [];
     $scope.ProductTypeList = [];
     $scope.SearchProductTypeList = [];
     //$scope.SubLedgers = [];
@@ -16,6 +16,29 @@
 
     $scope.Prefix = "";
 
+    function GetProductTypeList() {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/ProductType/GetProductTypeList";
+        $http.get(url)
+        .then(function (response) {
+            $scope.ProductTypeList = response.data.ProductTypeList;
+            $scope.MainProductTypeList = response.data.ProductTypeList;
+            $scope.SearchProductTypeList = $filter('limitTo')($scope.ProductTypeList, $scope.Paging, $scope.CurruntIndex);
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
+    }
+
     $scope.AddNewUI = function (isedit) {
         $scope.Details = false;
         $scope.Add = true;
@@ -23,12 +46,15 @@
     }
 
     $scope.FilterList = function () {
-        $scope.ProductTypeList = $filter('filter')(JSON.parse($("#producttypelist").val()), { ProductType: $scope.Prefix })
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.ProductTypeList = $scope.MainProductTypeList.filter(function (customer) {
+            return (reg.test(customer.ProductType.toLowerCase()));
+        });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.ProductTypeList = JSON.parse($("#producttypelist").val());
+        $scope.ProductTypeList = $scope.MainProductTypeList;
         $scope.SearchProductTypeList = $scope.ProductTypeList;
         $scope.First();
     }
@@ -95,7 +121,8 @@
                 }
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $("#producttypelist").val(JSON.stringify($scope.ProductTypeList));
+                        //$("#producttypelist").val(JSON.stringify($scope.ProductTypeList));
+                        $scope.MainProductTypeList = $scope.ProductTypeList;
                         $scope.SearchProductTypeList = $scope.ProductTypeList;
                         $scope.First();
                         $scope.CancelClick();
@@ -160,8 +187,9 @@
     }
 
     $scope.init = function () {
-        $scope.ProductTypeList = JSON.parse($("#producttypelist").val());
-        $scope.SearchProductTypeList = $filter('limitTo')($scope.ProductTypeList, $scope.Paging, $scope.CurruntIndex);
+        GetProductTypeList();
+        //$scope.ProductTypeList = JSON.parse($("#producttypelist").val());
+        //$scope.SearchProductTypeList = $filter('limitTo')($scope.ProductTypeList, $scope.Paging, $scope.CurruntIndex);
     }
 
     $scope.init();

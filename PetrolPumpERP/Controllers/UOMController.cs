@@ -15,7 +15,14 @@ namespace PetrolPumpERP.Controllers
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            return View(objuom.GetUOMList());
+            return View();
+        }
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetUOMList()
+        {
+            return Json(objuom.GetUOMList(),JsonRequestBehavior.AllowGet);
         }
 
 

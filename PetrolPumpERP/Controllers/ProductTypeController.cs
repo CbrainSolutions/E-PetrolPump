@@ -15,9 +15,15 @@ namespace PetrolPumpERP.Controllers
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            return View(objProductType.GetProductTypeList());
+            return View();
         }
 
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetProductTypeList()
+        {
+            return Json(objProductType.GetProductTypeList(),JsonRequestBehavior.AllowGet);
+        }
 
         [MyAuthorizeAttribute]
         [HttpPost]

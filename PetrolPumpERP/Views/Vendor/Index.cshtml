@@ -5,9 +5,9 @@
 }
 @Scripts.Render("~/bundles/Vendor")
 <div data-ng-controller="VendorController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.VendorList)" id="vendorlist" />
+    @*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.VendorList)" id="vendorlist" />
     <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AccontTypeList)" id="AccontTypeList" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
+    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />*@
     <h2>Vendor</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">

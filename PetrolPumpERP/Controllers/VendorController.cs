@@ -10,14 +10,21 @@ namespace PetrolPumpERP.Controllers
 {
     public class VendorController : Controller
     {
-        AccountTypeBL objAcType = AccountTypeBL.Instance;
+        
         VendorModelBL objVendor = VendorModelBL.Instance;
         // GET: Vendor
         [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            ViewBag.AccontTypeList = objAcType.GetAccountTypes();
-            ViewBag.SubledgerList = objAcType.GetAccountTypesDetails(null);
+            return View();
+        }
+
+
+
+        [MyAuthorizeAttribute]
+        [HttpGet]
+        public ActionResult GetVendors()
+        {
             return View(objVendor.GetVendors());
         }
 

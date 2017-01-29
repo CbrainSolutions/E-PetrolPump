@@ -1,5 +1,6 @@
 ﻿PetroliumApp.controller("OtherAccountController", ['$scope', '$http', '$filter', '$rootScope', function ($scope, $http, $filter, $rootScope) {
 
+    $scope.MainOtherAccountList = [];
     $scope.OtherAccountList = [];
     $scope.SearchOtherAccountList = [];
     $scope.AccountTypes = [];
@@ -25,6 +26,33 @@
     $scope.OtherAccountId = 0;
 
     $scope.Prefix = "";
+
+    function GetOtherAccountDetails()
+    {
+        var spinner = new Spinner().spin();
+        document.getElementById("mainbody").appendChild(spinner.el);
+        var url = GetVirtualDirectory() + "/OtherAccount/GetOtherAccountDetails";
+        $http.get(url)
+        .then(function (response) {
+            $scope.OtherAccountList = response.data.OtherAccountList;
+            $scope.MainOtherAccountList = response.data.OtherAccountList;
+            $scope.SearchOtherAccountList = $filter('limitTo')($scope.OtherAccountList, $scope.Paging, $scope.CurruntIndex);
+            $scope.AccountTypes = response.data.AccountTypes.AccountTypeList;
+            $scope.SubledgerList = response.data.SubledgerList;
+            document.getElementById("mainbody").removeChild(spinner.el);
+        },
+        function (response) {
+            var objShowCustomAlert = new ShowCustomAlert({
+                Title: "",
+                Message: response.data.Message,
+                Type: "alert",
+            });
+            objShowCustomAlert.ShowCustomAlertBox();
+            document.getElementById("mainbody").removeChild(spinner.el);
+        });
+        
+    }
+    
 
     $scope.AcTypeChanged = function () {
         var id = $("#AccountType").val();
@@ -66,14 +94,14 @@
 
     $scope.FilterList = function () {
         var reg = new RegExp($scope.Prefix.toLowerCase());
-        $scope.OtherAccountList = JSON.parse($("#otherlist").val()).filter(function (other) {
+        $scope.OtherAccountList = $scope.MainOtherAccountList.filter(function (other) {
             return (reg.test(other.AccountName.toLowerCase()));
         });
         $scope.First();
     }
 
     $scope.Reset = function () {
-        $scope.OtherAccountList = JSON.parse($("#otherlist").val());
+        $scope.OtherAccountList = $scope.MainOtherAccountList;
         $scope.SearchOtherAccountList = $scope.OtherAccountList;
         $scope.First();
     }
@@ -166,7 +194,8 @@
                     }
                     setTimeout(function () {
                         $scope.$apply(function () {
-                            $("#otherlist").val(JSON.stringify($scope.OtherAccountList));
+                            $scope.MainOtherAccountList = $scope.OtherAccountList;
+                            //$("#otherlist").val(JSON.stringify($scope.OtherAccountList));
                             $scope.SearchOtherAccountList = $scope.OtherAccountList;
                             $scope.First();
                             $scope.CancelClick();
@@ -233,10 +262,11 @@
     }
 
     $scope.init = function () {
-        $scope.OtherAccountList = JSON.parse($("#otherlist").val());
-        $scope.SearchOtherAccountList = $filter('limitTo')($scope.OtherAccountList, $scope.Paging, $scope.CurruntIndex);
-        $scope.AccountTypes = JSON.parse($("#AccontTypeList").val()).AccountTypeList;
-        $scope.SubledgerList = JSON.parse($("#SubledgerList").val());
+        GetOtherAccountDetails();
+        //$scope.OtherAccountList = JSON.parse($("#otherlist").val());
+        //$scope.SearchOtherAccountList = $filter('limitTo')($scope.OtherAccountList, $scope.Paging, $scope.CurruntIndex);
+        //$scope.AccountTypes = JSON.parse($("#AccontTypeList").val()).AccountTypeList;
+        //$scope.SubledgerList = JSON.parse($("#SubledgerList").val());
     }
 
     $scope.init();

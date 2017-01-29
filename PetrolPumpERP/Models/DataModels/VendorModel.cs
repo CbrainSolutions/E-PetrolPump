@@ -45,12 +45,21 @@ namespace PetrolPumpERP.Models.DataModels
 
     public class VendorResponse : Error
     {
+        public VendorResponse()
+        {
+            AccontTypeList = new AccountTypeResponse();
+        }
+        public AccountTypeResponse AccontTypeList { get; set; }
+
         public IQueryable<VendorModel> VendorList { get; set; }
+
+        public IQueryable<AccountTypeModel> SubledgerList { get; set; }
     }
 
     public class VendorModelBL
     {
         public static VendorModelBL _userBl = null;
+        AccountTypeBL objAcType = AccountTypeBL.Instance;
         PetrolPumpERPEntities _db = new PetrolPumpERPEntities();
         private VendorModelBL()
         {
@@ -100,9 +109,9 @@ namespace PetrolPumpERP.Models.DataModels
                                       SupplierCode=tbl.SupplierCode,
                                       AccountTypeId=tblledger.AcTypeId,
                                       SubledgerId=tblledger.SubLedgerId,
-                                      //BalType=tblopening.CreditBal>0?"CR": (tblopening.DebitBal > 0?"DR":""),
-                                      //OpeningBalance= tblopening.CreditBal > 0 ? tblopening.CreditBal : (tblopening.DebitBal > 0 ?tblopening.DebitBal : 0)
                                   };
+            response.AccontTypeList = objAcType.GetAccountTypes();
+            response.SubledgerList = objAcType.GetAccountTypesDetails(null);
             return response;
         }
 
@@ -111,7 +120,6 @@ namespace PetrolPumpERP.Models.DataModels
         public VendorResponse SaveVendor(VendorModel model)
         {
             VendorResponse response = new VendorResponse() { Status = false };
-            //tblSubLedger tbl = _db.tbl_CustomerInfo.Where(p => p..Trim().ToUpper() == model.SubLedgerName.Trim().ToUpper()).FirstOrDefault();
             tblSupplierMaster tbl=_db.tblSupplierMasters.Where(p=>p.SupplierName.Trim().ToLower()==model.SupplierName.Trim().ToLower()).FirstOrDefault();
             if (tbl==null)
             {
