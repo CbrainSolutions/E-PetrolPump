@@ -23,8 +23,6 @@
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblSalaryDetail" Width="1.5" PointX="5.375" PointY="3" IsExpanded="false" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblSubLedger" Width="1.5" PointX="2.125" PointY="4.5" IsExpanded="false" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblSupplierMaster" Width="1.5" PointX="5.375" PointY="4.5" IsExpanded="false" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransaction" Width="1.5" PointX="5.375" PointY="4" IsExpanded="false" />
-        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransactionType" Width="1.5" PointX="5.375" PointY="3.5" IsExpanded="false" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblUnitMaster" Width="1.5" PointX="0.5" PointY="2.5" IsExpanded="false" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblUser" Width="1.5" PointX="0.5" PointY="3" IsExpanded="false" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblUserType" Width="1.5" PointX="3.75" PointY="3.5" IsExpanded="false" />
@@ -42,6 +40,9 @@
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblDepartment" Width="1.5" PointX="0.5" PointY="4.5" IsExpanded="false" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblSwipeMachine" Width="1.5" PointX="0.5" PointY="5" IsExpanded="false" />
         <EntityTypeShape EntityType="PetrolPumpERPModel.tblEmployee" Width="1.5" PointX="3.75" PointY="1.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblAttendance" Width="1.5" PointX="5.375" PointY="3.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransactionType" Width="1.5" PointX="5.375" PointY="4" IsExpanded="false" />
+        <EntityTypeShape EntityType="PetrolPumpERPModel.tblTransaction" Width="1.5" PointX="2.125" PointY="5" IsExpanded="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

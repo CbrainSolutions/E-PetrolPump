@@ -31,7 +31,7 @@ namespace PetrolPumpERP.Models.DataEntities
         public string ChequeNo { get; set; }
         public Nullable<bool> IsPostDated { get; set; }
         public Nullable<System.DateTime> ChequeDate { get; set; }
-        public Nullable<int> BillNo { get; set; }
+        public Nullable<long> BillNo { get; set; }
         public Nullable<bool> IsDelete { get; set; }
         public string DraweeBank { get; set; }
         public Nullable<bool> IsTax { get; set; }
@@ -40,5 +40,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public Nullable<bool> IsChequeReturn { get; set; }
         public Nullable<bool> IsCheequeReturnChargesApplied { get; set; }
         public Nullable<decimal> PartialAmount { get; set; }
+        public Nullable<int> CustomerId { get; set; }
     }
 }

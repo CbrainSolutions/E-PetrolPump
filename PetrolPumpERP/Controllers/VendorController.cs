@@ -25,7 +25,7 @@ namespace PetrolPumpERP.Controllers
         [HttpGet]
         public ActionResult GetVendors()
         {
-            return View(objVendor.GetVendors());
+            return Json(objVendor.GetVendors(),JsonRequestBehavior.AllowGet);
         }
 
         [MyAuthorizeAttribute]

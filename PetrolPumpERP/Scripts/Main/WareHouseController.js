@@ -21,7 +21,7 @@
     {
         var spinner = new Spinner().spin();
         document.getElementById("mainbody").appendChild(spinner.el);
-        var url = GetVirtualDirectory() + "/Vendor/GetVendors";
+        var url = GetVirtualDirectory() + "/WareHouse/GetWareHouseList";
         $http.get(url)
         .then(function (response) {
             $scope.WareHouseList = response.data.WareHouseList;

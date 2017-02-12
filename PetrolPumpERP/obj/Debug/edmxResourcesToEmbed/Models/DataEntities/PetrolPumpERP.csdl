@@ -19,8 +19,6 @@
     <EntitySet Name="tblSalaryDetails" EntityType="PetrolPumpERPModel.tblSalaryDetail" />
     <EntitySet Name="tblSubLedgers" EntityType="PetrolPumpERPModel.tblSubLedger" />
     <EntitySet Name="tblSupplierMasters" EntityType="PetrolPumpERPModel.tblSupplierMaster" />
-    <EntitySet Name="tblTransactions" EntityType="PetrolPumpERPModel.tblTransaction" />
-    <EntitySet Name="tblTransactionTypes" EntityType="PetrolPumpERPModel.tblTransactionType" />
     <EntitySet Name="tblUnitMasters" EntityType="PetrolPumpERPModel.tblUnitMaster" />
     <EntitySet Name="tblUsers" EntityType="PetrolPumpERPModel.tblUser" />
     <EntitySet Name="tblUserTypes" EntityType="PetrolPumpERPModel.tblUserType" />
@@ -39,6 +37,30 @@
     <EntitySet Name="tblDepartments" EntityType="PetrolPumpERPModel.tblDepartment" />
     <EntitySet Name="tblSwipeMachines" EntityType="PetrolPumpERPModel.tblSwipeMachine" />
     <EntitySet Name="tblEmployees" EntityType="PetrolPumpERPModel.tblEmployee" />
+    <FunctionImport Name="STP_InsertLedger">
+      <Parameter Name="LedgerName" Mode="In" Type="String" />
+      <Parameter Name="Address" Mode="In" Type="String" />
+      <Parameter Name="AccountNo" Mode="In" Type="String" />
+      <Parameter Name="PanNo" Mode="In" Type="String" />
+      <Parameter Name="AccOpenDate" Mode="In" Type="DateTime" />
+      <Parameter Name="SubLedgerId" Mode="In" Type="Int64" />
+      <Parameter Name="EmailID" Mode="In" Type="String" />
+      <Parameter Name="PhoneNo" Mode="In" Type="String" />
+      <Parameter Name="MobileNo" Mode="In" Type="String" />
+      <Parameter Name="FinancialYearId" Mode="In" Type="Int64" />
+      <Parameter Name="MiscCode" Mode="In" Type="String" />
+      <Parameter Name="IFSCCode" Mode="In" Type="String" />
+      <Parameter Name="BankBranchName" Mode="In" Type="String" />
+      <Parameter Name="Uploaded" Mode="In" Type="Boolean" />
+      <Parameter Name="City" Mode="In" Type="String" />
+      <Parameter Name="Area" Mode="In" Type="String" />
+      <Parameter Name="PinCode" Mode="In" Type="String" />
+      <Parameter Name="AcType" Mode="In" Type="String" />
+      <Parameter Name="AcTypeId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tblAttendances" EntityType="PetrolPumpERPModel.tblAttendance" />
+    <EntitySet Name="tblTransactionTypes" EntityType="PetrolPumpERPModel.tblTransactionType" />
+    <EntitySet Name="tblTransactions" EntityType="PetrolPumpERPModel.tblTransaction" />
   </EntityContainer>
   <EntityType Name="tbl_CustomerInfo">
     <Key>
@@ -293,46 +315,6 @@
     <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Pin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="tblTransaction">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FinancialId" Type="Int64" />
-    <Property Name="TransactionId" Type="Int64" />
-    <Property Name="CrLedgerId" Type="Int64" />
-    <Property Name="DrLedger" Type="Int64" />
-    <Property Name="CrAmount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="DrAmount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="TransactionDate" Type="DateTime" Precision="3" />
-    <Property Name="TransactionType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="UserId" Type="Int64" />
-    <Property Name="LoginDate" Type="DateTime" Precision="3" />
-    <Property Name="CreationDate" Type="DateTime" Precision="3" />
-    <Property Name="ByHand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="IsPostDated" Type="Boolean" />
-    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
-    <Property Name="BillNo" Type="Int32" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="DraweeBank" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="IsTax" Type="Boolean" />
-    <Property Name="RefBillNo" Type="Int32" />
-    <Property Name="IsPartially" Type="Boolean" />
-    <Property Name="IsChequeReturn" Type="Boolean" />
-    <Property Name="IsCheequeReturnChargesApplied" Type="Boolean" />
-    <Property Name="PartialAmount" Type="Decimal" Precision="18" Scale="2" />
-  </EntityType>
-  <EntityType Name="tblTransactionType">
-    <Key>
-      <PropertyRef Name="TransactionTypeId" />
-    </Key>
-    <Property Name="TransactionTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="TransactionType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="IsDelete" Type="Boolean" />
-    <Property Name="IsModify" Type="Boolean" />
-  </EntityType>
   <EntityType Name="tblUnitMaster">
     <Key>
       <PropertyRef Name="UnitCode" />
@@ -585,5 +567,57 @@
     <Property Name="BasicSalary" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="EmpEmail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
     <Property Name="LedgerId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tblAttendance">
+    <Key>
+      <PropertyRef Name="AttendanceId" />
+    </Key>
+    <Property Name="AttendanceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmployeeId" Type="Int32" />
+    <Property Name="AttendanceDate" Type="DateTime" Precision="3" />
+    <Property Name="InTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OutTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="tblTransactionType">
+    <Key>
+      <PropertyRef Name="TransactionTypeId" />
+    </Key>
+    <Property Name="TransactionTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TransactionType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="IsModify" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblTransaction">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FinancialId" Type="Int64" />
+    <Property Name="TransactionId" Type="Int64" />
+    <Property Name="CrLedgerId" Type="Int64" />
+    <Property Name="DrLedger" Type="Int64" />
+    <Property Name="CrAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DrAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TransactionDate" Type="DateTime" Precision="3" />
+    <Property Name="TransactionType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserId" Type="Int64" />
+    <Property Name="LoginDate" Type="DateTime" Precision="3" />
+    <Property Name="CreationDate" Type="DateTime" Precision="3" />
+    <Property Name="ByHand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsPostDated" Type="Boolean" />
+    <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+    <Property Name="BillNo" Type="Int64" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="DraweeBank" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IsTax" Type="Boolean" />
+    <Property Name="RefBillNo" Type="Int32" />
+    <Property Name="IsPartially" Type="Boolean" />
+    <Property Name="IsChequeReturn" Type="Boolean" />
+    <Property Name="IsCheequeReturnChargesApplied" Type="Boolean" />
+    <Property Name="PartialAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CustomerId" Type="Int32" />
   </EntityType>
 </Schema>

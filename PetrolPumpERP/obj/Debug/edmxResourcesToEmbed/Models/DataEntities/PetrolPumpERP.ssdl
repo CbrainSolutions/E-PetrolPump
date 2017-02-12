@@ -114,6 +114,17 @@
     <Property Name="IsBasic" Type="bit" Nullable="false" />
     <Property Name="IsDelete" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="tblAttendance">
+    <Key>
+      <PropertyRef Name="AttendanceId" />
+    </Key>
+    <Property Name="AttendanceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmployeeId" Type="int" />
+    <Property Name="AttendanceDate" Type="datetime" />
+    <Property Name="InTime" Type="varchar" MaxLength="50" />
+    <Property Name="OutTime" Type="varchar" MaxLength="50" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+  </EntityType>
   <EntityType Name="tblBankMaster">
     <Key>
       <PropertyRef Name="BankId" />
@@ -477,7 +488,7 @@
     <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="IsPostDated" Type="bit" />
     <Property Name="ChequeDate" Type="datetime" />
-    <Property Name="BillNo" Type="int" />
+    <Property Name="BillNo" Type="bigint" />
     <Property Name="IsDelete" Type="bit" />
     <Property Name="DraweeBank" Type="varchar" MaxLength="100" />
     <Property Name="IsTax" Type="bit" />
@@ -486,6 +497,7 @@
     <Property Name="IsChequeReturn" Type="bit" />
     <Property Name="IsCheequeReturnChargesApplied" Type="bit" />
     <Property Name="PartialAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="CustomerId" Type="int" />
   </EntityType>
   <EntityType Name="tblTransactionType">
     <Key>
@@ -535,6 +547,27 @@
     <Property Name="IsDelete" Type="bit" />
   </EntityType>
   <Function Name="STP_GetAllOpeningBalLedgers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="STP_InsertLedger" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LedgerName" Type="varchar" Mode="In" />
+    <Parameter Name="Address" Type="varchar" Mode="In" />
+    <Parameter Name="AccountNo" Type="varchar" Mode="In" />
+    <Parameter Name="PanNo" Type="varchar" Mode="In" />
+    <Parameter Name="AccOpenDate" Type="datetime" Mode="In" />
+    <Parameter Name="SubLedgerId" Type="bigint" Mode="In" />
+    <Parameter Name="EmailID" Type="varchar" Mode="In" />
+    <Parameter Name="PhoneNo" Type="varchar" Mode="In" />
+    <Parameter Name="MobileNo" Type="varchar" Mode="In" />
+    <Parameter Name="FinancialYearId" Type="bigint" Mode="In" />
+    <Parameter Name="MiscCode" Type="varchar" Mode="In" />
+    <Parameter Name="IFSCCode" Type="varchar" Mode="In" />
+    <Parameter Name="BankBranchName" Type="varchar" Mode="In" />
+    <Parameter Name="Uploaded" Type="bit" Mode="In" />
+    <Parameter Name="City" Type="varchar" Mode="In" />
+    <Parameter Name="Area" Type="varchar" Mode="In" />
+    <Parameter Name="PinCode" Type="varchar" Mode="In" />
+    <Parameter Name="AcType" Type="varchar" Mode="In" />
+    <Parameter Name="AcTypeId" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="PetrolPumpERPModelStoreContainer">
     <EntitySet Name="tbl_CustomerInfo" EntityType="Self.tbl_CustomerInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tbl_Invoice" EntityType="Self.tbl_Invoice" Schema="dbo" store:Type="Tables" />
@@ -543,6 +576,7 @@
     <EntitySet Name="tblAccountType" EntityType="Self.tblAccountType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblAccountTypeDetail" EntityType="Self.tblAccountTypeDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblAllowanceDeduction" EntityType="Self.tblAllowanceDeduction" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAttendance" EntityType="Self.tblAttendance" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblBankMaster" EntityType="Self.tblBankMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblCustomeType" EntityType="Self.tblCustomeType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblDebitNote" EntityType="Self.tblDebitNote" Schema="dbo" store:Type="Tables" />

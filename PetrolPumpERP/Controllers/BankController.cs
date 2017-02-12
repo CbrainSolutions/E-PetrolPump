@@ -12,27 +12,27 @@ namespace PetrolPumpERP.Controllers
     {
         BankModelBL objbank = BankModelBL.Instance;
         
-        //SubledgerBL objsubledger = SubledgerBL.Instance;
-        // GET: Bank
-        [MyAuthorize]
+        [MyAuthorizeAttribute]
         public ActionResult Index()
         {
-            //ViewBag.AccontTypeList = objAccounttype.GetAccountTypes();
-            //ViewBag.SubledgerList = objAccounttype.GetAccountTypesDetails(null);
             return View();
         }
 
+        [MyAuthorizeAttribute]
+        [HttpGet]
         public ActionResult GetBankDetails()
         {
-            return Json(objbank.GetBankDetails());
+            return Json(objbank.GetBankDetails(),JsonRequestBehavior.AllowGet);
         }
 
+        [MyAuthorizeAttribute]
         [HttpPost]
         public ActionResult Save(BankModel model)
         {
             return Json(objbank.Save(model));
         }
 
+        [MyAuthorizeAttribute]
         [HttpPost]
         public ActionResult Update(BankModel model)
         {

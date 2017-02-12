@@ -12,30 +12,55 @@ namespace PetrolPumpERP.Controllers
     {
         // GET: Sales
         SalesModelBL sales = SalesModelBL.Instance;
-        SubledgerBL subledger = SubledgerBL.Instance;
-        OtherAccountModelBL otherac = OtherAccountModelBL.Instance;
-        BankModelBL bankbl = BankModelBL.Instance;
-        CustomerModelBL customer = CustomerModelBL.Instance;
-        ProductModelBL objproduct = ProductModelBL.Instance;
-        //PetrolPumpERP.Models.DataEntities.PetrolPumpERPEntities _db = new PetrolPumpERP.Models.DataEntities.PetrolPumpERPEntities();
+        
 
         [MyAuthorize]
         public ActionResult Index()
         {
-            ViewBag.BankList = bankbl.GetBankDetails();
-            ViewBag.Customers = customer.GetAllCustomers();
-            ViewBag.TaxList=otherac.GetOtherAccountDetails().OtherAccountList.Where(p => p.SubledgerId == 12 || p.OtherAccountId==2 || p.OtherAccountId==3);
-            ViewBag.OtherAccounts = otherac.GetOtherAccountDetails().OtherAccountList.Where(p => p.SubledgerId == 8 || p.SubledgerId==9);
-            ViewBag.ProductList = objproduct.GetProducts();
-            
-            return View(sales.GetSalesInvoices());
+            return View();
         }
 
+        [MyAuthorize]
+        [HttpGet]
+        public ActionResult GetSalesInvoices()
+        {
+            return Json(sales.GetSalesInvoices(),JsonRequestBehavior.AllowGet);
+        }
+
+        
+        [HttpPost]
         public ActionResult Save(SalesInvoiceModels model)
         {
+            decimal? round = null;
+            if (model.RoundOff != null && Convert.ToBoolean(model.RoundOff))
+            {
+                decimal roundnet =Math.Round(model.NetAmount, 0);
+                decimal? temp = 0;
+                if (model.NetAmount < roundnet)
+                {
+                    temp = roundnet - model.NetAmount;
+                    round = temp;
+                }
+                else
+                {
+                    temp = model.NetAmount - roundnet;
+                    round = temp * (-(1));
+                }
+                
+                //if (temp < Convert.ToDecimal(0.5))
+                //{
+                //    round = temp;// * (-(1));
+                //}
+                //else
+                //{
+                //    round = temp * (-(1));
+                //}
+                model.RoundValue = round;
+            }
             return Json(sales.Save(model));
         }
 
+        [HttpPost]
         public ActionResult Update(SalesInvoiceModels model)
         {
             return View(sales.Update(model));

@@ -6,9 +6,7 @@
 
 @Scripts.Render("~/bundles/OtherAccount")
 <div data-ng-controller="OtherAccountController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.OtherAccountList)" id="otherlist" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AccontTypeList)" id="AccontTypeList" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SubledgerList)" id="SubledgerList" />
+    
     <h2>Other Account Master</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">

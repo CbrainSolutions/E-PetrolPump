@@ -22,9 +22,10 @@ namespace PetrolPumpERP.Controllers
         }
 
         [MyAuthorizeAttribute]
+        [HttpGet]
         public ActionResult GetAccountTypes()
         {
-            return Json(objAccounttype.GetAccountTypes());
+            return Json(objAccounttype.GetAccountTypes(),JsonRequestBehavior.AllowGet);
         }
 
         [MyAuthorizeAttribute]

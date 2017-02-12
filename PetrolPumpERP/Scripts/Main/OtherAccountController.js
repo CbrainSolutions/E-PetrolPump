@@ -16,6 +16,7 @@
     $scope.ErrorMessage = ""
     $scope.IsRoundOff = false;
     $scope.IsPercentWise = false;
+    $scope.IsPercent = false;
     $scope.Add = false;
     $scope.Edit = false;
     $scope.SubLedgerId = 0;

@@ -272,48 +272,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblTransactions">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransaction">
-        <MappingFragment StoreEntitySet="tblTransaction">
-          <ScalarProperty Name="PartialAmount" ColumnName="PartialAmount" />
-          <ScalarProperty Name="IsCheequeReturnChargesApplied" ColumnName="IsCheequeReturnChargesApplied" />
-          <ScalarProperty Name="IsChequeReturn" ColumnName="IsChequeReturn" />
-          <ScalarProperty Name="IsPartially" ColumnName="IsPartially" />
-          <ScalarProperty Name="RefBillNo" ColumnName="RefBillNo" />
-          <ScalarProperty Name="IsTax" ColumnName="IsTax" />
-          <ScalarProperty Name="DraweeBank" ColumnName="DraweeBank" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="BillNo" ColumnName="BillNo" />
-          <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
-          <ScalarProperty Name="IsPostDated" ColumnName="IsPostDated" />
-          <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="ByHand" ColumnName="ByHand" />
-          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-          <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
-          <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
-          <ScalarProperty Name="DrAmount" ColumnName="DrAmount" />
-          <ScalarProperty Name="CrAmount" ColumnName="CrAmount" />
-          <ScalarProperty Name="DrLedger" ColumnName="DrLedger" />
-          <ScalarProperty Name="CrLedgerId" ColumnName="CrLedgerId" />
-          <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
-          <ScalarProperty Name="FinancialId" ColumnName="FinancialId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblTransactionTypes">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransactionType">
-        <MappingFragment StoreEntitySet="tblTransactionType">
-          <ScalarProperty Name="IsModify" ColumnName="IsModify" />
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
-          <ScalarProperty Name="TransactionTypeId" ColumnName="TransactionTypeId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblUnitMasters">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tblUnitMaster">
         <MappingFragment StoreEntitySet="tblUnitMaster">
@@ -585,6 +543,62 @@
           <ScalarProperty Name="EmpMiddleName" ColumnName="EmpMiddleName" />
           <ScalarProperty Name="EmpFirstName" ColumnName="EmpFirstName" />
           <ScalarProperty Name="EmpCode" ColumnName="EmpCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="STP_InsertLedger" FunctionName="PetrolPumpERPModel.Store.STP_InsertLedger" />
+    <EntitySetMapping Name="tblAttendances">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblAttendance">
+        <MappingFragment StoreEntitySet="tblAttendance">
+          <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+          <ScalarProperty Name="OutTime" ColumnName="OutTime" />
+          <ScalarProperty Name="InTime" ColumnName="InTime" />
+          <ScalarProperty Name="AttendanceDate" ColumnName="AttendanceDate" />
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+          <ScalarProperty Name="AttendanceId" ColumnName="AttendanceId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblTransactionTypes">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransactionType">
+        <MappingFragment StoreEntitySet="tblTransactionType">
+          <ScalarProperty Name="IsModify" ColumnName="IsModify" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+          <ScalarProperty Name="TransactionTypeId" ColumnName="TransactionTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblTransactions">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tblTransaction">
+        <MappingFragment StoreEntitySet="tblTransaction">
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="PartialAmount" ColumnName="PartialAmount" />
+          <ScalarProperty Name="IsCheequeReturnChargesApplied" ColumnName="IsCheequeReturnChargesApplied" />
+          <ScalarProperty Name="IsChequeReturn" ColumnName="IsChequeReturn" />
+          <ScalarProperty Name="IsPartially" ColumnName="IsPartially" />
+          <ScalarProperty Name="RefBillNo" ColumnName="RefBillNo" />
+          <ScalarProperty Name="IsTax" ColumnName="IsTax" />
+          <ScalarProperty Name="DraweeBank" ColumnName="DraweeBank" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="BillNo" ColumnName="BillNo" />
+          <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+          <ScalarProperty Name="IsPostDated" ColumnName="IsPostDated" />
+          <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ByHand" ColumnName="ByHand" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="LoginDate" ColumnName="LoginDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+          <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+          <ScalarProperty Name="DrAmount" ColumnName="DrAmount" />
+          <ScalarProperty Name="CrAmount" ColumnName="CrAmount" />
+          <ScalarProperty Name="DrLedger" ColumnName="DrLedger" />
+          <ScalarProperty Name="CrLedgerId" ColumnName="CrLedgerId" />
+          <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+          <ScalarProperty Name="FinancialId" ColumnName="FinancialId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -20,6 +20,7 @@ namespace PetrolPumpERP.Models.DataEntities
         public PetrolPumpERPEntities()
             : base("name=PetrolPumpERPEntities")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -45,8 +46,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblSalaryDetail> tblSalaryDetails { get; set; }
         public virtual DbSet<tblSubLedger> tblSubLedgers { get; set; }
         public virtual DbSet<tblSupplierMaster> tblSupplierMasters { get; set; }
-        public virtual DbSet<tblTransaction> tblTransactions { get; set; }
-        public virtual DbSet<tblTransactionType> tblTransactionTypes { get; set; }
         public virtual DbSet<tblUnitMaster> tblUnitMasters { get; set; }
         public virtual DbSet<tblUser> tblUsers { get; set; }
         public virtual DbSet<tblUserType> tblUserTypes { get; set; }
@@ -64,10 +63,94 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblDepartment> tblDepartments { get; set; }
         public virtual DbSet<tblSwipeMachine> tblSwipeMachines { get; set; }
         public virtual DbSet<tblEmployee> tblEmployees { get; set; }
+        public virtual DbSet<tblAttendance> tblAttendances { get; set; }
+        public virtual DbSet<tblTransactionType> tblTransactionTypes { get; set; }
+        public virtual DbSet<tblTransaction> tblTransactions { get; set; }
     
         public virtual ObjectResult<STP_GetAllOpeningBalLedgers_Result> STP_GetAllOpeningBalLedgers()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<STP_GetAllOpeningBalLedgers_Result>("STP_GetAllOpeningBalLedgers");
+        }
+    
+        public virtual int STP_InsertLedger(string ledgerName, string address, string accountNo, string panNo, Nullable<System.DateTime> accOpenDate, Nullable<long> subLedgerId, string emailID, string phoneNo, string mobileNo, Nullable<long> financialYearId, string miscCode, string iFSCCode, string bankBranchName, Nullable<bool> uploaded, string city, string area, string pinCode, string acType, Nullable<int> acTypeId)
+        {
+            var ledgerNameParameter = ledgerName != null ?
+                new ObjectParameter("LedgerName", ledgerName) :
+                new ObjectParameter("LedgerName", typeof(string));
+    
+            var addressParameter = address != null ?
+                new ObjectParameter("Address", address) :
+                new ObjectParameter("Address", typeof(string));
+    
+            var accountNoParameter = accountNo != null ?
+                new ObjectParameter("AccountNo", accountNo) :
+                new ObjectParameter("AccountNo", typeof(string));
+    
+            var panNoParameter = panNo != null ?
+                new ObjectParameter("PanNo", panNo) :
+                new ObjectParameter("PanNo", typeof(string));
+    
+            var accOpenDateParameter = accOpenDate.HasValue ?
+                new ObjectParameter("AccOpenDate", accOpenDate) :
+                new ObjectParameter("AccOpenDate", typeof(System.DateTime));
+    
+            var subLedgerIdParameter = subLedgerId.HasValue ?
+                new ObjectParameter("SubLedgerId", subLedgerId) :
+                new ObjectParameter("SubLedgerId", typeof(long));
+    
+            var emailIDParameter = emailID != null ?
+                new ObjectParameter("EmailID", emailID) :
+                new ObjectParameter("EmailID", typeof(string));
+    
+            var phoneNoParameter = phoneNo != null ?
+                new ObjectParameter("PhoneNo", phoneNo) :
+                new ObjectParameter("PhoneNo", typeof(string));
+    
+            var mobileNoParameter = mobileNo != null ?
+                new ObjectParameter("MobileNo", mobileNo) :
+                new ObjectParameter("MobileNo", typeof(string));
+    
+            var financialYearIdParameter = financialYearId.HasValue ?
+                new ObjectParameter("FinancialYearId", financialYearId) :
+                new ObjectParameter("FinancialYearId", typeof(long));
+    
+            var miscCodeParameter = miscCode != null ?
+                new ObjectParameter("MiscCode", miscCode) :
+                new ObjectParameter("MiscCode", typeof(string));
+    
+            var iFSCCodeParameter = iFSCCode != null ?
+                new ObjectParameter("IFSCCode", iFSCCode) :
+                new ObjectParameter("IFSCCode", typeof(string));
+    
+            var bankBranchNameParameter = bankBranchName != null ?
+                new ObjectParameter("BankBranchName", bankBranchName) :
+                new ObjectParameter("BankBranchName", typeof(string));
+    
+            var uploadedParameter = uploaded.HasValue ?
+                new ObjectParameter("Uploaded", uploaded) :
+                new ObjectParameter("Uploaded", typeof(bool));
+    
+            var cityParameter = city != null ?
+                new ObjectParameter("City", city) :
+                new ObjectParameter("City", typeof(string));
+    
+            var areaParameter = area != null ?
+                new ObjectParameter("Area", area) :
+                new ObjectParameter("Area", typeof(string));
+    
+            var pinCodeParameter = pinCode != null ?
+                new ObjectParameter("PinCode", pinCode) :
+                new ObjectParameter("PinCode", typeof(string));
+    
+            var acTypeParameter = acType != null ?
+                new ObjectParameter("AcType", acType) :
+                new ObjectParameter("AcType", typeof(string));
+    
+            var acTypeIdParameter = acTypeId.HasValue ?
+                new ObjectParameter("AcTypeId", acTypeId) :
+                new ObjectParameter("AcTypeId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("STP_InsertLedger", ledgerNameParameter, addressParameter, accountNoParameter, panNoParameter, accOpenDateParameter, subLedgerIdParameter, emailIDParameter, phoneNoParameter, mobileNoParameter, financialYearIdParameter, miscCodeParameter, iFSCCodeParameter, bankBranchNameParameter, uploadedParameter, cityParameter, areaParameter, pinCodeParameter, acTypeParameter, acTypeIdParameter);
         }
     }
 }

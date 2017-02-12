@@ -22,7 +22,7 @@
         .then(function (response) {
             $scope.MainDesignationList = response.data.DesignationList;
             $scope.DesignationList = response.data.DesignationList;
-            $scope.SearchDepartmentList = $filter('limitTo')($scope.DesignationList, $scope.Paging, $scope.CurruntIndex);
+            $scope.SearchDesignationList = $filter('limitTo')($scope.DesignationList, $scope.Paging, $scope.CurruntIndex);
             document.getElementById("mainbody").removeChild(spinner.el);
         },
         function (response) {

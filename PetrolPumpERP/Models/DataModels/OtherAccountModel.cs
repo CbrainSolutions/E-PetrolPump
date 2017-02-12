@@ -19,6 +19,7 @@ namespace PetrolPumpERP.Models.DataModels
         public int? AccountTypeId { get; set; }
         public Nullable<bool> IsPercent { get; set; }
         public Nullable<decimal> PercentOrFixedAmount { get; set; }
+        public Nullable<decimal> Amount { get; set; }
         public Nullable<bool> RoundOff { get; set; }
     }
 
@@ -66,8 +67,6 @@ namespace PetrolPumpERP.Models.DataModels
             response.OtherAccountList = from tbl in _db.tblOtherAccounts
                                 join tblledger in _db.tblLedgers
                                 on tbl.LedgerId equals tblledger.LedgerId
-                                join tblopening in _db.tblOpeningBalances
-                                on tblledger.LedgerId equals tblopening.LedgerId
                                 join tblacctype in _db.tblAccountTypes
                                 on tblledger.AcTypeId equals tblacctype.AccountTypeId
                                 where tbl.IsDelete == false

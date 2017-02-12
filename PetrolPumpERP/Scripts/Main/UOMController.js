@@ -25,9 +25,7 @@
         .then(function (response) {
             $scope.MainUOMList = response.data.UOMList;
             $scope.UOMList = response.data.UOMList;
-            $scope.MainSubledgerList = response.data.SubledgerList;
-            $scope.SearchSubledgerList = $filter('limitTo')($scope.SubledgerList, $scope.Paging, $scope.CurruntIndex);
-            $scope.MainLedgers = response.data.MainledgerList;
+            $scope.SearchUOMList = $filter('limitTo')($scope.UOMList, $scope.Paging, $scope.CurruntIndex);
             document.getElementById("mainbody").removeChild(spinner.el);
         },
         function (response) {

@@ -20,15 +20,6 @@
         });
 </script>
 <div data-ng-controller="SalesController" data-ng-app="PetroliumApp">
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.SalesList)" id="saleslist" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.BankList)" id="BankList" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Customers)" id="Customers" />
-    
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.TaxList)" id="TaxList" />
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ProductList)" id="ProductList" />
-    
-    <input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.OtherAccounts)" id="OtherAccounts" />
-    
     <h2>Sales</h2>
     <div class="table-responsive" data-ng-show="Details==true">
         <div class="col-md-12">
@@ -75,7 +66,7 @@
                     {{sales.InvoiceNo}}
                 </td>
                 <td>
-                    {{sales.InvoiceDate}}
+                    {{getDateformat(sales.InvoiceDate)| date: 'yyyy-MM-dd'}}
                 </td>
                 <td>
                     {{sales.CustName}}
@@ -167,13 +158,19 @@
                 </div>
                 <br />
             </div>
-            <div class="form-group">
+            <div class="form-group" data-ng-show="IsCashInvoice==true">
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <select id="Customers" class="form-control">
-                                <option value="0">--Select Bank--</option>
-                                <option data-ng-repeat="bank in BankList" value="{{bank.LedgerId}}">{{bank.BankName + " " + bank.AccountNo }}</option>
+                            <select id="SwipeMachine" class="form-control" ng-model="selectedMachineId" data-ng-change="SwipeMachineSelection()">
+                                <option value="0">--Swipe Machine--</option>
+                                <option data-ng-repeat="swipe in SwipeMachineList" value="{{swipe.MachineId}}">{{swipe.MachineNo}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <select id="Bank" class="form-control">
                             </select>
                         </div>
                     </div>
@@ -181,6 +178,9 @@
                 <br />
             </div>
             <div class="form-group">
+                <div class="col-md-12" data-ng-show="ErrorModel.IsProductsSelected==true">
+                    <span>{{ErrorMessage}}</span>
+                </div>
                 <div class="col-md-12">
                     <table class="table">
                         <tr>
@@ -253,13 +253,95 @@
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-6">
-                            <select id="Taxs" class="form-control" data-ng-change="TaxSelection()" ng-model="selectedTaxId">
-                                <option value="0">--Select Tax--</option>
-                                <option data-ng-repeat="tax in TaxList" value="{{tax.LedgerId}}">{{tax.AccountName}}</option>
+                            Total Amount
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Total Amount" id="txtTotalAmount" value="{{TotalAmount}}" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <tr data-ng-repeat="tax in SelectedTaxList">
+                                    <td>
+                                        {{tax.AccountName}}
+                                    </td>
+                                    <td>
+                                        {{tax.IsPercent==true?tax.PercentOrFixedAmount:'0'}}
+                                    </td>
+                                    <td>
+                                        {{tax.Amount}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            <select id="Tax" class="form-control" data-ng-click="TaxSelection();">
                             </select>
                         </div>
                         <div class="col-md-6">
                             <input type="text" class="form-control" placeholder="Tax" id="TaxAmount"  />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            <div class="col-md-6">
+                                Round Off
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" class="form-control" id="RoundOff" ng-model="IsRoundOff" data-ng-click="CalculateRoundOff();" />
+                            </div>  
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            Net Amount
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Net Amount" id="NetAmount" value="{{NetAmount}}" />
                         </div>
                     </div>
                 </div>
