@@ -20,7 +20,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public PetrolPumpERPEntities()
             : base("name=PetrolPumpERPEntities")
         {
-            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -53,7 +52,6 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblProductMaster> tblProductMasters { get; set; }
         public virtual DbSet<tblWareHouse> tblWareHouses { get; set; }
         public virtual DbSet<tblBankMaster> tblBankMasters { get; set; }
-        public virtual DbSet<tbl_Invoice> tbl_Invoice { get; set; }
         public virtual DbSet<tblPurchaseInvoice> tblPurchaseInvoices { get; set; }
         public virtual DbSet<tbl_InvoiceDetail> tbl_InvoiceDetail { get; set; }
         public virtual DbSet<tblDebitNoteDetail> tblDebitNoteDetails { get; set; }
@@ -66,6 +64,7 @@ namespace PetrolPumpERP.Models.DataEntities
         public virtual DbSet<tblAttendance> tblAttendances { get; set; }
         public virtual DbSet<tblTransactionType> tblTransactionTypes { get; set; }
         public virtual DbSet<tblTransaction> tblTransactions { get; set; }
+        public virtual DbSet<tbl_Invoice> tbl_Invoice { get; set; }
     
         public virtual ObjectResult<STP_GetAllOpeningBalLedgers_Result> STP_GetAllOpeningBalLedgers()
         {

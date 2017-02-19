@@ -43,15 +43,17 @@
           <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
           <Property Name="CustomerLedgerId" Type="bigint" Nullable="false" />
           <Property Name="ISCASH" Type="bit" Nullable="false" />
-          <Property Name="CustName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="CustAddress" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="CustContactNo" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CustName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustContactNo" Type="nvarchar" MaxLength="20" />
           <Property Name="NetVAT" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="NetInvoiceAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="BalanceAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="BalanceAmount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="NetAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="IsDelete" Type="bit" />
+          <Property Name="IsRoundOff" Type="bit" />
+          <Property Name="SwipeMachineId" Type="bigint" />
         </EntityType>
         <EntityType Name="tbl_InvoiceDetail">
           <Key>
@@ -644,7 +646,6 @@
           <EntitySet Name="tblProductMasters" EntityType="PetrolPumpERPModel.tblProductMaster" />
           <EntitySet Name="tblWareHouses" EntityType="PetrolPumpERPModel.tblWareHouse" />
           <EntitySet Name="tblBankMasters" EntityType="PetrolPumpERPModel.tblBankMaster" />
-          <EntitySet Name="tbl_Invoice" EntityType="PetrolPumpERPModel.tbl_Invoice" />
           <EntitySet Name="tblPurchaseInvoices" EntityType="PetrolPumpERPModel.tblPurchaseInvoice" />
           <EntitySet Name="tbl_InvoiceDetail" EntityType="PetrolPumpERPModel.tbl_InvoiceDetail" />
           <EntitySet Name="tblDebitNoteDetails" EntityType="PetrolPumpERPModel.tblDebitNoteDetail" />
@@ -678,6 +679,7 @@
           <EntitySet Name="tblAttendances" EntityType="PetrolPumpERPModel.tblAttendance" />
           <EntitySet Name="tblTransactionTypes" EntityType="PetrolPumpERPModel.tblTransactionType" />
           <EntitySet Name="tblTransactions" EntityType="PetrolPumpERPModel.tblTransaction" />
+          <EntitySet Name="tbl_Invoice" EntityType="PetrolPumpERPModel.tbl_Invoice" />
         </EntityContainer>
         <EntityType Name="tbl_CustomerInfo">
           <Key>
@@ -1028,24 +1030,6 @@
           <Property Name="AccountNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsLoan" Type="Boolean" />
         </EntityType>
-        <EntityType Name="tbl_Invoice">
-          <Key>
-            <PropertyRef Name="InvoiceNo" />
-          </Key>
-          <Property Name="InvoiceNo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CustomerLedgerId" Type="Int64" Nullable="false" />
-          <Property Name="ISCASH" Type="Boolean" Nullable="false" />
-          <Property Name="CustName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CustAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CustContactNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="NetVAT" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="NetInvoiceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="BalanceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="Discount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="NetAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="IsDelete" Type="Boolean" />
-        </EntityType>
         <EntityType Name="tblPurchaseInvoice">
           <Key>
             <PropertyRef Name="PINo" />
@@ -1236,6 +1220,26 @@
           <Property Name="IsCheequeReturnChargesApplied" Type="Boolean" />
           <Property Name="PartialAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="CustomerId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tbl_Invoice">
+          <Key>
+            <PropertyRef Name="InvoiceNo" />
+          </Key>
+          <Property Name="InvoiceNo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CustomerLedgerId" Type="Int64" Nullable="false" />
+          <Property Name="ISCASH" Type="Boolean" Nullable="false" />
+          <Property Name="CustName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustContactNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NetVAT" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="NetInvoiceAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="BalanceAmount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NetAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="IsRoundOff" Type="Boolean" />
+          <Property Name="SwipeMachineId" Type="Int64" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1621,25 +1625,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_Invoice">
-            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_Invoice">
-              <MappingFragment StoreEntitySet="tbl_Invoice">
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
-                <ScalarProperty Name="NetInvoiceAmount" ColumnName="NetInvoiceAmount" />
-                <ScalarProperty Name="NetVAT" ColumnName="NetVAT" />
-                <ScalarProperty Name="CustContactNo" ColumnName="CustContactNo" />
-                <ScalarProperty Name="CustAddress" ColumnName="CustAddress" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
-                <ScalarProperty Name="CustomerLedgerId" ColumnName="CustomerLedgerId" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblPurchaseInvoices">
             <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoice">
               <MappingFragment StoreEntitySet="tblPurchaseInvoice">
@@ -1844,6 +1829,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Invoice">
+            <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_Invoice">
+              <MappingFragment StoreEntitySet="tbl_Invoice">
+                <ScalarProperty Name="SwipeMachineId" ColumnName="SwipeMachineId" />
+                <ScalarProperty Name="IsRoundOff" ColumnName="IsRoundOff" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="NetInvoiceAmount" ColumnName="NetInvoiceAmount" />
+                <ScalarProperty Name="NetVAT" ColumnName="NetVAT" />
+                <ScalarProperty Name="CustContactNo" ColumnName="CustContactNo" />
+                <ScalarProperty Name="CustAddress" ColumnName="CustAddress" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
+                <ScalarProperty Name="CustomerLedgerId" ColumnName="CustomerLedgerId" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1858,7 +1864,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

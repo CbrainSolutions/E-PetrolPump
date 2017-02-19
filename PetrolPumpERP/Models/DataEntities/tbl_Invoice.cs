@@ -23,9 +23,11 @@ namespace PetrolPumpERP.Models.DataEntities
         public string CustContactNo { get; set; }
         public decimal NetVAT { get; set; }
         public decimal NetInvoiceAmount { get; set; }
-        public decimal BalanceAmount { get; set; }
-        public decimal Discount { get; set; }
+        public Nullable<decimal> BalanceAmount { get; set; }
+        public Nullable<decimal> Discount { get; set; }
         public decimal NetAmount { get; set; }
         public Nullable<bool> IsDelete { get; set; }
+        public Nullable<bool> IsRoundOff { get; set; }
+        public Nullable<long> SwipeMachineId { get; set; }
     }
 }

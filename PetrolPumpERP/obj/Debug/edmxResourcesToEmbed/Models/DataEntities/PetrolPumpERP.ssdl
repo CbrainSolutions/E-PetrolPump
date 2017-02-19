@@ -38,15 +38,17 @@
     <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
     <Property Name="CustomerLedgerId" Type="bigint" Nullable="false" />
     <Property Name="ISCASH" Type="bit" Nullable="false" />
-    <Property Name="CustName" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="CustAddress" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="CustContactNo" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="CustName" Type="nvarchar" MaxLength="100" />
+    <Property Name="CustAddress" Type="nvarchar" MaxLength="100" />
+    <Property Name="CustContactNo" Type="nvarchar" MaxLength="20" />
     <Property Name="NetVAT" Type="decimal" Precision="10" Scale="2" Nullable="false" />
     <Property Name="NetInvoiceAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-    <Property Name="BalanceAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-    <Property Name="Discount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="BalanceAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="NetAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
     <Property Name="IsDelete" Type="bit" />
+    <Property Name="IsRoundOff" Type="bit" />
+    <Property Name="SwipeMachineId" Type="bigint" />
   </EntityType>
   <EntityType Name="tbl_InvoiceDetail">
     <Key>

@@ -72,8 +72,6 @@ namespace PetrolPumpERP.Models.DataModels
             response.BankList = from tbl in _db.tblBankMasters
                                   join tblledger in _db.tblLedgers
                                   on tbl.LedgerId equals tblledger.LedgerId
-                                  join tblopening in _db.tblOpeningBalances
-                                  on tblledger.LedgerId equals tblopening.LedgerId
                                   where tbl.IsDelete == false
                                   select new BankModel
                                   {

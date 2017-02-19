@@ -379,25 +379,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tbl_Invoice">
-      <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_Invoice">
-        <MappingFragment StoreEntitySet="tbl_Invoice">
-          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-          <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
-          <ScalarProperty Name="NetInvoiceAmount" ColumnName="NetInvoiceAmount" />
-          <ScalarProperty Name="NetVAT" ColumnName="NetVAT" />
-          <ScalarProperty Name="CustContactNo" ColumnName="CustContactNo" />
-          <ScalarProperty Name="CustAddress" ColumnName="CustAddress" />
-          <ScalarProperty Name="CustName" ColumnName="CustName" />
-          <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
-          <ScalarProperty Name="CustomerLedgerId" ColumnName="CustomerLedgerId" />
-          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblPurchaseInvoices">
       <EntityTypeMapping TypeName="PetrolPumpERPModel.tblPurchaseInvoice">
         <MappingFragment StoreEntitySet="tblPurchaseInvoice">
@@ -599,6 +580,27 @@
           <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
           <ScalarProperty Name="FinancialId" ColumnName="FinancialId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_Invoice">
+      <EntityTypeMapping TypeName="PetrolPumpERPModel.tbl_Invoice">
+        <MappingFragment StoreEntitySet="tbl_Invoice">
+          <ScalarProperty Name="SwipeMachineId" ColumnName="SwipeMachineId" />
+          <ScalarProperty Name="IsRoundOff" ColumnName="IsRoundOff" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+          <ScalarProperty Name="NetInvoiceAmount" ColumnName="NetInvoiceAmount" />
+          <ScalarProperty Name="NetVAT" ColumnName="NetVAT" />
+          <ScalarProperty Name="CustContactNo" ColumnName="CustContactNo" />
+          <ScalarProperty Name="CustAddress" ColumnName="CustAddress" />
+          <ScalarProperty Name="CustName" ColumnName="CustName" />
+          <ScalarProperty Name="ISCASH" ColumnName="ISCASH" />
+          <ScalarProperty Name="CustomerLedgerId" ColumnName="CustomerLedgerId" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

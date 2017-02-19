@@ -26,14 +26,15 @@
     $scope.Paging = 10;
     $scope.CurruntIndex = 0;
     $scope.IsCashInvoice = false;
-    $scope.selectedCustomerId = "0";
+    $scope.InvoiceNo = 0;
+    //$scope.selectedCustomerId = "0";
     $scope.selectedProductId = "0";
     $scope.IsRoundOff = false;
     $scope.TotalAmount = 0;
     $scope.NetAmount = 0;
     $scope.FinalAmount = 0;
     $scope.CustomerInfo = {Address:"",MobileNo:"",LedgerId:"0"};
-    $scope.ProductInfo = { ProductId: "0", UOM: "", Price: "0", UOMId: "0", ProductName: "" };
+    $scope.ProductInfo = { ProductId: "0", UOMName: "", Price: "0", UOMId: "0", ProductName: "" };
     $scope.TaxInfo = { OtherAccountId: "0", AccountName: "", LedgerId: "0", PercentOrFixedAmount: 0, Amount:0 };
     $scope.SwipeMachine = { MachineId: "0", MachineNo: "", BankId: "0", AccountNo: "0", BankName: "" };
     $scope.InvoiceNo = 0;
@@ -58,8 +59,27 @@
                     taxlist += "<option value='" + value.LedgerId + "'>" + value.AccountName + "</option>";
                 }
             });
+
             $("#Tax").html(taxlist);
+            
+
+            taxlist = "<option value='0'>--Select Customer--</option>";
+            angular.forEach($scope.CustomerList, function (value, key) {
+                taxlist += "<option value='" + value.LedgerId + "'>" + value.CustomerFirstName + " " + value.CustomeLName + "</option>";
+            });
+
+            $("#Customers").html(taxlist);
+            $("#Customers").val(0);
             $scope.SwipeMachineList = response.data.SwipeMachines.SwipeMachineList;
+
+            taxlist = "<option value='0'>--Select Swipe Machine--</option>";
+            angular.forEach($scope.SwipeMachineList, function (value, key) {
+                taxlist += "<option value='" + value.MachineId + "'>" + value.MachineNo + "</option>";
+            });
+
+            $("#SwipeMachine").html(taxlist);
+            $("#SwipeMachine").val(0);
+            
             var html = "<option value='0'>--Select Bank--</option>";
             $("#Bank").html(html);
             $("#Bank").val("0");
@@ -89,14 +109,15 @@
     {
         if ($scope.IsRoundOff==true) {
             //$scope.FinalAmount = $scope.NetAmount;
-            $scope.NetAmount = $scope.Math.round($scope.NetAmount);
+            //$scope.NetAmount = $scope.Math.round($scope.NetAmount);
+            $scope.getTotal();
         }
     }
 
     $scope.SwipeMachineSelection = function ()
     {
-        if (parseInt($scope.selectedMachineId) > 0) {
-            $scope.SwipeMachine = $filter('filter')($scope.SwipeMachineList, function (d) { return d.MachineId === parseInt($scope.selectedMachineId); })[0];
+        if (parseInt($("#SwipeMachine").val()) > 0) {
+            $scope.SwipeMachine = $filter('filter')($scope.SwipeMachineList, function (d) { return d.MachineId === parseInt($("#SwipeMachine").val()); })[0];
             if ($scope.SwipeMachine.BankId>0) {
                 $scope.SelectedBankList = $filter('filter')($scope.BankList, function (d) { return d.BankId === parseInt($scope.SwipeMachine.BankId); });
                 var bank = $scope.SelectedBankList[0];
@@ -147,7 +168,7 @@
             var product = $scope.InvoiceProductList[i];
             total += product.ProductAmount;
         }
-        $scope.TotalAmount = total;
+        $scope.TotalAmount = total.toFixed(2);
         $scope.NetAmount = 0;
         $scope.FinalAmount = 0;
         for (var i = 0; i < $scope.SelectedTaxList.length; i++) {
@@ -156,16 +177,21 @@
             }
             else {
                 if ($scope.SelectedTaxList[i].IsPercent == true) {
-                    $scope.SelectedTaxList[i].Amount = parseFloat(parseFloat($scope.SelectedTaxList[i].PercentOrFixedAmount / 100) * ($scope.TotalAmount)).toFixed(2);
+                    var amt = parseFloat($scope.SelectedTaxList[i].PercentOrFixedAmount / 100) * ($scope.TotalAmount);
+                    $scope.SelectedTaxList[i].Amount = amt.toFixed(2);
                 }
                 else {
-                    $scope.SelectedTaxList[i].Amount = $scope.SelectedTaxList[i].PercentOrFixedAmount;
+                    $scope.SelectedTaxList[i].Amount = Math.round($scope.SelectedTaxList[i].PercentOrFixedAmount * 100) /100;
                 }
                 $scope.NetAmount =parseFloat($scope.NetAmount) + parseFloat($scope.SelectedTaxList[i].Amount);
             }
         }
-        $scope.NetAmount += $scope.TotalAmount;
-        $scope.FinalAmount = $scope.NetAmount;
+        $scope.NetAmount += parseFloat($scope.TotalAmount);
+        $scope.NetAmount = $scope.NetAmount.toFixed(2);
+        if ($scope.IsRoundOff) {
+            $scope.FinalAmount = $scope.NetAmount;
+            $scope.NetAmount = $scope.Math.round($scope.NetAmount);
+        }
     }
 
     $scope.ProductSelection = function ()
@@ -214,22 +240,82 @@
         return valid;
     }
 
-    $scope.Last = function () {
+    $scope.FilterList = function () {
+        var reg = new RegExp($scope.Prefix.toLowerCase());
+        $scope.SalesList = $scope.MainSalesList.filter(function (customer) {
+            return (reg.test(customer.CustName.toLowerCase()) || reg.test(customer.Address.toLowerCase()) || reg.test(customer.InvoiceDate.toLowerCase()));
+        });
+        $scope.First();
+    }
 
+    $scope.Reset = function () {
+        $scope.SalesList =$scope.MainSalesList;
+        $scope.SearchSalesList = $scope.SalesList;
+        $scope.First();
+    }
+
+    $scope.Last = function () {
+        var total = $scope.SalesList.length;
+        var rem = parseInt($scope.SalesList.length) % parseInt($scope.Paging);
+        var position = $scope.SalesList.length - $scope.Paging;
+        if (rem > 0) {
+            position = $scope.SalesList.length - rem;
+        }
+        $scope.CurruntIndex = position;
+        $scope.SearchSalesList = $filter('limitTo')($scope.SalesList, $scope.Paging, position);
     }
 
     $scope.Prev = function () {
-
+        $scope.CurruntIndex = $scope.CurruntIndex - $scope.Paging;
+        if ($scope.CurruntIndex >= 0) {
+            $scope.SearchSalesList = $filter('limitTo')($scope.SalesList, $scope.Paging, $scope.CurruntIndex);
+        }
+        else {
+            $scope.CurruntIndex = 0;
+        }
     }
 
     $scope.Next = function () {
-
+        $scope.CurruntIndex = $scope.CurruntIndex + $scope.Paging;
+        if ($scope.CurruntIndex <= $scope.SalesList.length) {
+            $scope.SearchSalesList = $filter('limitTo')($scope.SalesList, $scope.Paging, $scope.CurruntIndex);
+        }
+        else {
+            $scope.Last();
+        }
     }
 
     $scope.First = function ()
     {
         $scope.CurruntIndex = 0;
         $scope.SearchSalesList = $filter('limitTo')($scope.SalesList, $scope.Paging, 0);
+    }
+
+    $scope.EditClick = function (SalesModel)
+    {
+        $scope.InvoiceNo = SalesModel.InvoiceNo;
+        $scope.IsCashInvoice = SalesModel.ISCASH;
+        $scope.IsRoundOff = SalesModel.RoundOff;
+        if (SalesModel.ISCASH) {
+            $("#InvoiceType").val(SalesModel.ISCASH);
+            $("#CustomerName").val(SalesModel.CustName);
+            $("#SwipeMachine").val(SalesModel.SwipeMachineId);
+            $scope.SwipeMachineSelection();
+            $scope.CustomerInfo = { Address: SalesModel.Address, MobileNo: SalesModel.CustContactNo, LedgerId: "0" };
+        }
+        else {
+            $("#Customers").val(SalesModel.CustomerLedgerId);
+            $scope.CustomerSelection();
+        }
+        var dt = new Date($scope.getDateformat(SalesModel.InvoiceDate));
+        $("#InvoiceDate").val(dt.getDate()+ "/" + dt.getMonth() +"/"+dt.getFullYear());
+        $scope.InvoiceProductList = SalesModel.SalesDetails;
+        $scope.SelectedTaxList = SalesModel.TaxList;
+        $scope.getTotal();
+        $scope.Details = false;
+        $scope.Add = false;
+        $scope.Edit = true;
+
     }
 
 
@@ -246,13 +332,14 @@
                     CustomerLedgerId: $("#Customers").val(),
                     CustName: $("#CustomerName").val(),
                     CustAddress: $("#Address").val(),
-                    CustContactNo: $("#ContactNo").val(),
+                    CustContactNo: $("#ContactNo").val() == "" ? "No" : $("#ContactNo").val(),
                     InvoiceDate: $("#InvoiceDate").val(),
                     NetInvoiceAmount: $scope.TotalAmount,
                     NetAmount: $scope.FinalAmount,
                     TaxList: $scope.SelectedTaxList,
                     SalesDetails: $scope.InvoiceProductList,
                     RoundOff: $scope.IsRoundOff,
+                    SwipeMachineId: $("#SwipeMachine").val(),
                 };
 
             var url = GetVirtualDirectory() + '/Sales/Save';
@@ -302,9 +389,28 @@
         }
     }
 
+    $scope.RemoveProduct = function (product)
+    {
+        for (var i = $scope.InvoiceProductList.length - 1; i >= 0; i--) {
+            if ($scope.InvoiceProductList[i].ItemCode == product.ItemCode) {
+                $scope.InvoiceProductList.splice(i, 1);
+            }
+        }
+        $scope.getTotal();
+    }
+
+    $scope.RemoveTax = function (tax) {
+        for (var i = $scope.SelectedTaxList.length - 1; i >= 0; i--) {
+            if ($scope.SelectedTaxList[i].OtherAccountId == product.OtherAccountId) {
+                $scope.SelectedTaxList.splice(i, 1);
+            }
+        }
+        $scope.getTotal();
+    }
+
     $scope.CustomerSelection = function () {
-        if (parseInt($scope.selectedCustomerId)>0) {
-            $scope.CustomerInfo = $filter('filter')($scope.CustomerList, function (d) { return d.LedgerId === parseInt($scope.selectedCustomerId); })[0];
+        if (parseInt($("#Customers").val())>0) {
+            $scope.CustomerInfo = $filter('filter')($scope.CustomerList, function (d) { return d.LedgerId === parseInt($("#Customers").val()); })[0];
         }
         else {
             $scope.CustomerInfo = { Address: "", MobileNo: "", LedgerId: "0" };
@@ -339,7 +445,7 @@
             UOMId: $scope.ProductInfo.UOMId,
             ProductAmount: parseFloat($("#txtAmount").val()),
             ProductName: $scope.ProductInfo.ProductName,
-            UOM: $scope.ProductInfo.UOM,
+            UOMName: $scope.ProductInfo.UOM,
         };
         $scope.InvoiceProductList.push(product);
         $scope.selectedProductId = "0";

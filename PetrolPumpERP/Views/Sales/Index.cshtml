@@ -102,7 +102,7 @@
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            Cash <input type="checkbox" id="InvoiceType" value="{{IsCashInvoice}}" data-ng-click="SetCashInvoice()"/>
+                            Credit <input type="checkbox" id="InvoiceType" value="{{IsCashInvoice}}" data-ng-click="SetCashInvoice()"/>
                         </div>
                         <div class="col-md-12" data-ng-show="ErrorModel.IsInvoiceType==true">
                             <span>{{ErrorMessage}}</span>
@@ -119,9 +119,8 @@
                         <div class="col-md-12">
                             <input type="text" id="CustomerName" placeholder="Customer Name" maxlength="30" minlength="2" data-ng-show="IsCashInvoice==true"
                                    class="form-control setMargin" />
-                            <select id="Customers" class="form-control" data-ng-show="IsCashInvoice==false" data-ng-change="CustomerSelection()" ng-model="selectedCustomerId">
-                                <option value="0">--Select Customer--</option>
-                                <option data-ng-repeat="customer in CustomerList" value="{{customer.LedgerId}}">{{customer.CustomerName}}</option>
+                            <select id="Customers" class="form-control" data-ng-show="IsCashInvoice==false" data-ng-click="CustomerSelection()">
+                                
                             </select>
                         </div>
                         <div class="col-md-12" data-ng-show="ErrorModel.IsCustomerName==true">
@@ -162,9 +161,7 @@
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="col-md-12">
-                            <select id="SwipeMachine" class="form-control" ng-model="selectedMachineId" data-ng-change="SwipeMachineSelection()">
-                                <option value="0">--Swipe Machine--</option>
-                                <option data-ng-repeat="swipe in SwipeMachineList" value="{{swipe.MachineId}}">{{swipe.MachineNo}}</option>
+                            <select id="SwipeMachine" class="form-control" data-ng-click="SwipeMachineSelection()">
                             </select>
                         </div>
                     </div>
@@ -199,6 +196,7 @@
                             <th>
                                 Amount
                             </th>
+                           
                         </tr>
                         <tr>
                             <td>
@@ -219,6 +217,7 @@
                             <td>
                                 <input type="text" class="form-control" placeholder="Amount" id="txtAmount" data-ng-blur="CalculateAmount()" />
                             </td>
+                            
                         </tr>
                     </table>
                 </div>
@@ -232,13 +231,16 @@
                                 {{product.Rate}}
                             </td>
                             <td>
-                                {{product.UOM}}
+                                {{product.UOMName}}
                             </td>
                             <td>
                                 {{product.Quantity}}
                             </td>
                             <td>
                                 {{product.ProductAmount}}
+                            </td>
+                            <td>
+                                <span class="glyphicon glyphicon-trash" data-ng-click="RemoveProduct(product)"></span>
                             </td>
                         </tr>
                     </table>
@@ -280,6 +282,9 @@
                                     </td>
                                     <td>
                                         {{tax.Amount}}
+                                    </td>
+                                    <td>
+                                        <span class="glyphicon glyphicon-trash" data-ng-click="RemoveTax(tax)"></span>
                                     </td>
                                 </tr>
                             </table>

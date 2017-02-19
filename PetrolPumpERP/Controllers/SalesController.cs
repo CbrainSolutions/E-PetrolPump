@@ -27,7 +27,15 @@ namespace PetrolPumpERP.Controllers
             return Json(sales.GetSalesInvoices(),JsonRequestBehavior.AllowGet);
         }
 
-        
+        //[MyAuthorize]
+        //[HttpGet]
+        //public ActionResult GetInvoiceTaxes(long InvoiceNo)
+        //{
+        //    return Json(sales.GetTaxList(InvoiceNo), JsonRequestBehavior.AllowGet);
+        //}
+
+
+        [MyAuthorize]
         [HttpPost]
         public ActionResult Save(SalesInvoiceModels model)
         {
@@ -46,24 +54,33 @@ namespace PetrolPumpERP.Controllers
                     temp = model.NetAmount - roundnet;
                     round = temp * (-(1));
                 }
-                
-                //if (temp < Convert.ToDecimal(0.5))
-                //{
-                //    round = temp;// * (-(1));
-                //}
-                //else
-                //{
-                //    round = temp * (-(1));
-                //}
                 model.RoundValue = round;
             }
             return Json(sales.Save(model));
         }
 
+        [MyAuthorize]
         [HttpPost]
         public ActionResult Update(SalesInvoiceModels model)
         {
-            return View(sales.Update(model));
+            decimal? round = null;
+            if (model.RoundOff != null && Convert.ToBoolean(model.RoundOff))
+            {
+                decimal roundnet = Math.Round(model.NetAmount, 0);
+                decimal? temp = 0;
+                if (model.NetAmount < roundnet)
+                {
+                    temp = roundnet - model.NetAmount;
+                    round = temp;
+                }
+                else
+                {
+                    temp = model.NetAmount - roundnet;
+                    round = temp * (-(1));
+                }
+                model.RoundValue = round;
+            }
+            return Json(sales.Update(model));
         }
     }
 }
