@@ -439,6 +439,7 @@
     <Content Include="Models\DataEntities\PetrolPumpERP.edmx.diagram">
       <DependentUpon>PetrolPumpERP.edmx</DependentUpon>
     </Content>
+    <Content Include="DBBackUp\19Feb2017.bak" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
