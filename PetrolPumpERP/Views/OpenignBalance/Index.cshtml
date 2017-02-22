@@ -1,11 +1,9 @@
-﻿@model PetrolPumpERP.Models.DataModels.OpeningBalanceResponse
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 @Scripts.Render("~/bundles/Opening")
 <h2>Opening Balance</h2>
-@*<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.OpeningBalanceList)" id="openingbalanceList" />*@
 <div class="table-responsive" data-ng-app="PetroliumApp" data-ng-controller="OpeningController">
     <div class="col-md-12">
         <div class="col-md-8 divsearch">

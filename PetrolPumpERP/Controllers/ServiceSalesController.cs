@@ -8,11 +8,10 @@ using PetrolPumpERP.Models.DataModels;
 
 namespace PetrolPumpERP.Controllers
 {
-    public class SalesController : Controller
+    public class ServiceSalesController : Controller
     {
-        // GET: Sales
         SalesModelBL sales = SalesModelBL.Instance;
-        
+
 
         [MyAuthorize]
         public ActionResult Index()
@@ -22,9 +21,9 @@ namespace PetrolPumpERP.Controllers
 
         [MyAuthorize]
         [HttpGet]
-        public ActionResult GetSalesInvoices(int ProductTypeId=0)
+        public ActionResult GetSalesInvoices(int ProductTypeId = 0)
         {
-            return Json(sales.GetSalesInvoices(ProductTypeId),JsonRequestBehavior.AllowGet);
+            return Json(sales.GetSalesInvoices(ProductTypeId), JsonRequestBehavior.AllowGet);
         }
 
 
@@ -35,7 +34,7 @@ namespace PetrolPumpERP.Controllers
             decimal? round = null;
             if (model.RoundOff != null && Convert.ToBoolean(model.RoundOff))
             {
-                decimal roundnet =Math.Round(model.NetAmount, 0);
+                decimal roundnet = Math.Round(model.NetAmount, 0);
                 decimal? temp = 0;
                 if (model.NetAmount < roundnet)
                 {

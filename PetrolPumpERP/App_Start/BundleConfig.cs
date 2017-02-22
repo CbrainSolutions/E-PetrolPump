@@ -70,7 +70,11 @@ namespace PetrolPumpERP
 
             bundles.Add(new ScriptBundle("~/bundles/datepicker").Include("~/Scripts/Main/bootstrap-datepicker.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/Sales").Include("~/Scripts/Main/SalesController.js"));
+            bundles.Add(new ScriptBundle("~/bundles/PetrolSales").Include("~/Scripts/Main/SalesController.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/AccessoriesSales").Include("~/Scripts/Main/AccessoriesSalesController.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ServiceSales").Include("~/Scripts/Main/ServiceSalesController.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Purchase").Include("~/Scripts/Main/PurchaseController.js"));
 

@@ -197,6 +197,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AccessariesSalesController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
     <Compile Include="Controllers\BankController.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
+    <Compile Include="Controllers\ServiceSalesController.cs" />
     <Compile Include="Controllers\SubledgerController.cs" />
     <Compile Include="Controllers\SwipeController.cs" />
     <Compile Include="Controllers\UOMController.cs" />
@@ -448,6 +450,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Main\AccessoriesSalesController.js" />
     <Content Include="Scripts\Main\AccountTypeController.js" />
     <Content Include="Scripts\Main\angular.min.js" />
     <Content Include="Scripts\Main\App.js" />
@@ -466,6 +469,7 @@
     <Content Include="Scripts\Main\ProductTypeController.js" />
     <Content Include="Scripts\Main\PurchaseController.js" />
     <Content Include="Scripts\Main\SalesController.js" />
+    <Content Include="Scripts\Main\ServiceSalesController.js" />
     <Content Include="Scripts\Main\ShowCustomAlert.js" />
     <Content Include="Scripts\Main\spin.js" />
     <Content Include="Scripts\Main\SubledgerController.js" />
@@ -529,6 +533,8 @@
     <Content Include="Views\Department\Index.cshtml" />
     <Content Include="Views\Designation\Index.cshtml" />
     <Content Include="Views\Swipe\Index.cshtml" />
+    <Content Include="Views\AccessariesSales\Index.cshtml" />
+    <Content Include="Views\ServiceSales\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

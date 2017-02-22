@@ -71,9 +71,14 @@
                             <div class="collapse" id="saleandpurchase" style="height: 0px;">
                                 <ul class="nav nav-list">
                                     <li>
-                                        <a href="@Url.Action("Index","Sales")">Sale</a>
+                                        <a href="@Url.Action("Index","Sales")">Petrolium Sales</a>
                                     </li>
-                                    
+                                    <li>
+                                        <a href="@Url.Action("Index","Sales",new { @ProductTypeId=2})">Accessories Sales</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index","Sales",new { @ProductTypeId=3})">Services Sales</a>
+                                    </li>
                                 </ul>
                             </div>
                         </a>

@@ -75,9 +75,10 @@ namespace PetrolPumpERP.Models.DataModels
             }
         }
 
-        public ProductResponse GetProducts()
+        public ProductResponse GetProducts(int ProductTypeId=0)
         {
             ProductResponse response = new ProductResponse();
+            
             response.ProductList = from tbl in _db.tblProductMasters
                                    join tblproducttype in _db.tblProductTypes
                                    on tbl.ProductTypeId equals tblproducttype.ProductTypeId
@@ -107,6 +108,10 @@ namespace PetrolPumpERP.Models.DataModels
                                        WareHouseNo=tbl.WareHouseNo,
                                    };
 
+            if (ProductTypeId>0)
+            {
+                response.ProductList = response.ProductList.Where(p => p.ProductTypeId == ProductTypeId);
+            }
             response. ProductTypeList = objproduttype.GetProductTypeList();
             response.UOMList = objuombl.GetUOMList();
             response.WareHouseList = objWh.GetWareHouseList();

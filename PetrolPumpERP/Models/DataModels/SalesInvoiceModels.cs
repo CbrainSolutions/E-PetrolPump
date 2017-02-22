@@ -120,7 +120,7 @@ namespace PetrolPumpERP.Models.DataModels
             }
         }
 
-        public SalesResponse GetSalesInvoices()
+        public SalesResponse GetSalesInvoices(int ProductTypeId=0)
         {
             SalesResponse response = new SalesResponse();
             response.SalesList = from tbl in _db.tbl_Invoice
@@ -173,6 +173,7 @@ namespace PetrolPumpERP.Models.DataModels
                                                 join tblotherac in _db.tblOtherAccounts
                                                 on tax.CrLedgerId equals tblotherac.LedgerId
                                                 where tblotherac.IsPercent==true &&
+                                                tax.IsDelete==false &&
                                                 tax.BillNo==tbl.InvoiceNo
                                                 select new OtherAccountModel
                                                 {
@@ -191,7 +192,7 @@ namespace PetrolPumpERP.Models.DataModels
             response.Customers = customer.GetAllCustomers();
             response.TaxList = otherac.GetOtherAccountDetails().OtherAccountList.Where(p => p.SubledgerId == 12 || p.OtherAccountId == 2 || p.OtherAccountId == 3);
             response.OtherAccounts = otherac.GetOtherAccountDetails().OtherAccountList.Where(p => p.SubledgerId == 8 || p.SubledgerId == 9);
-            response.ProductList = objproduct.GetProducts();
+            response.ProductList = objproduct.GetProducts(ProductTypeId);
             response.SwipeMachines = objSwipe.GetAllSwipeMachines();
             return response;
         }
@@ -203,349 +204,388 @@ namespace PetrolPumpERP.Models.DataModels
             return otherac.GetOtherAccountDetails().OtherAccountList.Where(p => p.OtherAccountId == 3).FirstOrDefault();
         }
 
-
+        #region Save
         public SalesResponse Save(SalesInvoiceModels model)
         {
             SalesResponse response = new SalesResponse();
-            response.Status = false;
-            try
+            lock (thisLock)
             {
-                AppSettingManager settings = AppSettingManager.Instance;
-                tbl_Invoice inv = new tbl_Invoice()
+                response.Status = false;
+                try
                 {
-                    BalanceAmount = model.BalanceAmount,
-                    CustAddress = model.CustAddress,
-                    CustContactNo = model.CustContactNo,
-                    CustName = model.ISCASH?model.CustName:"",
-                    CustomerLedgerId = model.CustomerLedgerId,
-                    Discount = model.Discount,
-                    InvoiceDate = model.InvoiceDate,
-                    ISCASH = model.ISCASH,
-                    IsDelete = false,
-                    NetAmount = Math.Round(model.NetAmount, 0),
-                    NetInvoiceAmount = model.NetInvoiceAmount,
-                    NetVAT = model.NetVAT,
-                    IsRoundOff=model.RoundOff,
-                    SwipeMachineId=model.SwipeMachineId,
-                };
-
-                _db.tbl_Invoice.Add(inv);
-                _db.SaveChanges();
-                foreach (var item in model.SalesDetails)
-                {
-                    tbl_InvoiceDetail invdtl = new tbl_InvoiceDetail()
+                    AppSettingManager settings = AppSettingManager.Instance;
+                    tbl_Invoice inv = new tbl_Invoice()
                     {
-                        BatchNo = item.BatchNo,
-                        ExpiryDate = item.ExpiryDate,
-                        InvoiceNo = inv.InvoiceNo,
+                        BalanceAmount = model.BalanceAmount,
+                        CustAddress = model.CustAddress,
+                        CustContactNo = model.CustContactNo,
+                        CustName = model.ISCASH ? model.CustName : "",
+                        CustomerLedgerId = model.CustomerLedgerId,
+                        Discount = model.Discount,
+                        InvoiceDate = model.InvoiceDate,
+                        ISCASH = model.ISCASH,
                         IsDelete = false,
-                        ItemCode = item.ItemCode,
-                        ProductAmount = item.ProductAmount,
-                        Quantity = item.Quantity,
-                        Rate = item.Rate,
-                        TotalAmount = item.TotalAmount,
-                        VAT = item.VAT,
-                        VATAmount = item.VATAmount,
+                        NetAmount = Math.Round(model.NetAmount, 0),
+                        NetInvoiceAmount = model.NetInvoiceAmount,
+                        NetVAT = model.NetVAT,
+                        IsRoundOff = model.RoundOff,
+                        SwipeMachineId = model.SwipeMachineId,
                     };
 
-                    _db.tbl_InvoiceDetail.Add(invdtl);
-
-                    tblProductMaster producttype = _db.tblProductMasters.Where(p => p.ProductId == item.ItemCode).FirstOrDefault();
-                    if (producttype.ProductTypeId != 3)
+                    _db.tbl_Invoice.Add(inv);
+                    _db.SaveChanges();
+                    foreach (var item in model.SalesDetails)
                     {
-                        tblStockDetail stock = new tblStockDetail()
+                        tbl_InvoiceDetail invdtl = new tbl_InvoiceDetail()
                         {
                             BatchNo = item.BatchNo,
-                            DocumentNo = item.InvoiceNo,
                             ExpiryDate = item.ExpiryDate,
-                            OutwardAmount = item.ProductAmount,
-                            OutwardPrice = item.Rate,
-                            OutwardQty = item.Quantity,
-                            ProductId = item.ItemCode,
-                            TransactionType = "Sales",
+                            InvoiceNo = inv.InvoiceNo,
+                            IsDelete = false,
+                            ItemCode = item.ItemCode,
+                            ProductAmount = item.ProductAmount,
+                            Quantity = item.Quantity,
+                            Rate = item.Rate,
+                            TotalAmount = item.TotalAmount,
+                            VAT = item.VAT,
+                            VATAmount = item.VATAmount,
                         };
-                        _db.tblStockDetails.Add(stock);
+
+                        _db.tbl_InvoiceDetail.Add(invdtl);
+
+                        tblProductMaster producttype = _db.tblProductMasters.Where(p => p.ProductId == item.ItemCode).FirstOrDefault();
+                        if (producttype.ProductTypeId != 3)
+                        {
+                            tblStockDetail stock = new tblStockDetail()
+                            {
+                                BatchNo = item.BatchNo,
+                                DocumentNo = item.InvoiceNo,
+                                ExpiryDate = item.ExpiryDate,
+                                OutwardAmount = item.ProductAmount,
+                                OutwardPrice = item.Rate,
+                                OutwardQty = item.Quantity,
+                                ProductId = item.ItemCode,
+                                TransactionType = "Sales",
+                            };
+                            _db.tblStockDetails.Add(stock);
+                        }
+                        _db.SaveChanges();
+                    }
+
+                    long? trasid = _db.tblTransactions.Max(p => p.TransactionId);
+                    if (trasid == null)
+                    {
+                        trasid = 1;
+                    }
+
+                    tblTransaction transaction = new tblTransaction()
+                    {
+                        CustomerId = 0,
+                        TransactionDate = model.InvoiceDate,
+                        DrLedger = model.ISCASH ? settings.CashLedger.LedgerId : model.CustomerLedgerId,
+                        DrAmount = Math.Round(model.NetAmount, 0),
+                        BillNo = inv.InvoiceNo,
+                        TransactionId = trasid,
+                        FinancialId = 1,
+                        IsDelete = false,
+                        TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
+                        UserId = SessionManager.Instance.ActiveUser.UserId,
+                    };
+                    if (model.ISCASH)
+                    {
+                        if (model.BankLedgerId > 0)
+                        {
+                            transaction.DrLedger = model.BankLedgerId;
+                        }
+                    }
+                    _db.tblTransactions.Add(transaction);
+                    if (model.RoundOff != null && Convert.ToBoolean(model.RoundOff))
+                    {
+                        transaction = new tblTransaction()
+                        {
+                            CustomerId = 0,
+                            TransactionDate = model.InvoiceDate,
+                            CrLedgerId = GetRoundOffLedger().LedgerId,
+                            CrAmount = model.RoundValue,
+                            BillNo = inv.InvoiceNo,
+                            TransactionId = trasid,
+                            FinancialId = 1,
+                            IsDelete = false,
+                            TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
+                            UserId = SessionManager.Instance.ActiveUser.UserId,
+                        };
+                        _db.tblTransactions.Add(transaction);
+                    }
+
+                    transaction = new tblTransaction()
+                    {
+                        CustomerId = 0,
+                        TransactionDate = model.InvoiceDate,
+                        CrLedgerId = settings.SalesLedger.LedgerId,
+                        CrAmount = model.NetInvoiceAmount,
+                        BillNo = inv.InvoiceNo,
+                        TransactionId = trasid,
+                        FinancialId = 1,
+                        IsDelete = false,
+                        TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
+                        UserId = SessionManager.Instance.ActiveUser.UserId,
+                    };
+                    _db.tblTransactions.Add(transaction);
+                    foreach (var item in model.TaxList)
+                    {
+                        transaction = new tblTransaction()
+                        {
+                            CustomerId = 0,
+                            TransactionDate = model.InvoiceDate,
+                            CrLedgerId = item.LedgerId,
+                            CrAmount = item.Amount,
+                            BillNo = inv.InvoiceNo,
+                            TransactionId = trasid,
+                            FinancialId = 1,
+                            IsDelete = false,
+                            TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
+                            UserId = SessionManager.Instance.ActiveUser.UserId,
+                        };
+                        _db.tblTransactions.Add(transaction);
                     }
                     _db.SaveChanges();
+                    response.Id = inv.InvoiceNo;
+                    response.Status = true;
                 }
-
-                long? trasid = _db.tblTransactions.Max(p => p.TransactionId);
-                if (trasid==null)
+                catch (DbEntityValidationException ex)
                 {
-                    trasid = 1;
-                }
-
-                tblTransaction transaction = new tblTransaction()
-                {
-                    CustomerId = 0,
-                    TransactionDate = model.InvoiceDate,
-                    DrLedger = model.ISCASH?settings.CashLedger.LedgerId:model.CustomerLedgerId,
-                    DrAmount = Math.Round(model.NetAmount, 0),
-                    BillNo = inv.InvoiceNo,
-                    TransactionId = trasid,
-                    FinancialId = 1,
-                    IsDelete = false,
-                    TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
-                    UserId = SessionManager.Instance.ActiveUser.UserId,
-                };
-                if (model.ISCASH)
-                {
-                    if (model.BankLedgerId>0)
+                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
                     {
-                        transaction.DrLedger = model.BankLedgerId;
-                    }
-                }
-                _db.tblTransactions.Add(transaction);
-                if (model.RoundOff != null && Convert.ToBoolean(model.RoundOff))
-                {
-                    transaction = new tblTransaction()
-                    {
-                        CustomerId = 0,
-                        TransactionDate = model.InvoiceDate,
-                        CrLedgerId = GetRoundOffLedger().LedgerId,
-                        CrAmount = model.RoundValue,
-                        BillNo = inv.InvoiceNo,
-                        TransactionId = trasid,
-                        FinancialId = 1,
-                        IsDelete = false,
-                        TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
-                        UserId = SessionManager.Instance.ActiveUser.UserId,
-                    };
-                    _db.tblTransactions.Add(transaction);
-                }
-
-                transaction = new tblTransaction()
-                {
-                    CustomerId = 0,
-                    TransactionDate = model.InvoiceDate,
-                    CrLedgerId = settings.SalesLedger.LedgerId,
-                    CrAmount = model.NetInvoiceAmount,
-                    BillNo = inv.InvoiceNo,
-                    TransactionId = trasid,
-                    FinancialId = 1,
-                    IsDelete = false,
-                    TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
-                    UserId = SessionManager.Instance.ActiveUser.UserId,
-                };
-                _db.tblTransactions.Add(transaction);
-                foreach (var item in model.TaxList)
-                {
-                    transaction = new tblTransaction()
-                    {
-                        CustomerId = 0,
-                        TransactionDate = model.InvoiceDate,
-                        CrLedgerId = item.LedgerId,
-                        CrAmount = item.Amount,
-                        BillNo = inv.InvoiceNo,
-                        TransactionId = trasid,
-                        FinancialId = 1,
-                        IsDelete = false,
-                        TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
-                        UserId = SessionManager.Instance.ActiveUser.UserId,
-                    };
-                    _db.tblTransactions.Add(transaction);
-                }
-                _db.SaveChanges();
-                response.Id = inv.InvoiceNo;
-                response.Status = true;
-            }
-            catch (DbEntityValidationException ex)
-            {
-                foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in entityValidationErrors.ValidationErrors)
-                    {
+                        foreach (var validationError in entityValidationErrors.ValidationErrors)
+                        {
+                        }
                     }
                 }
             }
-            
             return response;
+            
         }
+        #endregion
+
+        private Object thisLock = new Object();
 
         public SalesResponse Update(SalesInvoiceModels model)
         {
             SalesResponse response = new SalesResponse();
-            tblTransaction transaction = _db.tblTransactions.Where(p => p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
-            try
+            using (PetrolPumpERPEntities db=new PetrolPumpERPEntities())
             {
-                tbl_Invoice inv = _db.tbl_Invoice.Where(p => p.InvoiceNo == model.InvoiceNo).FirstOrDefault();
-                if (inv!=null)
+                tblTransaction transaction = db.tblTransactions.Where(p => p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
+                try
                 {
-                    inv.BalanceAmount = model.BalanceAmount;
-                    inv.CustAddress = model.CustAddress;
-                    inv.CustContactNo = model.CustContactNo;
-                    inv.CustName = model.ISCASH ? model.CustName : "";
-                    inv.CustomerLedgerId = model.CustomerLedgerId;
-                    inv.Discount = model.Discount;
-                    inv.InvoiceDate = model.InvoiceDate;
-                    inv.ISCASH = model.ISCASH;
-                    inv.NetAmount = Math.Round(model.NetAmount, 0);
-                    inv.NetInvoiceAmount = model.NetInvoiceAmount;
-                    inv.NetVAT = model.NetVAT;
-                    inv.IsRoundOff = model.RoundOff;
-                    inv.SwipeMachineId = model.SwipeMachineId;
-
-                    IQueryable<tbl_InvoiceDetail> salesdetail = _db.tbl_InvoiceDetail.Where(p => p.InvoiceNo == model.InvoiceNo && p.IsDelete==false);
-                    // Find to delete removed products from db
-                    foreach (var item in salesdetail)
+                    tbl_Invoice inv = db.tbl_Invoice.Where(p => p.InvoiceNo == model.InvoiceNo).FirstOrDefault();
+                    if (inv != null)
                     {
-                        var test= model.SalesDetails.Where(p => p.ItemCode == item.ItemCode).FirstOrDefault();
-                        if (test==null)
+                        inv.BalanceAmount = model.BalanceAmount;
+                        inv.CustAddress = model.CustAddress;
+                        inv.CustContactNo = model.CustContactNo;
+                        inv.CustName = model.ISCASH ? model.CustName : "";
+                        inv.CustomerLedgerId = model.CustomerLedgerId;
+                        inv.Discount = model.Discount;
+                        inv.InvoiceDate = model.InvoiceDate;
+                        inv.ISCASH = model.ISCASH;
+                        inv.NetAmount = Math.Round(model.NetAmount, 0);
+                        inv.NetInvoiceAmount = model.NetInvoiceAmount;
+                        inv.NetVAT = model.NetVAT;
+                        inv.IsRoundOff = model.RoundOff;
+                        inv.SwipeMachineId = model.SwipeMachineId;
+
+                        IQueryable<tbl_InvoiceDetail> salesdetail = db.tbl_InvoiceDetail.Where(p => p.InvoiceNo == model.InvoiceNo && p.IsDelete == false);
+                        // Find to delete removed products from db
+                        foreach (var item in salesdetail)
                         {
-                            item.IsDelete = true;
-                        }
-                        
-                        if (test==null)
-                        {
-                            tblProductMaster producttype = _db.tblProductMasters.Where(p => p.ProductId == item.ItemCode).FirstOrDefault();
-                            if (producttype.ProductTypeId != 3)
+                            var test = model.SalesDetails.Where(p => p.ItemCode == item.ItemCode).FirstOrDefault();
+                            if (test == null)
                             {
-                                tblStockDetail stock = _db.tblStockDetails.Where(p => p.DocumentNo == item.InvoiceNo && p.ProductId == item.ItemCode && p.TransactionType == "Sales").FirstOrDefault();
-                                if (stock!=null)
+                                item.IsDelete = true;
+                            }
+
+                            if (test == null)
+                            {
+                                tblProductMaster producttype = db.tblProductMasters.Where(p => p.ProductId == item.ItemCode).FirstOrDefault();
+                                if (producttype.ProductTypeId != 3)
                                 {
-                                    stock.IsDelete = true;
+                                    tblStockDetail stock = db.tblStockDetails.Where(p => p.DocumentNo == item.InvoiceNo && p.ProductId == item.ItemCode && p.TransactionType == "Sales").FirstOrDefault();
+                                    if (stock != null)
+                                    {
+                                        stock.IsDelete = true;
+                                    }
                                 }
                             }
+                            else
+                            {
+                                tblProductMaster producttype = db.tblProductMasters.Where(p => p.ProductId == test.ItemCode).FirstOrDefault();
+                                if (producttype.ProductTypeId == 3)
+                                {
+                                    // Product Category was change  while update it 
+                                    tblStockDetail stock = db.tblStockDetails.Where(p => p.DocumentNo == item.InvoiceNo && p.ProductId == test.ItemCode && p.TransactionType == "Sales").FirstOrDefault();
+                                    if (stock != null)
+                                    {
+                                        stock.IsDelete = true;
+                                    }
+                                }
+                            }
+
+                            _db.SaveChanges();
+                        }
+                        salesdetail = db.tbl_InvoiceDetail.Where(p => p.InvoiceNo == model.InvoiceNo && p.IsDelete == false);
+                        foreach (var item in salesdetail)
+                        {
+                            var test = model.SalesDetails.Where(p => p.ItemCode == item.ItemCode).FirstOrDefault();
+                            if (test != null)
+                            {
+                                item.BatchNo = test.BatchNo;
+                                item.ExpiryDate = test.ExpiryDate;
+                                item.ItemCode = test.ItemCode;
+                                item.ProductAmount = test.ProductAmount;
+                                item.Quantity = test.Quantity;
+                                item.Rate = test.Rate;
+                                item.TotalAmount = test.TotalAmount;
+                                item.VAT = test.VAT;
+                                item.VATAmount = test.VATAmount;
+
+                                tblProductMaster producttype = db.tblProductMasters.Where(p => p.ProductId == test.ItemCode).FirstOrDefault();
+                                if (producttype.ProductTypeId != 3)
+                                {
+                                    tblStockDetail stock = db.tblStockDetails.Where(p => p.DocumentNo == item.InvoiceNo && p.ProductId == test.ItemCode && p.TransactionType == "Sales").FirstOrDefault();
+                                    if (stock != null)
+                                    {
+                                        stock.BatchNo = test.BatchNo;
+                                        stock.DocumentNo = test.InvoiceNo;
+                                        stock.ExpiryDate = test.ExpiryDate;
+                                        stock.OutwardAmount = test.ProductAmount;
+                                        stock.OutwardPrice = test.Rate;
+                                        stock.OutwardQty = test.Quantity;
+                                        stock.ProductId = test.ItemCode;
+                                        stock.TransactionType = "Sales";
+                                    }
+                                }
+                            }
+                        }
+
+                        foreach (var item in model.SalesDetails)
+                        {
+                            var test = db.tbl_InvoiceDetail.Where(p => p.ItemCode == item.ItemCode && p.InvoiceNo == model.InvoiceNo).FirstOrDefault();
+                            if (test == null)
+                            {
+                                tbl_InvoiceDetail invdtl = new tbl_InvoiceDetail()
+                                {
+                                    BatchNo = item.BatchNo,
+                                    ExpiryDate = item.ExpiryDate,
+                                    InvoiceNo = inv.InvoiceNo,
+                                    IsDelete = false,
+                                    ItemCode = item.ItemCode,
+                                    ProductAmount = item.ProductAmount,
+                                    Quantity = item.Quantity,
+                                    Rate = item.Rate,
+                                    TotalAmount = item.TotalAmount,
+                                    VAT = item.VAT,
+                                    VATAmount = item.VATAmount,
+                                };
+
+                                db.tbl_InvoiceDetail.Add(invdtl);
+
+                                tblProductMaster producttype = db.tblProductMasters.Where(p => p.ProductId == item.ItemCode).FirstOrDefault();
+                                if (producttype.ProductTypeId != 3)
+                                {
+                                    tblStockDetail stock = new tblStockDetail()
+                                    {
+                                        BatchNo = item.BatchNo,
+                                        DocumentNo = item.InvoiceNo,
+                                        ExpiryDate = item.ExpiryDate,
+                                        OutwardAmount = item.ProductAmount,
+                                        OutwardPrice = item.Rate,
+                                        OutwardQty = item.Quantity,
+                                        ProductId = item.ItemCode,
+                                        TransactionType = "Sales",
+                                    };
+                                    db.tblStockDetails.Add(stock);
+                                }
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                    var taxlist = otherac.GetOtherAccountDetails().OtherAccountList.Where(p => p.SubledgerId == 12 || p.OtherAccountId == 2 || p.OtherAccountId == 3);
+                    IQueryable<tblTransaction> lstTrans = db.tblTransactions.Where(p => p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper());
+                    foreach (var item in lstTrans)
+                    {
+                        var checktax = taxlist.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
+                        if (checktax != null)
+                        {
+                            var test = model.TaxList.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
+                            if (test == null)
+                            {
+                                item.IsDelete = true;
+                            }
+                        }
+                    }
+                    foreach (var item in lstTrans)
+                    {
+                        var checktax = taxlist.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
+                        if (checktax != null)
+                        {
+                            var test = model.TaxList.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
+                            if (test != null)
+                            {
+                                item.CustomerId = 0;
+                                item.TransactionDate = model.InvoiceDate;
+                                item.CrLedgerId = test.LedgerId;
+                                item.CrAmount = test.Amount;
+                                item.BillNo = inv.InvoiceNo;
+                                item.FinancialId = 1;
+                            }
+
+                        }
+                    }
+                    db.SaveChanges();
+                    foreach (var item in model.TaxList)
+                    {
+                        tblTransaction transactionexist = db.tblTransactions.Where(p => p.CrLedgerId == item.LedgerId && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
+                        if (transactionexist == null)
+                        {
+                            if (transaction != null)
+                            {
+                                tblTransaction transaction1 = new tblTransaction()
+                                {
+                                    CustomerId = 0,
+                                    TransactionDate = model.InvoiceDate,
+                                    CrLedgerId = item.LedgerId,
+                                    CrAmount = item.Amount,
+                                    BillNo = inv.InvoiceNo,
+                                    TransactionId = transaction.TransactionId,
+                                    FinancialId = 1,
+                                    IsDelete = false,
+                                    TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
+                                    UserId = SessionManager.Instance.ActiveUser.UserId,
+                                };
+                                db.tblTransactions.Add(transaction1);
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+
+
+                    // Update Round off ledger
+                    var roundoffledger = GetRoundOffLedger();
+                    var checkexist = lstTrans.Where(p => p.CrLedgerId == roundoffledger.LedgerId && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
+                    if (model.RoundOff != null && Convert.ToBoolean(model.RoundOff))
+                    {
+                        if (checkexist != null)
+                        {
+                            checkexist.CrAmount = model.RoundValue;
                         }
                         else
                         {
-                            tblProductMaster producttype = _db.tblProductMasters.Where(p => p.ProductId == test.ItemCode).FirstOrDefault();
-                            if (producttype.ProductTypeId == 3)
-                            {
-                                // Product Category was change  while update it 
-                                tblStockDetail stock = _db.tblStockDetails.Where(p => p.DocumentNo == item.InvoiceNo && p.ProductId == test.ItemCode && p.TransactionType == "Sales").FirstOrDefault();
-                                if (stock != null)
-                                {
-                                    stock.IsDelete = true;
-                                }
-                            }
-                        }
-                        
-                        _db.SaveChanges();
-                    }
-                    salesdetail = _db.tbl_InvoiceDetail.Where(p => p.InvoiceNo == model.InvoiceNo && p.IsDelete == false);
-                    foreach (var item in salesdetail)
-                    {
-                        var test = model.SalesDetails.Where(p => p.ItemCode == item.ItemCode).FirstOrDefault();
-                        if (test != null)
-                        {
-                            item.BatchNo = test.BatchNo;
-                            item.ExpiryDate = test.ExpiryDate;
-                            item.ItemCode = test.ItemCode;
-                            item.ProductAmount = test.ProductAmount;
-                            item.Quantity = test.Quantity;
-                            item.Rate = test.Rate;
-                            item.TotalAmount = test.TotalAmount;
-                            item.VAT = test.VAT;
-                            item.VATAmount = test.VATAmount;
-
-                            tblProductMaster producttype = _db.tblProductMasters.Where(p => p.ProductId == test.ItemCode).FirstOrDefault();
-                            if (producttype.ProductTypeId != 3)
-                            {
-                                tblStockDetail stock = _db.tblStockDetails.Where(p => p.DocumentNo == item.InvoiceNo && p.ProductId == test.ItemCode && p.TransactionType == "Sales").FirstOrDefault();
-                                if (stock != null)
-                                {
-                                    stock.BatchNo = test.BatchNo;
-                                    stock.DocumentNo = test.InvoiceNo;
-                                    stock.ExpiryDate = test.ExpiryDate;
-                                    stock.OutwardAmount = test.ProductAmount;
-                                    stock.OutwardPrice = test.Rate;
-                                    stock.OutwardQty = test.Quantity;
-                                    stock.ProductId = test.ItemCode;
-                                    stock.TransactionType = "Sales";
-                                }
-                            }
-                        }
-                    }
-
-                    foreach (var item in model.SalesDetails)
-                    {
-                        var test = _db.tbl_InvoiceDetail.Where(p => p.ItemCode == item.ItemCode && p.InvoiceNo==model.InvoiceNo).FirstOrDefault();
-                        if (test == null)
-                        {
-                            tbl_InvoiceDetail invdtl = new tbl_InvoiceDetail()
-                            {
-                                BatchNo = item.BatchNo,
-                                ExpiryDate = item.ExpiryDate,
-                                InvoiceNo = inv.InvoiceNo,
-                                IsDelete = false,
-                                ItemCode = item.ItemCode,
-                                ProductAmount = item.ProductAmount,
-                                Quantity = item.Quantity,
-                                Rate = item.Rate,
-                                TotalAmount = item.TotalAmount,
-                                VAT = item.VAT,
-                                VATAmount = item.VATAmount,
-                            };
-
-                            _db.tbl_InvoiceDetail.Add(invdtl);
-
-                            tblProductMaster producttype = _db.tblProductMasters.Where(p => p.ProductId == item.ItemCode).FirstOrDefault();
-                            if (producttype.ProductTypeId != 3)
-                            {
-                                tblStockDetail stock = new tblStockDetail()
-                                {
-                                    BatchNo = item.BatchNo,
-                                    DocumentNo = item.InvoiceNo,
-                                    ExpiryDate = item.ExpiryDate,
-                                    OutwardAmount = item.ProductAmount,
-                                    OutwardPrice = item.Rate,
-                                    OutwardQty = item.Quantity,
-                                    ProductId = item.ItemCode,
-                                    TransactionType = "Sales",
-                                };
-                                _db.tblStockDetails.Add(stock);
-                            }
-                            _db.SaveChanges();
-                        }
-                    }
-                }
-                var taxlist= otherac.GetOtherAccountDetails().OtherAccountList.Where(p => p.SubledgerId == 12 || p.OtherAccountId == 2 || p.OtherAccountId == 3);
-                IQueryable<tblTransaction> lstTrans = _db.tblTransactions.Where(p => p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper());
-                foreach (var item in lstTrans)
-                {
-                    var checktax = taxlist.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
-                    if (checktax!=null)
-                    {
-                        var test = model.TaxList.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
-                        if (test == null)
-                        {
-                            item.IsDelete = true;
-                        }
-                    }
-                }
-                foreach (var item in lstTrans)
-                {
-                    var checktax = taxlist.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
-                    if (checktax != null)
-                    {
-                        var test = model.TaxList.Where(p => p.LedgerId == item.CrLedgerId).FirstOrDefault();
-                        if (test != null)
-                        {
-                            item.CustomerId = 0;
-                            item.TransactionDate = model.InvoiceDate;
-                            item.CrLedgerId = test.LedgerId;
-                            item.CrAmount = test.Amount;
-                            item.BillNo = inv.InvoiceNo;
-                            item.FinancialId = 1;
-                        }
-                        
-                    }
-                }
-                _db.SaveChanges();
-                foreach (var item in model.TaxList)
-                {
-                    tblTransaction transactionexist = _db.tblTransactions.Where(p => p.CrLedgerId == item.LedgerId && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
-                    if (transactionexist == null)
-                    {
-                        if (transaction!=null)
-                        {
-                            tblTransaction transaction1 = new tblTransaction()
+                            tblTransaction transactionround = new tblTransaction()
                             {
                                 CustomerId = 0,
                                 TransactionDate = model.InvoiceDate,
-                                CrLedgerId = item.LedgerId,
-                                CrAmount = item.Amount,
+                                CrLedgerId = GetRoundOffLedger().LedgerId,
+                                CrAmount = model.RoundValue,
                                 BillNo = inv.InvoiceNo,
                                 TransactionId = transaction.TransactionId,
                                 FinancialId = 1,
@@ -553,73 +593,40 @@ namespace PetrolPumpERP.Models.DataModels
                                 TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
                                 UserId = SessionManager.Instance.ActiveUser.UserId,
                             };
-                            _db.tblTransactions.Add(transaction1);
-                            _db.SaveChanges();
+                            db.tblTransactions.Add(transactionround);
                         }
-                    }
-                }
-
-
-                // Update Round off ledger
-                var roundoffledger = GetRoundOffLedger();
-                var checkexist = lstTrans.Where(p => p.CrLedgerId == roundoffledger.LedgerId && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
-                if (model.RoundOff!=null && Convert.ToBoolean(model.RoundOff))
-                {
-                    if (checkexist!=null)
-                    {
-                        checkexist.CrAmount = model.RoundValue;
                     }
                     else
                     {
-                        tblTransaction transactionround = new tblTransaction()
+                        if (checkexist != null)
                         {
-                            CustomerId = 0,
-                            TransactionDate = model.InvoiceDate,
-                            CrLedgerId = GetRoundOffLedger().LedgerId,
-                            CrAmount = model.RoundValue,
-                            BillNo = inv.InvoiceNo,
-                            TransactionId = transaction.TransactionId,
-                            FinancialId = 1,
-                            IsDelete = false,
-                            TransactionType = Convert.ToString(TransactionTypes.PetroliumSales),
-                            UserId = SessionManager.Instance.ActiveUser.UserId,
-                        };
-                        _db.tblTransactions.Add(transactionround);
+                            checkexist.IsDelete = true;
+                        }
                     }
-                }
-                else
-                {
-                    if (checkexist!=null)
+
+                    var checkexistsales = lstTrans.Where(p => p.CrLedgerId == AppSettingManager.Instance.SalesLedger.LedgerId && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
+                    if (checkexistsales != null)
                     {
-                        checkexist.IsDelete = true;
+                        checkexistsales.CrAmount = model.NetInvoiceAmount;
                     }
-                }
 
-                var checkexistsales = lstTrans.Where(p => p.CrLedgerId == AppSettingManager.Instance.SalesLedger.LedgerId && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
-                if (checkexistsales != null)
-                {
-                    checkexistsales.CrAmount = model.NetInvoiceAmount;
-                }
-
-                var checkexistdr = lstTrans.Where(p => p.DrLedger >0 && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
-                if (checkexistdr != null)
-                {
-                    checkexistdr.DrAmount = model.NetAmount;
-                    checkexistdr.DrLedger = model.ISCASH ? (model.BankLedgerId>0?model.BankLedgerId:AppSettingManager.Instance.CashLedger.LedgerId) : model.CustomerLedgerId;
-                }
-
-                _db.SaveChanges();
-
-                // Update Sales Ledger
-
-
-            }
-            catch (DbEntityValidationException ex)
-            {
-                foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                    var checkexistdr = lstTrans.Where(p => p.DrLedger > 0 && p.BillNo == model.InvoiceNo && p.TransactionType.ToUpper() == TransactionTypes.PetroliumSales.ToString().ToUpper()).FirstOrDefault();
+                    if (checkexistdr != null)
                     {
+                        checkexistdr.DrAmount = model.NetAmount;
+                        checkexistdr.DrLedger = model.ISCASH ? (model.BankLedgerId > 0 ? model.BankLedgerId : AppSettingManager.Instance.CashLedger.LedgerId) : model.CustomerLedgerId;
+                    }
+
+                    db.SaveChanges();
+
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in entityValidationErrors.ValidationErrors)
+                        {
+                        }
                     }
                 }
             }
